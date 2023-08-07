@@ -1,3 +1,17 @@
 {
-  "hello": "SALOM"
+  "hello": "Salom",
+  "main": "Главная",
+  "category": "Каталог",
+  "basket": "Корзинка",
+  "favourite": "Желания",
+  "cabinet": "Кабинет",
+  "more": "Более",
+  "bestSeller": "Бестселлер",
+  "newArrivals":"Новые поступления",
+  "sale": "Распродажа",
+  "personalCabinet": "Личный кабинет",
+  "loginCabinet": "Войдите, чтобы получить к корзине и списку желаний вашего аккаунта",
+  "connectWithUs": "Связаться с нами",
+  "telephone": "Telefon qilish",
+  "information": "Информация"
 }

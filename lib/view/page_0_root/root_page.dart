@@ -10,7 +10,7 @@ import 'package:shopping/view/page_3_basket/basket_page.dart';
 import 'package:shopping/view/page_4_favourite/favourite_page.dart';
 import 'package:shopping/view/page_5_account/account_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 class RootPage extends StatefulWidget {
   String homeIdMainpage;
 
@@ -207,28 +207,32 @@ List<PersistentBottomNavBarItem> navBarsItems() {
     PersistentBottomNavBarItem(
       icon: const Icon(
         Icons.home,
-        size: 36,
+        size: 25,
       ),
+      title: "main".tr(),
+      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       inactiveIcon: const Icon(
         Icons.home_outlined,
-        size: 36,
+        size: 25,
       ),
       // title: ("Home"),
-      activeColorPrimary: MyColors.appColorBBA(),
-      activeColorSecondary:MyColors.appColorBBA(),
+      activeColorPrimary: MyColors.appColorUzBazar(),
+      activeColorSecondary:MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(
-        Icons.search,
-        size: 36,
+      Icons.manage_search_rounded,
+        size: 25,
       ),
+      title: "category".tr(),
+      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       inactiveIcon: const Icon(
-        Icons.search,
-        size: 32,
+        Icons.manage_search_rounded,
+        size: 25,
       ),
-      activeColorPrimary: MyColors.appColorBBA(),
-      activeColorSecondary:  MyColors.appColorBBA(),
+      activeColorPrimary: MyColors.appColorUzBazar(),
+      activeColorSecondary:  MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
@@ -236,43 +240,48 @@ List<PersistentBottomNavBarItem> navBarsItems() {
         CupertinoIcons.cart_fill,
         size: 25,
       ),
-      title: "main",
-
+      title: "basket".tr(),
       textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       inactiveIcon: const Icon(
         CupertinoIcons.cart,
         size: 25,
       ),
-      activeColorPrimary:  MyColors.appColorBBA(),
-      activeColorSecondary:  MyColors.appColorBBA(),
+      activeColorPrimary:  MyColors.appColorUzBazar(),
+      activeColorSecondary:  MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(
         Icons.favorite,
-        size: 36,
+        size: 25,
       ),
+      title: "favourite".tr(),
+      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+
       inactiveIcon: const Icon(
         Icons.favorite_border,
-        size: 32,
+        size: 25,
       ),
       // title: ("Settings"),
-      activeColorPrimary: MyColors.appColorBBA(),
-      activeColorSecondary:  MyColors.appColorBBA(),
+      activeColorPrimary: MyColors.appColorUzBazar(),
+      activeColorSecondary:  MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(
         Icons.account_circle,
-        size: 36,
+        size: 25,
       ),
+      title: "cabinet".tr(),
+      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+
       inactiveIcon: const Icon(
         Icons.account_circle_outlined,
-        size: 32,
+        size: 25,
       ),
       // title: ("Settings"),
-      activeColorPrimary: MyColors.appColorBBA(),
-      activeColorSecondary:  MyColors.appColorBBA(),
+      activeColorPrimary: MyColors.appColorUzBazar(),
+      activeColorSecondary:  MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
   ];

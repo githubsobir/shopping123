@@ -1,3 +1,17 @@
 {
-  "hello": "SALOM"
+  "hello": "SALOM",
+  "main": "Home",
+  "category": "Catalog",
+  "basket": "Basket",
+  "favourite": "Wishes",
+  "cabinet": "Cabinet",
+  "more": "More",
+  "bestSeller": "Best seller",
+  "newArrivals":"New arrivals",
+  "sale": "Sale",
+  "personalCabinet": "Personal Cabinet",
+  "loginCabinet": "Sign in to get to the cart and wish list of your account",
+  "connectWithUs": "Connect with us",
+  "telephone": "Telefon qilish",
+  "information": "Informatioin"
 }

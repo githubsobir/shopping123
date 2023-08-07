@@ -1,9 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/view/page_0_root/root_page.dart';
-import 'package:shopping/view/page_1_main/main_page.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';

@@ -74,8 +74,8 @@ class MyColors {
     return const Color(0xFF66BB6A);
   }
 
-  static Color appColorBBA() {
-    return  Colors.teal;
+  static Color appColorUzBazar() {
+    return  Colors.red.shade400;
     // return const Color.fromRGBO(51, 110, 100,1);
   }
 

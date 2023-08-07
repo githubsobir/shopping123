@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping/view/page_2_category/category_page_open.dart';
 import 'package:shopping/view/page_2_category/page_2_controller.dart';
+import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
@@ -32,17 +36,20 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
+          backgroundColor: Colors.white,
           elevation: 0,
-          title: const Text('UzBazar Category',
+          automaticallyImplyLeading: false,
+          title:  Text("category".tr(),
               style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         ),
         body: Consumer(
           builder: (context, ref, child) {
             return SafeArea(
-                child: ref.read(getCategoryData).when(data: (data) {
+                child: ref.watch(getCategoryData).when(data: (data) {
               return Container(
                   color: Colors.white,
                   child: SingleChildScrollView(
@@ -73,9 +80,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                   //   size: 32.0,
                                   //   color: Colors.blueAccent,
                                   // ),
-                            title: Text(data.results[index].name,
+                                  title: Text(data.results[index].name,
                                       style: const TextStyle(
-                                          color: Color(0xFF09216B),
+                                          color: Colors.black,
                                           fontSize: 17.0,
                                           fontWeight: FontWeight.bold)),
                                   // subtitle: Text(
@@ -110,176 +117,229 @@ class _CategoryPageState extends State<CategoryPage> {
                                             itemBuilder: (context, index2) {
                                               /// 2-qavat
 
-                                              return
-                                                data.results[index]
-                                                    .subcategories[index2].subcategories.isNotEmpty
-                                                ?Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 20),
-                                                child: ExpansionTile(
-                                                  key: Key(("$selected2")
-                                                      .toString()),
-                                                  initiallyExpanded:
-                                                      index2 == selected2,
-                                                  title: Text(
-                                                    data
-                                                        .results[index]
-                                                        .subcategories[index2]
-                                                        .name,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.fade,
-                                                    softWrap: true,
-                                                  ),
-                                                  onExpansionChanged:
-                                                      ((newState) {
-                                                    if (newState) {
-                                                      setState(() {
-                                                        const Duration(
-                                                            seconds: 20000);
-                                                        selected2 = index2;
-                                                      });
-                                                    } else {
-                                                      setState(() {
-                                                        selected2 = -1;
-                                                      });
-                                                    }
-                                                  }),
-                                                  children: [
-                                                    data
-                                                            .results[index]
-                                                            .subcategories[
-                                                                index2]
-                                                            .subcategories
-                                                            .isNotEmpty
-                                                        ?
-
-                                                        /// 3-qavat
-                                                        Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 15),
-                                                            child: ListView
-                                                                .builder(
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  const NeverScrollableScrollPhysics(),
-                                                              itemCount: data
+                                              return data
+                                                      .results[index]
+                                                      .subcategories[index2]
+                                                      .subcategories
+                                                      .isNotEmpty
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20),
+                                                      child: ExpansionTile(
+                                                        key: Key(("$selected2")
+                                                            .toString()),
+                                                        initiallyExpanded:
+                                                            index2 == selected2,
+                                                        title: Text(
+                                                          data
+                                                              .results[index]
+                                                              .subcategories[
+                                                                  index2]
+                                                              .name,
+                                                          maxLines: 1,
+                                                          overflow:
+                                                              TextOverflow.fade,
+                                                          softWrap: true,
+                                                        ),
+                                                        onExpansionChanged:
+                                                            ((newState) {
+                                                          if (newState) {
+                                                            setState(() {
+                                                              const Duration(
+                                                                  seconds:
+                                                                      20000);
+                                                              selected2 =
+                                                                  index2;
+                                                            });
+                                                          } else {
+                                                            setState(() {
+                                                              selected2 = -1;
+                                                            });
+                                                          }
+                                                        }),
+                                                        children: [
+                                                          data
                                                                   .results[
                                                                       index]
                                                                   .subcategories[
                                                                       index2]
                                                                   .subcategories
-                                                                  .length,
-                                                              itemBuilder:
-                                                                  (context,
-                                                                      index3) {
-                                                                return
-                                                                  data
-                                                                      .results[
-                                                                  index]
-                                                                      .subcategories[
-                                                                  index2]
-                                                                      .subcategories[index3].subcategories.isNotEmpty
-                                                                  ?ExpansionTile(
-                                                                  title: Text(data
-                                                                      .results[
-                                                                          index]
-                                                                      .subcategories[
-                                                                          index2]
-                                                                      .subcategories[
-                                                                          index3]
-                                                                      .name),
-                                                                  children: [
-                                                                    /// 4-qavat
-                                                                    data
-                                                                            .results[
-                                                                                index]
-                                                                            .subcategories[
-                                                                                index2]
-                                                                            .subcategories[
-                                                                                index3]
-                                                                            .subcategories
-                                                                            .isNotEmpty
-                                                                        ? Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.only(left: 15),
-                                                                            child:
-                                                                                ListView.builder(
-                                                                              /// 4-qavat
-                                                                              itemCount: data.results[index].subcategories[index2].subcategories[index3].subcategories.length,
-                                                                              shrinkWrap: true,
-                                                                              physics: const NeverScrollableScrollPhysics(),
-                                                                              itemBuilder: (context, index4) {
-                                                                                return ExpansionTile(title: Text(data.results[index].subcategories[index2].subcategories[index3].subcategories[index].name));
-                                                                              },
-                                                                            ),
-                                                                          )
-                                                                        : Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.only(left: 20),
-                                                                            child: ExpansionTile(title: Text(data.results[index].subcategories[index2].subcategories[index3].name)))
-                                                                  ],
-                                                                )
-                                                                :Padding(
-                                                                    padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                    left: 20),
-                                                                    child: ListTile(
-                                                                    title: Text(data
-                                                                        .results[
-                                                                    index]
-                                                                        .subcategories[
-                                                                    index2]
-                                                                        .name)))
-                                                                ;
-                                                              },
-                                                            ),
-                                                          )
-                                                        : Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    left: 20),
-                                                            child: ListTile(
-                                                                title: Text(data
-                                                                    .results[
-                                                                        index]
-                                                                    .subcategories[
-                                                                        index2]
-                                                                    .name)))
-                                                  ],
-                                                ),
-                                              )
-                                              :Padding(
-                                                padding: const EdgeInsets.only(left: 20),
-                                                child: ListTile(
-                                                    leading: Text(data.results[index].subcategories[index2].name,
-                                                        style: const TextStyle(
-                                                            color: Colors.black,
-                                                           )),
+                                                                  .isNotEmpty
+                                                              ?
 
-                                                  ),
-                                              );
+                                                              /// 3-qavat
+                                                              Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left: 15),
+                                                                  child: ListView
+                                                                      .builder(
+                                                                    shrinkWrap:
+                                                                        true,
+                                                                    physics:
+                                                                        const NeverScrollableScrollPhysics(),
+                                                                    itemCount: data
+                                                                        .results[
+                                                                            index]
+                                                                        .subcategories[
+                                                                            index2]
+                                                                        .subcategories
+                                                                        .length,
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            index3) {
+                                                                      return data
+                                                                              .results[index]
+                                                                              .subcategories[index2]
+                                                                              .subcategories[index3]
+                                                                              .subcategories
+                                                                              .isNotEmpty
+                                                                          ? ExpansionTile(
+                                                                              title: Text(data.results[index].subcategories[index2].subcategories[index3].name),
+                                                                              children: [
+                                                                                /// 4-qavat
+                                                                                data.results[index].subcategories[index2].subcategories[index3].subcategories.isNotEmpty
+                                                                                    ? Padding(
+                                                                                        padding: const EdgeInsets.only(left: 15),
+                                                                                        child: ListView.builder(
+                                                                                          /// 4-qavat
+                                                                                          itemCount: data.results[index].subcategories[index2].subcategories[index3].subcategories.length,
+                                                                                          shrinkWrap: true,
+                                                                                          physics: const NeverScrollableScrollPhysics(),
+                                                                                          itemBuilder: (context, index4) {
+                                                                                            return ExpansionTile(title: Text(data.results[index].subcategories[index2].subcategories[index3].subcategories[index].name));
+                                                                                          },
+                                                                                        ),
+                                                                                      )
+                                                                                    : Padding(
+                                                                                        padding: const EdgeInsets.only(left: 20),
+                                                                                        child: ListTile(
+                                                                                            onTap: () {
+                                                                                              getAction(
+                                                                                                categoryId: data.results[index].subcategories[index2].subcategories[index3].id.toString(),
+                                                                                                parentId: data.results[index].subcategories[index2].subcategories[index3].parent.toString(),
+                                                                                                categoryName: data.results[index].subcategories[index2].subcategories[index3].name.toString(),
+                                                                                              );
+                                                                                            },
+                                                                                            title: Text(data.results[index].subcategories[index2].subcategories[index3].name)))
+                                                                              ],
+                                                                            )
+                                                                          : Padding(
+                                                                              padding: const EdgeInsets.only(left: 20),
+                                                                              child: ListTile(
+                                                                                  onTap: () {
+                                                                                    getAction(
+                                                                                      categoryId: data.results[index].subcategories[index2].id.toString(),
+                                                                                      parentId: data.results[index].subcategories[index2].parent.toString(),
+                                                                                      categoryName: data.results[index].subcategories[index2].name.toString(),
+                                                                                    );
+                                                                                  },
+                                                                                  title: Text(data.results[index].subcategories[index2].name)));
+                                                                    },
+                                                                  ),
+                                                                )
+                                                              : Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left: 20),
+                                                                  child:
+                                                                      ListTile(
+                                                                          onTap:
+                                                                              () {
+                                                                            getAction(
+                                                                              categoryId: data.results[index].subcategories[index2].id.toString(),
+                                                                              parentId: data.results[index].subcategories[index2].parent.toString(),
+                                                                              categoryName: data.results[index].subcategories[index2].name.toString(),
+                                                                            );
+                                                                          },
+                                                                          title: Text(data
+                                                                              .results[index]
+                                                                              .subcategories[index2]
+                                                                              .name)))
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 20),
+                                                      child: ListTile(
+                                                        onTap: () {
+                                                          getAction(
+                                                            categoryId: data
+                                                                .results[index]
+                                                                .subcategories[
+                                                                    index2]
+                                                                .id
+                                                                .toString(),
+                                                            parentId: data
+                                                                .results[index]
+                                                                .subcategories[
+                                                                    index2]
+                                                                .parent
+                                                                .toString(),
+                                                            categoryName: data
+                                                                .results[index]
+                                                                .subcategories[
+                                                                    index2]
+                                                                .name
+                                                                .toString(),
+                                                          );
+                                                        },
+                                                        leading: Text(
+                                                            data
+                                                                .results[index]
+                                                                .subcategories[
+                                                                    index2]
+                                                                .name,
+                                                            style:
+                                                                const TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                            )),
+                                                      ),
+                                                    );
                                             },
                                           )
                                         : ListTile(
-                                      leading: Text(data.results[index].name,
-                                          style: const TextStyle(
-                                              color: Color(0xFF09216B),
-                                              fontSize: 17.0,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-
-
-
+                                            leading: Text(
+                                                data.results[index].name,
+                                                style: const TextStyle(
+                                                    color: Colors.blueAccent,
+                                                    fontSize: 17.0,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            onTap: () {
+                                              getAction(
+                                                categoryId: data
+                                                    .results[index].id
+                                                    .toString(),
+                                                parentId: data
+                                                    .results[index].parent
+                                                    .toString(),
+                                                categoryName: data
+                                                    .results[index].name
+                                                    .toString(),
+                                              );
+                                            },
+                                          ),
                                   ],
                                 )
                               : ListTile(
+                                  onTap: () {
+                                    getAction(
+                                      categoryId:
+                                          data.results[index].id.toString(),
+                                      parentId:
+                                          data.results[index].parent.toString(),
+                                      categoryName:
+                                          data.results[index].name.toString(),
+                                    );
+                                  },
                                   leading: Text(data.results[index].name,
                                       style: const TextStyle(
-                                          color: Color(0xFF09216B),
+                                          color: Colors.black,
                                           fontSize: 17.0,
                                           fontWeight: FontWeight.bold)),
                                 ),
@@ -288,11 +348,26 @@ class _CategoryPageState extends State<CategoryPage> {
                     )
                   ])));
             }, error: (error, errorText) {
-              return Text(errorText.toString());
+              return LoadingShimmerList();
             }, loading: () {
-              return Text("Loading");
+              return const LoadingShimmerList();
             }));
           },
+        ));
+  }
+
+  void getAction(
+      {required String categoryId,
+      required String parentId,
+      required String categoryName}) {
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => CategoryPageOpen(
+            categoryId: categoryId,
+            parentId: parentId,
+            categoryName: categoryName,
+          ),
         ));
   }
 }
