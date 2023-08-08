@@ -79,6 +79,7 @@
   "deletePrivilage": "Imtiyozni o'chirish",
   "loginPasswordError": "Telefon raqam yoki parol noto‘g‘ri kiritildi.",
   "search": "Qidiruv",
-  "brand": "Brendlar"
+  "brand": "Brendlar",
+  "or": "YOKI"
 
 }

@@ -674,22 +674,22 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           ),
         ),
       ],
-      // leading: CircleAvatar(
-      //   backgroundColor: const Color.fromRGBO(250, 250, 250, 1),
-      //   radius: 18,
-      //   child: IconButton(
-      //     padding: const EdgeInsets.all(0),
-      //     onPressed: () {
-      //       Navigator.of(context).pop();
-      //     },
-      //     icon: const Icon(
-      //       Icons.arrow_back,
-      //       // color: Color(0xffF35383),
-      //       color: Colors.black,
-      //       size: 25,
-      //     ),
-      //   ),
-      // ),
+      leading: CircleAvatar(
+        backgroundColor: const Color.fromRGBO(250, 250, 250, 1),
+        radius: 18,
+        child: IconButton(
+          padding: const EdgeInsets.all(0),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            // color: Color(0xffF35383),
+            color: Colors.black,
+            size: 25,
+          ),
+        ),
+      ),
     );
   }
 }

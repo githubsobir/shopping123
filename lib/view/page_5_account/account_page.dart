@@ -45,17 +45,7 @@ class _AccountPageState extends State<AccountPage> {
                           "assets/images/shopping1.png",
                         ),
                       )),
-                   child:  Align(
-                   alignment: Alignment.bottomCenter,
 
-                   child: MaterialButton(
-                       color: Colors.grey.shade50,
-                       onPressed: (){
-                         pushNewScreen(context, screen: EnterFirst(windowIdEnterFirst: "0"),
-                         withNavBar: false
-                         );
-
-                       },child: Text("Kirish"))),
                 ),
                 const SizedBox(height: 15),
                 Text(
@@ -108,6 +98,20 @@ class _AccountPageState extends State<AccountPage> {
                   trailing: const Icon(Icons.arrow_forward_ios,
                       color: Colors.black, size: 20),
                 ),
+                const SizedBox(height: 40),
+                Align(
+                    alignment: Alignment.bottomCenter,
+
+                    child: MaterialButton(
+                        color: Colors.grey.shade50,
+                        height: 45,
+                        minWidth: MediaQuery.of(context).size.width*0.5,
+                        onPressed: (){
+                          pushNewScreen(context, screen: EnterFirst(windowIdEnterFirst: "0"),
+                              withNavBar: false
+                          );
+
+                        },child: Text("Kirish"))),
 
               ],
             ),

@@ -11,9 +11,3 @@ final getDataCarousel = FutureProvider<ModelMainPageCarusel>((ref) {
   // log(ref.read(apiProviderHeader).getCarouselData().toString());
   return ref.read(apiProviderHeader).getCarouselData();
 });
-
-// final apiProviderBody =
-// Provider((ref, a) => InternetMainBody());
-
-// final getDataBody = FutureProvider.family<ModelMainPageCarusel, String>((ref,
-//     a) => ref.read(apiProviderBody).getCarouselData());
