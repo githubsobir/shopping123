@@ -34,7 +34,7 @@ class LoadingShimmer extends StatelessWidget {
 }
 
 ///
-///
+/// vertical
 class LoadingShimmerList extends StatelessWidget {
   const LoadingShimmerList({Key? key}) : super(key: key);
 
@@ -59,6 +59,35 @@ class LoadingShimmerList extends StatelessWidget {
   }
 }
 
+/// horizontal
+class LoadingShimmerListHorizontal extends StatelessWidget {
+  const LoadingShimmerListHorizontal({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      width: MediaQuery.of(context).size.width,
+      child: ListView.builder(
+          itemCount: 10,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Shimmer.fromColors(
+                baseColor: Colors.grey.shade100,
+                highlightColor: Colors.grey.shade300,
+                child: Container(
+                  height: 35,
+                  width: 100,
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ));
+          }),
+    );
+  }
+}
 
 class LoadingGridView extends StatelessWidget {
   const LoadingGridView({super.key});

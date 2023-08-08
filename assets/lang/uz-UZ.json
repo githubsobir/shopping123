@@ -77,6 +77,8 @@
   "pinKodEnterOrNew": "Dasturga kirish pin kodini o'chirish yoki boshqa yaratish",
   "createPinKod": "Pin kod yaratish",
   "deletePrivilage": "Imtiyozni o'chirish",
-  "loginPasswordError": "Telefon raqam yoki parol noto‘g‘ri kiritildi."
+  "loginPasswordError": "Telefon raqam yoki parol noto‘g‘ri kiritildi.",
+  "search": "Qidiruv",
+  "brand": "Brendlar"
 
 }

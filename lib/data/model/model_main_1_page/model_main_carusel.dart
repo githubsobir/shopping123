@@ -27,12 +27,12 @@ class ModelMainPageCarusel {
 }
 
 class Result {
-  int id;
-  DateTime updatedAt;
-  DateTime createdAt;
-  String title;
-  String image;
-  DateTime deadline;
+  dynamic id;
+  dynamic updatedAt;
+  dynamic createdAt;
+  dynamic title;
+  dynamic image;
+  dynamic deadline;
   bool isActive;
 
   Result({
@@ -47,11 +47,11 @@ class Result {
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     id: json["id"],
-    updatedAt: DateTime.parse(json["updated_at"]),
-    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"],
+    createdAt: json["created_at"],
     title: json["title"],
     image: json["image"],
-    deadline: DateTime.parse(json["deadline"]),
+    deadline: json["deadline"],
     isActive: json["is_active"],
   );
 

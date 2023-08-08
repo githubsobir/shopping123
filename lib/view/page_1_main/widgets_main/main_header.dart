@@ -42,6 +42,7 @@ Widget mainHeader({required BuildContext context, required WidgetRef ref}) {
                   /// carusel action
                 },
                 child: Container(
+                  height: 200,
                     width: MediaQuery.of(context).size.width,
                     margin: const EdgeInsets.symmetric(horizontal: 1.0),
                     decoration: BoxDecoration(
@@ -60,8 +61,7 @@ Widget mainHeader({required BuildContext context, required WidgetRef ref}) {
                             width: MediaQuery.of(context).size.width,
                             fit: BoxFit.cover,
                             imageUrl: i.image,
-
-                        errorWidget: (context, url, text) {
+                               errorWidget: (context, url, text) {
                               return Image.asset(
                                   "assets/images/image_for_error.png",
                               fit: BoxFit.fill,

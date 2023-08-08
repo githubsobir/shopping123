@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
+import 'package:shopping/data/model/model_main_1_page/model_main_product_details.dart';
 
-class User {
+class User1 {
   final String id;
   final String name;
   final String profilePicture;
@@ -12,7 +13,7 @@ class User {
   final String categoryId;
   final String gender;
 
-  const User(
+  const User1(
       {required this.id,
         required this.name,
         required this.profilePicture,
@@ -27,13 +28,13 @@ class User {
       });
 }
 
-class CustomExampleState extends PagedState<String, User> {
+class CustomExampleState extends PagedState<String, ProductModel> {
   // We can extends [PagedState] to add custom parameters to our state
   final bool filterByCity;
 
   const CustomExampleState(
       {this.filterByCity = false,
-      List<User>? records,
+      List<ProductModel>? records,
       String? error,
       String? nextPageKey,
       List<String>? previousPageKeys})
@@ -43,7 +44,7 @@ class CustomExampleState extends PagedState<String, User> {
   @override
   CustomExampleState copyWith(
       {bool? filterByCity,
-      List<User>? records,
+      List<ProductModel>? records,
       dynamic error,
       dynamic nextPageKey,
       List<String>? previousPageKeys}) {
@@ -62,11 +63,11 @@ class CustomExampleState extends PagedState<String, User> {
 }
 
 class CustomExampleNotifier extends StateNotifier<CustomExampleState>
-    with PagedNotifierMixin<String, User, CustomExampleState> {
+    with PagedNotifierMixin<String, ProductModel, CustomExampleState> {
   CustomExampleNotifier() : super(const CustomExampleState());
 
   @override
-  Future<List<User>?> load(String page, int limit) async {
+  Future<List<ProductModel>?> load(String page, int limit) async {
     try {
       //as build can be called many times, ensure
       //we only hit our page API once per page
@@ -76,21 +77,19 @@ class CustomExampleNotifier extends StateNotifier<CustomExampleState>
         });
         return state.records;
       }
-      var users = await Future.delayed(const Duration(seconds: 1), () {
+      var users = await Future.delayed(const Duration(milliseconds: 400), () {
         // This simulates a network call to an api that returns paginated users
         return List.generate(
             20,
-            (index) => User(
+            (index) => ProductModel(
                 id: "${page}_$index",
-                name: "Produkt nomi",
-                brandId: "1",
-                categoryId: "1",
-                gender: "1",
-                productId: "1",
-                quantity: "1002",
-                summa: "1099000",
-                profilePicture:
-                    "https://m.media-amazon.com/images/I/51c7PrN5AFL._AC_UL1000_.jpg"));
+
+                title:"Produkt nomi",
+                price:"109000",
+                description:"Product haqida qisqacha",
+                category:"4",
+                image:"https://m.media-amazon.com/images/I/51c7PrN5AFL._AC_UL1000_.jpg",
+                rating:"4",));
       });
       // we then update state accordingly
       state = state.copyWith(
@@ -104,11 +103,11 @@ class CustomExampleNotifier extends StateNotifier<CustomExampleState>
   }
 
   // Super simple example of custom methods of the StateNotifier
-  void add(User user) {
+  void add(ProductModel user) {
     state = state.copyWith(records: [...(state.records ?? []), user]);
   }
 
-  void delete(User user) {
+  void delete(ProductModel user) {
     state = state.copyWith(records: [...(state.records ?? [])]..remove(user));
   }
 }
