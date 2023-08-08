@@ -11,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/view/page_0_root/lang_choose.dart';
-import 'package:shopping/view/page_0_root/root_page.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -131,7 +130,7 @@ class MyApp extends StatelessWidget {
                   box.get("language") == "2" ||
                   box.get("language") == "3"
               ? //MainPages()//
-               RootPage(homeIdMainpage: "1")
+          EnterFirst0()//RootPage(homeIdMainpage: "1")
               : const EnterFirst0()),
     );
   }

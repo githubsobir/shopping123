@@ -80,6 +80,7 @@
   "loginPasswordError": "Telefon raqam yoki parol noto‘g‘ri kiritildi.",
   "search": "Qidiruv",
   "brand": "Brendlar",
-  "or": "YOKI"
+  "or": "YOKI",
+  "chooseLang": "Til tanlang"
 
 }

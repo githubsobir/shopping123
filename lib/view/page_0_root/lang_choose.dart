@@ -36,12 +36,13 @@ class _EnterFirst0State extends State<EnterFirst0> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Image.asset("assets/images/gerb.png",
+                        Image.asset("assets/images/shopping1.png",
                             height: 110, fit: BoxFit.cover),
                         const SizedBox(width: 10),
                         MyWidgets.robotoFontText(
-                            text: "BBA",
+                            text: "UzBazar",
                             textColor: MyColors.appColorBlack(),
+                            textFontWeight: FontWeight.bold,
                             textSize: 28)
                       ],
                     ),
@@ -96,17 +97,17 @@ class _EnterFirst0State extends State<EnterFirst0> {
                       child: ListTile(
                         textColor: MyColors.appColorBlack(),
                         title: MyWidgets.robotoFontText(
-                            text: "Qaraqalpaq tili",
+                            text: "English language",
                             textFontWeight: FontWeight.w400),
                         leading: const CircleAvatar(
-                          backgroundImage: AssetImage("assets/images/kk.png"),
+                          backgroundImage: AssetImage("assets/images/ukflag.png"),
                           radius: 15,
                         ),
                         trailing: const Icon(CupertinoIcons.chevron_forward),
                         onTap: () {
                           box.delete("language");
                           box.put("language", "2");
-                          context.setLocale(const Locale('kk', 'KK'));
+                          context.setLocale(const Locale('en', 'EN'));
                           // context.locale = const Locale("kk", "KK");
                           Navigator.push(
                               context,

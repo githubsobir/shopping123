@@ -40,12 +40,17 @@ class _BasketPageState extends State<BasketPage> {
                     children: [
                      const Image(
                         image: AssetImage("assets/images/shopping1.png"),
-                        height: 100,
+                        height: 80,
                         fit: BoxFit.cover,
                       ), 
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Column(children: [
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+
+
                           Text("Title text", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
                           SizedBox(
                             height: 30,
@@ -70,7 +75,9 @@ class _BasketPageState extends State<BasketPage> {
                               },
                             ),
                           ),
-
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width*0.5,
+                              child: Text("Product haqida qisqacha ma'lumot", style: TextStyle(fontSize: 15),)),
                         ],),
                       ),
                       Expanded(
@@ -80,7 +87,7 @@ class _BasketPageState extends State<BasketPage> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 15.0),
-                              child: Icon(Icons.delete, color: Colors.blue.shade700),
+                              child: Icon(Icons.delete, color: Colors.red.shade700),
                             ),
                           ],
                         ),
