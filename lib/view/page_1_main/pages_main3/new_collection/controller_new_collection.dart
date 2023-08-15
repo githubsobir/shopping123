@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/data/model/model_main_1_page/new_collection/new_collection_model.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
@@ -15,26 +13,25 @@ final getDataNewCollection = FutureProvider<ModelMainNewCollections>((ref) {
 });
 
 final apiProviderInfiniteList =
-Provider<InternetInfiniteList>((ref) => InternetInfiniteList());
+    Provider<InternetInfiniteList>((ref) => InternetInfiniteList());
 
 List<DatumSavedQuestion> listData = [];
-final getDataInfinitiList =
-FutureProvider.family<List<DatumSavedQuestion>, String>(
-        (ref, dataString) async {
+late ModelSavedQuestion modelSavedQuestion;
+final getDataInfinitiList = FutureProvider.family
+    .autoDispose<List<DatumSavedQuestion>, String>((ref, dataString) async {
 
       String data = await ref
-          .read(apiProviderInfiniteList)
-          .getInfiniteList(nextPage: dataString);
-      log(data);
-      ModelSavedQuestion modelSavedQuestion =
+      .read(apiProviderInfiniteList)
+      .getInfiniteList(nextPage: dataString);
+  // log(data);
+  modelSavedQuestion =
       ModelSavedQuestion.fromJson(jsonDecode(data));
-      log(jsonEncode(modelSavedQuestion).toString());
+  // log(jsonEncode(modelSavedQuestion).toString());
 
-      if (listData.isEmpty) {
-        listData = modelSavedQuestion.data.data;
-      } else {
-        listData.addAll(modelSavedQuestion.data.data);
-      }
-
-      return listData;
-    });
+  if (listData.isEmpty) {
+    listData = modelSavedQuestion.data.data;
+  } else {
+    listData.addAll(modelSavedQuestion.data.data);
+  }
+  return listData;
+});
