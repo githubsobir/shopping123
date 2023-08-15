@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_5_account/identification_page/sign_up/app_bar_sign_up.dart';
 import 'package:shopping/view/page_5_account/identification_page/sign_up/button_sign_up.dart';
 import 'package:shopping/view/page_5_account/identification_page/sign_up/input_sign_up.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
-class SignUp extends StatefulWidget {
+class SignUp extends ConsumerStatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  ConsumerState<SignUp> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends ConsumerState<SignUp> {
 
   @override
   void initState() {
@@ -54,7 +55,9 @@ class _SignUpState extends State<SignUp> {
                     Column(children: [
 
                       buttonSignUp(
-                          context: context),
+                          context: context,
+                      ref: ref
+                      ),
                     ],),
 
 

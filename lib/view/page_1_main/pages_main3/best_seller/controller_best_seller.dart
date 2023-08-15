@@ -1,32 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_infinite_scroll/riverpod_infinite_scroll.dart';
 import 'package:shopping/data/model/model_main_1_page/model_main_product_details.dart';
-
-class User1 {
-  final String id;
-  final String name;
-  final String profilePicture;
-  final String summa;
-  final String productId;
-  final String quantity;
-  final String brandId;
-  final String categoryId;
-  final String gender;
-
-  const User1(
-      {required this.id,
-        required this.name,
-        required this.profilePicture,
-        required this.summa,
-        required this.productId,
-        required this.quantity,
-        required this.brandId,
-        required this.categoryId,
-        required this.gender,
-
-
-      });
-}
+import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
+import 'package:shopping/data/network/internet_main_1_page/test_infinitelist.dart';
 
 class CustomExampleState extends PagedState<String, ProductModel> {
   // We can extends [PagedState] to add custom parameters to our state
@@ -82,14 +61,15 @@ class CustomExampleNotifier extends StateNotifier<CustomExampleState>
         return List.generate(
             20,
             (index) => ProductModel(
-                id: "${page}_$index",
-
-                title:"Produkt nomi",
-                price:"109000",
-                description:"Product haqida qisqacha",
-                category:"4",
-                image:"https://m.media-amazon.com/images/I/51c7PrN5AFL._AC_UL1000_.jpg",
-                rating:"4",));
+                  id: "${page}_$index",
+                  title: "Produkt nomi",
+                  price: "109000",
+                  description: "Product haqida qisqacha",
+                  category: "4",
+                  image:
+                      "https://m.media-amazon.com/images/I/51c7PrN5AFL._AC_UL1000_.jpg",
+                  rating: "4",
+                ));
       });
       // we then update state accordingly
       state = state.copyWith(
@@ -115,3 +95,9 @@ class CustomExampleNotifier extends StateNotifier<CustomExampleState>
 final customExampleProvider =
     StateNotifierProvider<CustomExampleNotifier, CustomExampleState>(
         (_) => CustomExampleNotifier());
+
+///
+///
+///
+///
+final getDataLoad1 = FutureProvider((ref) => null);

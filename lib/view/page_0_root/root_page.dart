@@ -1,16 +1,22 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/data/model/model_0_root/model_ip_address.dart';
 import 'package:shopping/view/page_1_main/main_page.dart';
 import 'package:shopping/view/page_2_category/category_page.dart';
 import 'package:shopping/view/page_3_basket/basket_page.dart';
 import 'package:shopping/view/page_4_favourite/favourite_page.dart';
 import 'package:shopping/view/page_5_account/account_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
-import 'package:easy_localization/easy_localization.dart';
+
 class RootPage extends StatefulWidget {
   String homeIdMainpage;
 
@@ -27,15 +33,12 @@ class _RootPageState extends State<RootPage> {
   }
 
   List<Widget> myPages() => [
-    MainPage(),
-    CategoryPage(),
-    BasketPage(),
-    FavouritePage(),
-    AccountPage()
-
-
-
-  ];
+        MainPage(),
+        CategoryPage(),
+        BasketPage(),
+        FavouritePage(),
+        AccountPage()
+      ];
   int index = 0;
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
 
@@ -48,7 +51,19 @@ class _RootPageState extends State<RootPage> {
   Future getFirstAction() async {
     try {
       await Future.delayed(Duration.zero);
-
+      try {
+        /// Initialize Ip Address
+        var ipAddress = IpAddress(type: RequestType.json);
+        dynamic data = await ipAddress.getIpAddress();
+        ModelIpAddress ipNumber =
+            ModelIpAddress.fromJson(jsonDecode(jsonEncode(data)));
+        box.delete("ipAddressPhone");
+        box.put("ipAddressPhone", ipNumber.ip.toString());
+        log(box.get("ipAddressPhone"));
+      } on IpAddressException catch (exception) {
+        /// Handle the exception.
+        // print(exception.message);
+      }
       box.delete("updateVersion");
       box.put("updateVersion", "1005");
     } catch (e) {
@@ -61,7 +76,7 @@ class _RootPageState extends State<RootPage> {
     super.initState();
     // screenLock123();
     // isBiometricAvailable();
-    // getFirstAction();
+    getFirstAction();
   }
 
   // Future screenLock123() async {
@@ -210,29 +225,31 @@ List<PersistentBottomNavBarItem> navBarsItems() {
         size: 25,
       ),
       title: "main".tr(),
-      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       inactiveIcon: const Icon(
         Icons.home_outlined,
         size: 25,
       ),
       // title: ("Home"),
       activeColorPrimary: MyColors.appColorUzBazar(),
-      activeColorSecondary:MyColors.appColorUzBazar(),
+      activeColorSecondary: MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
       icon: const Icon(
-      Icons.manage_search_rounded,
+        Icons.manage_search_rounded,
         size: 25,
       ),
       title: "category".tr(),
-      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       inactiveIcon: const Icon(
         Icons.manage_search_rounded,
         size: 25,
       ),
       activeColorPrimary: MyColors.appColorUzBazar(),
-      activeColorSecondary:  MyColors.appColorUzBazar(),
+      activeColorSecondary: MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
@@ -241,13 +258,14 @@ List<PersistentBottomNavBarItem> navBarsItems() {
         size: 25,
       ),
       title: "basket".tr(),
-      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       inactiveIcon: const Icon(
-        CupertinoIcons.cart,
+        CupertinoIcons.shopping_cart,
         size: 25,
       ),
-      activeColorPrimary:  MyColors.appColorUzBazar(),
-      activeColorSecondary:  MyColors.appColorUzBazar(),
+      activeColorPrimary: MyColors.appColorUzBazar(),
+      activeColorSecondary: MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
@@ -256,7 +274,8 @@ List<PersistentBottomNavBarItem> navBarsItems() {
         size: 25,
       ),
       title: "favourite".tr(),
-      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
 
       inactiveIcon: const Icon(
         Icons.favorite_border,
@@ -264,7 +283,7 @@ List<PersistentBottomNavBarItem> navBarsItems() {
       ),
       // title: ("Settings"),
       activeColorPrimary: MyColors.appColorUzBazar(),
-      activeColorSecondary:  MyColors.appColorUzBazar(),
+      activeColorSecondary: MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
     PersistentBottomNavBarItem(
@@ -273,15 +292,16 @@ List<PersistentBottomNavBarItem> navBarsItems() {
         size: 25,
       ),
       title: "cabinet".tr(),
-      textStyle:const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      textStyle:
+          const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
 
       inactiveIcon: const Icon(
-        Icons.account_circle_outlined,
+        CupertinoIcons.person,
         size: 25,
       ),
       // title: ("Settings"),
       activeColorPrimary: MyColors.appColorUzBazar(),
-      activeColorSecondary:  MyColors.appColorUzBazar(),
+      activeColorSecondary: MyColors.appColorUzBazar(),
       inactiveColorPrimary: MyColors.appColorGrey400(),
     ),
   ];

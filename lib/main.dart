@@ -9,8 +9,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/view/page_0_root/lang_choose.dart';
+import 'package:shopping/view/page_0_root/root_page.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -29,46 +31,11 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.removeAfter(initialization);
-  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await EasyLocalization.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await Hive.initFlutter();
   await Hive.openBox("online");
   await initialization(null);
-  // final config = TalsecConfig(
-  //   /// For Android
-  //   androidConfig: AndroidConfig(
-  //     packageName: 'www.uzbmba.uz',
-  //     signingCertHashes: [
-  //       'bNSrT49K4aceo7I8iMlohhDtRS0e7kcGeMiH4jSKYaE='
-  //     ],
-  //     supportedStores: ['some.other.store'],
-  //   ),
-  //   watcherMail: 'tojiyev.s.b@gmail.com',
-  //   isProd: true,
-  // );
-  // final callback = ThreatCallback(
-  //     onAppIntegrity: () => print("App integrity"),
-  //     onObfuscationIssues: () => print("Obfuscation issues"),
-  //     onDebug: () => print("Debugging"),
-  //     onDeviceBinding: () => print("Device binding"),
-  //     onDeviceID: () => print("Device ID"),
-  //     onHooks: () => print("Hooks"),
-  //     onPasscode: () => print("Passcode not set"),
-  //     onPrivilegedAccess: () => print("Privileged access"),
-  //     onSecureHardwareNotAvailable: () => print("Secure hardware not available"),
-  //     onSimulator: () => print("Simulator"),
-  //     onUnofficialStore: () => print("Unofficial store")
-  // );
-  //
-  // // Attaching listener
-  // Talsec.instance.attachListener(callback);
-  //
-  //
-  // await Talsec.instance.start(config);
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then(
@@ -87,6 +54,7 @@ Future main() async {
       ),
     ),
   );
+
 }
 
 class MyApp extends StatelessWidget {
@@ -130,47 +98,48 @@ class MyApp extends StatelessWidget {
                   box.get("language") == "2" ||
                   box.get("language") == "3"
               ? //MainPages()//
-          EnterFirst0()//RootPage(homeIdMainpage: "1")
+        RootPage(homeIdMainpage: "1")
               : const EnterFirst0()),
     );
   }
 }
 
-final List<SingleIntroScreen> pages = [
-  const SingleIntroScreen(
-    title: 'Welcome to the Event Management App !',
-    description:
-        'You plans your Events, We\'ll do the rest and will be the best! Guaranteed!  ',
-    imageAsset: 'assets/image1.jpeg',
-  ),
-  const SingleIntroScreen(
-    title: 'Book tickets to cricket matches and events',
-    description:
-        'Tickets to the latest movies, crickets matches, concerts, comedy shows, plus lots more !',
-    imageAsset: 'assets/image2.png',
-  ),
-  const SingleIntroScreen(
-    title: 'Grabs all events now only in your hands',
-    description: 'All events are now in your hands, just a click away ! ',
-    imageAsset: 'assets/image1.jpeg',
-  ),
-];
+// final List<SingleIntroScreen> pages = [
+//   const SingleIntroScreen(
+//     title: 'Welcome to the Event Management App !',
+//     description:
+//         'You plans your Events, We\'ll do the rest and will be the best! Guaranteed!  ',
+//     imageAsset: 'assets/image1.jpeg',
+//   ),
+//   const SingleIntroScreen(
+//     title: 'Book tickets to cricket matches and events',
+//     description:
+//         'Tickets to the latest movies, crickets matches, concerts, comedy shows, plus lots more !',
+//     imageAsset: 'assets/image2.png',
+//   ),
+//   const SingleIntroScreen(
+//     title: 'Grabs all events now only in your hands',
+//     description: 'All events are now in your hands, just a click away ! ',
+//     imageAsset: 'assets/image1.jpeg',
+//   ),
+// ];
+//
+// class ExamplePage extends StatelessWidget {
+//   const ExamplePage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return AnimatedIntroduction(
+//       footerPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+//       slides: pages,
+//       footerRadius: 10,
+//       indicatorType: IndicatorType.diamond,
+//       onDone: () {
+//         /// TODO: Go to desire page like login or home
+//       },
+//       isFullScreen: false,
+//
+//     );
+//   }
+// }
 
-class ExamplePage extends StatelessWidget {
-  const ExamplePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedIntroduction(
-      footerPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      slides: pages,
-      footerRadius: 10,
-      indicatorType: IndicatorType.diamond,
-      onDone: () {
-        /// TODO: Go to desire page like login or home
-      },
-      isFullScreen: false,
-
-    );
-  }
-}
