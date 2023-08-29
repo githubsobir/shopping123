@@ -74,7 +74,9 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
 
                           idProduct: index.toString(),
                           isFavourite: data[index].isFavorite,
-                        ));
+                        ),
+                    withNavBar: false
+                    );
                     log(index.toString());
                   },
                   child: Container(

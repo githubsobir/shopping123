@@ -310,30 +310,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         },
                       ),
                     ),
-                    // Padding(
-                    //   padding: EdgeInsets.only(
-                    //       right: MediaQuery.of(context).size.width * 0.75),
-                    //   child: MaterialButton(
-                    //     padding: const EdgeInsets.only(left: 0, top: 0),
-                    //     onPressed: () {
-                    //       setState(() {
-                    //         selectSizeIndex = sizes.length;
-                    //       });
-                    //     },
-                    //     child: const Row(
-                    //       children: [
-                    //         Icon(
-                    //           Icons.clear,
-                    //           size: 14,
-                    //         ),
-                    //         Text(
-                    //           "Clear",
-                    //           style: TextStyle(fontSize: 13),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
