@@ -141,30 +141,30 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             ),
                           ],
                         ),
-                        Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Consumer(
-                              builder: (context, ref, child) {
-                                return IconButton(
-                                  padding: const EdgeInsets.all(0),
-                                  onPressed: () {
-                                    ref
-                                        .read(setFavourite2.notifier)
-                                        .updateFavorite(widget.modelDetails.id.toString());
-                                    setState(() {});
-                                    // isFavourites = !isFavourites;
-                                  },
-                                  icon: Icon(
-                                    isFavourites
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    // color: Color(0xffF35383),
-                                    color: Colors.red,
-                                    size: 30,
-                                  ),
-                                );
-                              },
-                            )),
+                        // Padding(
+                        //     padding: const EdgeInsets.symmetric(horizontal: 15),
+                        //     child: Consumer(
+                        //       builder: (context, ref, child) {
+                        //         return IconButton(
+                        //           padding: const EdgeInsets.all(0),
+                        //           onPressed: () {
+                        //             ref
+                        //                 .read(setFavourite2.notifier)
+                        //                 .updateFavorite(widget.modelDetails.id.toString());
+                        //             setState(() {});
+                        //             // isFavourites = !isFavourites;
+                        //           },
+                        //           icon: Icon(
+                        //             isFavourites
+                        //                 ? Icons.favorite
+                        //                 : Icons.favorite_border,
+                        //             // color: Color(0xffF35383),
+                        //             color: Colors.red,
+                        //             size: 30,
+                        //           ),
+                        //         );
+                        //       },
+                        //     )),
                       ],
                     ),
                     // const SizedBox(height: 12),

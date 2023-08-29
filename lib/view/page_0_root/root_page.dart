@@ -40,8 +40,7 @@ class _RootPageState extends State<RootPage> {
         AccountPage()
       ];
   int index = 0;
-  PersistentTabController controller = PersistentTabController(
-    initialIndex: 0);
+  PersistentTabController controller = PersistentTabController(initialIndex: 0);
 
   getFunction() {
     setState(() {});
@@ -87,7 +86,7 @@ class _RootPageState extends State<RootPage> {
       controller: controller,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: false,
-      stateManagement: true,
+      stateManagement: false,
       hideNavigationBar: false,
       hideNavigationBarWhenKeyboardShows: false,
       decoration: NavBarDecoration(
@@ -98,6 +97,9 @@ class _RootPageState extends State<RootPage> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       navBarStyle: NavBarStyle.style3,
+      selectedTabScreenContext: (p0) {},
+      screenTransitionAnimation:
+          ScreenTransitionAnimation(curve: Curves.bounceIn),
       onItemSelected: (value) {
         log(value.toString());
         setState(() {});
