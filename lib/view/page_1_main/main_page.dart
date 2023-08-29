@@ -7,7 +7,6 @@ import 'package:shopping/view/page_1_main/pages_main3/best_seller/best_sellers.d
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/new_collections.dart';
 import 'package:shopping/view/page_1_main/pages_main3/sale/sales.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/search_page.dart';
-import 'package:shopping/view/page_1_main/widgets_main/main_body.dart';
 import 'package:shopping/view/page_1_main/widgets_main/main_header.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
@@ -96,16 +95,14 @@ class _MainPageState extends ConsumerState<MainPage> {
                     height: 35,
                   ),
                   tabs: const [
+                    Text('New Collect'),
                     Text('Best Sellers'),
-                    Text('New Arrivals'),
                     Text('Sale'),
                   ],
                   views: const [NewCollection(), BestSellers(), Sales()],
                   onChange: (index) {
                     if(index == 1){
-                      setState(() {
 
-                      });
                       // ref.read(getDataInfinitiList("1"));
                     }
                     // setState((){});

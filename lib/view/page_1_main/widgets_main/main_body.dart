@@ -27,8 +27,8 @@ Widget mainBody({required BuildContext context, required WidgetRef ref}) {
           height: 35,
         ),
         tabs: const [
-          Text('Best Sellers'),
           Text('New Arrivals'),
+          Text('Best Sellers'),
           Text('Sale'),
         ],
         views: const [NewCollection(), BestSellers(), Sales()],

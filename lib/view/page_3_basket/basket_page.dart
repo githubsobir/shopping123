@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
+import 'package:shopping/view/page_3_basket/basket_empty.dart';
 import 'package:shopping/view/page_3_basket/controller_basket.dart';
 
 class BasketPage extends ConsumerStatefulWidget {
@@ -29,7 +30,9 @@ class _BasketPageState extends ConsumerState<BasketPage> {
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(1),
-              child: ListView.builder(
+              child: 
+              listOrder.length > 0? 
+              ListView.builder(
                 itemCount: listOrder.length,
                 itemBuilder: (context, index) => Container(
                   margin: const EdgeInsets.all(3),
@@ -126,7 +129,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                     ),
                   ),
                 ),
-              ))),
+              ):basketEmpty(context: context))),
     );
   }
 }

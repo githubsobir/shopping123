@@ -3,7 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_1_main/controller_main_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 import 'package:shopping/widgets/error_pages/data_not_found.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
@@ -39,7 +41,7 @@ Widget mainHeader({required BuildContext context, required WidgetRef ref}) {
             builder: (BuildContext context) {
               return GestureDetector(
                 onTap: () {
-                  /// carusel action
+                pushNewScreen(context, screen: DetailsPage(idProduct: i.id.toString(), isFavourite:false ), withNavBar: false);
                 },
                 child: Container(
                   height: 200,

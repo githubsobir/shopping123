@@ -15,7 +15,9 @@ Widget buttonSignUp({required BuildContext context, required WidgetRef ref}) {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         child: MyWidgets.robotoFontText(
             text: "registration".tr(), textColor: MyColors.appColorWhite()),
-        onPressed: () {},
+        onPressed: () {
+
+        },
       ),
       const SizedBox(height: 30),
     ],

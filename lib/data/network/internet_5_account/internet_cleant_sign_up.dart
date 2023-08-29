@@ -1,9 +1,5 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:shopping/data/network/base_url.dart';
-import 'package:shopping/view/page_5_account/identification_page/sign_up/sign_up_controller.dart';
 
 class InternetClientSignUp {
   Future<String> getISignUp({
@@ -30,8 +26,7 @@ class InternetClientSignUp {
           "password": password,
           "is_active": isActive,
         });
-    log("jsonEncode(response.data).toString()");
-    log(jsonEncode(response.data).toString());
+
     return (response.data).toString();
   }
 }
