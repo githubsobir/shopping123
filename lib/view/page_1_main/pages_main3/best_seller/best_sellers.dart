@@ -31,18 +31,18 @@ class _BestSellersState extends State<BestSellers> {
         itemBuilder: (context, item, index) =>
             GestureDetector(
               onTap: () {
-                pushNewScreen(context, screen: ItemDetailsScreen(
-                  itemIndex: 0,
-                    data: [ProductModel(image: "https://cdn-images.farfetch-contents.com/19/88/58/50/19885850_50455986_1000.jpg",
-                  title: "titles",
-                  category: 1,
-                  description: "description descriptiondescriptiondescriptiondescriptiondescription descriptiondescription",
-                  id: 1,
-                  price: "999 0000",
-                  rating: "4.5",
-                )]),
-                withNavBar: false
-                );
+                // pushNewScreen(context, screen: ItemDetailsScreen(
+                //   itemIndex: 0,
+                //     data: [ProductModel(image: "https://cdn-images.farfetch-contents.com/19/88/58/50/19885850_50455986_1000.jpg",
+                //   title: "titles",
+                //   category: 1,
+                //   description: "description descriptiondescriptiondescriptiondescriptiondescription descriptiondescription",
+                //   id: 1,
+                //   price: "999 0000",
+                //   rating: "4.5",
+                // )]),
+                // withNavBar: false
+                // );
               },
               child: Container(
                 height: 350,

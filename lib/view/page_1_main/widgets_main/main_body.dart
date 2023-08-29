@@ -2,8 +2,10 @@ import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_1_main/pages_main3/best_seller/best_sellers.dart';
+import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/new_collections.dart';
 import 'package:shopping/view/page_1_main/pages_main3/sale/sales.dart';
+
 
 Widget mainBody({required BuildContext context, required WidgetRef ref}) {
   return Scaffold(
@@ -29,8 +31,13 @@ Widget mainBody({required BuildContext context, required WidgetRef ref}) {
           Text('New Arrivals'),
           Text('Sale'),
         ],
-        views: const [BestSellers(), NewCollection(), Sales()],
-        onChange: (index) => print(index),
+        views: const [NewCollection(), BestSellers(), Sales()],
+        onChange: (index) {
+          if(index == 1){
+            ref.read(getDataInfinitiList("1"));
+          }
+          // setState((){});
+        },
       ),
     ),
 

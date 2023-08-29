@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
 class NewCollection extends ConsumerStatefulWidget {
@@ -27,7 +29,7 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
       ..addListener(_scrollListener);
   }
 
-  int pageCount = 0;
+  int pageCount = 1;
 
   _scrollListener() {
     if (_scrollController.offset >=
@@ -38,7 +40,9 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
         log(pageCount.toString());
         getData(item: pageCount.toString(), ref: ref);
         // log(getData(item: pageCount.toString(), ref: ref));
-      } catch (e) {}
+      } catch (e) {
+        log(e.toString());
+      }
     }
   }
 
@@ -52,20 +56,28 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
       body: Center(
           child: listGet.when(data: (data) {
         return GridView.builder(
+          shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-          ),
+              crossAxisCount: 2,
+              mainAxisSpacing: 5.0,
+              crossAxisSpacing: 5.0,
+              childAspectRatio: 0.55),
+          scrollDirection: Axis.vertical,
           controller: _scrollController,
-          itemCount: data.length % 2 == 0 ? data.length+ 2 :data.length+ 3,
+          itemCount: data.length % 2 == 0 ? data.length + 2 : data.length + 3,
           physics: const AlwaysScrollableScrollPhysics(),
           itemBuilder: (context, index) => index < data.length
               ? GestureDetector(
                   onTap: () {
+                    pushNewScreen(context,
+                        screen: DetailsPage(
+
+                          idProduct: index.toString(),
+                          isFavourite: data[index].isFavorite,
+                        ));
                     log(index.toString());
                   },
                   child: Container(
-                    height: 350,
-                    width: 200,
                     padding: const EdgeInsets.all(5),
                     margin: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
@@ -86,28 +98,54 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                         children: [
                           const SizedBox(height: 5),
                           SizedBox(
-                            height: 100,
+                            width: MediaQuery.of(context).size.width * 0.4,
                             child: Stack(
                               children: [
                                 SingleChildScrollView(
                                   child: Image.network(
-                                    data[index].qimg,
+                                    height: 150,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    data[index].photo.toString(),
                                     fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            SizedBox(
+                                      height: 150,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.4,
+                                      child: Image.asset(
+                                          "assets/images/shopping1.png"),
+                                    ),
                                     // height: 100,
                                     // width: 150,
                                   ),
                                 ),
-                                Align(
-                                    alignment: Alignment.topRight,
-                                    child: GestureDetector(
-                                        onTap: () {},
-                                        child:
-                                            const Icon(Icons.favorite_border)))
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      10, 10, 10, 15.0),
+                                  child: Align(
+                                      alignment: Alignment.topRight,
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            ref
+                                                .read(setFavourite2.notifier)
+                                                .updateFavorite(
+                                                    data[index].id.toString());
+                                            setState(() {});
+                                          },
+                                          child: Icon(
+                                            data[index].isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: Colors.red,
+                                          ))),
+                                )
                               ],
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(data[index].bookNum.toString(),
+                          Text(data[index].name.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.fade,
                               softWrap: true),
@@ -115,7 +153,8 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                           SizedBox(
                             height: 30,
                             child: RatingBar.builder(
-                              initialRating: 3,
+                              initialRating:
+                                  double.parse(data[index].rating.toString()),
                               minRating: 1,
                               direction: Axis.horizontal,
                               allowHalfRating: true,
@@ -141,19 +180,37 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("999 so'm"),
+                                Text("${data[index].price} so'm"),
                                 Container(
                                     // margin: EdgeInsets.all(3),
                                     padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: Border.all(
-                                            color: Colors.grey.shade400)),
+                                            color:
+                                            data[index].slug == "987654321"?
+                                            Colors.red:
+                                            Colors.grey.shade400,
+                                            )),
                                     child: Center(
-                                        child: Icon(
-                                      Icons.add_shopping_cart,
-                                      color: Colors.grey.shade800,
-                                      size: 20,
+                                        child: GestureDetector(
+                                      onTap: () {
+                                        ref
+                                            .read(setFavourite2.notifier)
+                                            .setOrder(idOrder:
+                                            data[index].id.toString());
+                                        setState(() {});
+                                      },
+                                      child: Icon(
+
+
+                                        Icons.add_shopping_cart,
+                                        color:
+                                        data[index].slug == "987654321"?
+                                            Colors.red:
+                                        Colors.grey.shade800,
+                                        size: 20,
+                                      ),
                                     ))),
                               ],
                             ),

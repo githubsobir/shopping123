@@ -40,7 +40,8 @@ class _RootPageState extends State<RootPage> {
         AccountPage()
       ];
   int index = 0;
-  PersistentTabController controller = PersistentTabController(initialIndex: 0);
+  PersistentTabController controller = PersistentTabController(
+    initialIndex: 0);
 
   getFunction() {
     setState(() {});
@@ -64,8 +65,6 @@ class _RootPageState extends State<RootPage> {
         /// Handle the exception.
         // print(exception.message);
       }
-      box.delete("updateVersion");
-      box.put("updateVersion", "1005");
     } catch (e) {
       throw Exception("Error update");
     }
@@ -74,121 +73,8 @@ class _RootPageState extends State<RootPage> {
   @override
   initState() {
     super.initState();
-    // screenLock123();
-    // isBiometricAvailable();
     getFirstAction();
   }
-
-  // Future screenLock123() async {
-  //   await Future.delayed(const Duration(milliseconds: 10)).then((value) {
-  //     if (box.get("langLock").toString().trim() == "1") {
-  //       box.delete("langLock");
-  //     } else {
-  //       box.get("lockScreen").toString().trim().length == 4 &&
-  //           box.get("lockScreen").toString() != "null"
-  //           ? {
-  //         screenLock(
-  //           useBlur: true,
-  //           context: navigatorKey.currentContext!,
-  //           correctString: box.get("lockScreen").toString(),
-  //           canCancel: false,
-  //           footer: Row(
-  //             crossAxisAlignment: CrossAxisAlignment.end,
-  //             mainAxisAlignment: MainAxisAlignment.end,
-  //             children: [
-  //               GestureDetector(
-  //                   onTap: () {
-  //                     AwesomeDialog(
-  //                       context: context,
-  //                       dialogType: DialogType.noHeader,
-  //                       animType: AnimType.bottomSlide,
-  //                       title: "BBA",
-  //                       desc: "logUot".tr(),
-  //                       titleTextStyle: TextStyle(
-  //                           color: MyColors.appColorBlue1(),
-  //                           fontSize: 24,
-  //                           fontWeight: FontWeight.bold),
-  //                       descTextStyle: TextStyle(
-  //                           color: MyColors.appColorBlack(),
-  //                           fontSize: 18,
-  //                           fontWeight: FontWeight.w500),
-  //                       btnOkOnPress: () {
-  //                         box.delete("token");
-  //                         box.delete("imie");
-  //                         box.delete("psnum");
-  //                         box.delete("personImage");
-  //                         box.delete("boxAllPersonInfo");
-  //                         box.delete("langLock");
-  //                         box.delete("lockScreen");
-  //
-  //                         if (Platform.isIOS) {
-  //                           exit(0);
-  //                         } else {
-  //                           SystemNavigator.pop();
-  //                         }
-  //                         Navigator.of(context).pop();
-  //                       },
-  //                       btnOkText: "yes".tr(),
-  //                       btnOkColor: MyColors.appColorGrey600(),
-  //                       btnCancelColor: MyColors.appColorBBA(),
-  //                       btnCancelOnPress: () {},
-  //                       btnCancelText: "no".tr(),
-  //                     ).show();
-  //                     // AwesomeDialog(
-  //                     //         context: context,
-  //                     //         dialogType: DialogType.noHeader,
-  //                     //         animType: AnimType.bottomSlide,
-  //                     //         title: "DTM",
-  //                     //         desc: "logUot".tr(),
-  //                     //         titleTextStyle: TextStyle(
-  //                     //             color: MyColors.appColorBlue1(),
-  //                     //             fontSize: 24,
-  //                     //             fontWeight: FontWeight.bold),
-  //                     //         descTextStyle: TextStyle(
-  //                     //             color: MyColors.appColorBlack(),
-  //                     //             fontWeight: FontWeight.bold),
-  //                     //         btnCancelOnPress: () {
-  //                     //           if (Platform.isIOS) {
-  //                     //             exit(0);
-  //                     //           } else {
-  //                     //             SystemNavigator.pop();
-  //                     //           }
-  //                     //           Navigator.of(context).pop();
-  //                     //           box.delete("lockScreen");
-  //                     //           box.delete("token");
-  //                     //           box.delete("imie");
-  //                     //           box.delete("psnum");
-  //                     //           box.delete("personImage");
-  //                     //           box.delete("boxAllPersonInfo");
-  //                     //         },
-  //                     //         btnCancelColor: MyColors.appColorBlue1(),
-  //                     //         btnCancelText: "OK")
-  //                     //     .show();
-  //                   },
-  //                   child: Text("exet".tr())),
-  //               const SizedBox(width: 20),
-  //             ],
-  //           ),
-  //           // customizedButtonChild: const Icon(
-  //           //   Icons.fingerprint,
-  //           // ),
-  //           title: Text("pinPassword".tr()),
-  //           config: const ScreenLockConfig(
-  //             backgroundColor: Colors.black,
-  //           ),
-  //           // customizedButtonTap: () async {
-  //           //   await authenticate(context: context);
-  //           // },
-  //           // didOpened: () async {
-  //           //   await authenticate(context: context);
-  //           // },
-  //         ),
-  //         box.delete("lockHasEnter")
-  //       }
-  //           : {};
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +98,10 @@ class _RootPageState extends State<RootPage> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       navBarStyle: NavBarStyle.style3,
-      // navBarStyle: NavBarStyle.style6,
+      onItemSelected: (value) {
+        log(value.toString());
+        setState(() {});
+      },
     );
   }
 }

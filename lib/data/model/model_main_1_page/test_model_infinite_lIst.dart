@@ -1,189 +1,202 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModelSavedQuestion {
-  int status;
-  DataSavedQuestion data;
+class ModelProductList {
+  dynamic count;
+  dynamic next;
+  dynamic previous;
+  List<ResultProductList> results;
 
-  ModelSavedQuestion({
-    required this.status,
-    required this.data,
+  ModelProductList({
+    required this.count,
+    required this.next,
+    required this.previous,
+    required this.results,
   });
 
-  ModelSavedQuestion copyWiths({
-    int? status2,
-    DataSavedQuestion? data2,
+  ModelProductList copyWith({
+    dynamic count,
+    dynamic next,
+    dynamic previous,
+    required List<ResultProductList> results,
   }) {
-    return ModelSavedQuestion(status: status2 ?? status, data: data2 ?? data);
+    return ModelProductList(
+        count: count ?? this.count,
+        next: next ?? this.next,
+        previous: previous ?? this.previous,
+        results: results ?? this.results);
   }
 
-  factory ModelSavedQuestion.fromJson(Map<String, dynamic> json) =>
-      ModelSavedQuestion(
-        status: json["status"],
-        data: DataSavedQuestion.fromJson(json["data"]),
+  factory ModelProductList.fromJson(Map<String, dynamic> json) =>
+      ModelProductList(
+        count: json["count"],
+        next: json["next"],
+        previous: json["previous"],
+        results: List<ResultProductList>.from(
+            json["results"].map((x) => ResultProductList.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
-        "data": data.toJson(),
+        "count": count,
+        "next": next,
+        "previous": previous,
+        "results": List<dynamic>.from(results.map((x) => x.toJson())),
       };
 }
 
-class DataSavedQuestion {
-  List<DatumSavedQuestion> data;
-  Meta meta;
-
-  DataSavedQuestion({
-    required this.data,
-    required this.meta,
-  });
-
-  factory DataSavedQuestion.fromJson(Map<String, dynamic> json) =>
-      DataSavedQuestion(
-        data: List<DatumSavedQuestion>.from(
-            json["data"].map((x) => DatumSavedQuestion.fromJson(x))),
-        meta: Meta.fromJson(json["_meta"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-        "_meta": meta.toJson(),
-      };
-}
-
-class DatumSavedQuestion {
+class ResultProductList {
   dynamic id;
-  dynamic bookNum;
-  dynamic userAns;
-  dynamic questionId;
-  dynamic fanName;
-  dynamic subjectCode;
-  dynamic qsvg;
-  dynamic textSvg;
-  dynamic qpdf;
-  dynamic textPdf;
-  dynamic qimg;
-  dynamic textImg;
-  dynamic examId;
-  dynamic userId;
-  dynamic isFavorite;
+  dynamic name;
+  dynamic slug;
+  dynamic price;
+  dynamic discount;
+  dynamic newPrice;
+  dynamic gender;
+  dynamic type;
+  dynamic season;
+  dynamic material;
+  dynamic brand;
+  dynamic category;
+  bool isFavorite;
+  dynamic photo;
+  dynamic rating;
 
-  DatumSavedQuestion({
+  ResultProductList({
     required this.id,
-    required this.bookNum,
-    required this.userAns,
-    required this.questionId,
-    required this.fanName,
-    required this.subjectCode,
-    required this.qsvg,
-    required this.textSvg,
-    required this.qpdf,
-    required this.textPdf,
-    required this.qimg,
-    required this.textImg,
-    required this.examId,
-    required this.userId,
+    required this.name,
+    required this.slug,
+    required this.price,
+    required this.discount,
+    required this.newPrice,
+    required this.gender,
+    required this.type,
+    required this.season,
+    required this.material,
+    required this.brand,
+    required this.category,
     required this.isFavorite,
+    required this.photo,
+    required this.rating,
   });
 
-  factory DatumSavedQuestion.fromJson(Map<String, dynamic> json) =>
-      DatumSavedQuestion(
+  ResultProductList copyWith({
+    dynamic id,
+    dynamic name,
+    dynamic slug,
+    dynamic price,
+    dynamic discount,
+    dynamic newPrice,
+    dynamic gender,
+    dynamic type,
+    dynamic season,
+    dynamic material,
+    dynamic brand,
+    dynamic category,
+    dynamic isFavorite,
+    dynamic photo,
+    dynamic rating,
+  }) {
+    return ResultProductList(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        slug: slug ?? this.slug,
+        price: price ?? this.price,
+        discount: discount ?? this.discount,
+        newPrice: newPrice ?? this.newPrice,
+        gender: gender ?? this.gender,
+        type: type ?? this.type,
+        season: season ?? this.season,
+        material: material ?? this.material,
+        brand: brand ?? this.brand,
+        category: category ?? this.category,
+        isFavorite: isFavorite ?? this.isFavorite,
+        photo: photo ?? this.photo,
+        rating: rating ?? this.rating);
+  }
+
+  factory ResultProductList.fromJson(Map<String, dynamic> json) =>
+      ResultProductList(
         id: json["id"],
-        bookNum: json["book_num"],
-        userAns: json["user_ans"],
-        questionId: json["question_id"],
-        fanName: json["fan_name"],
-        subjectCode: json["subject_code"],
-        qsvg: json["qsvg"],
-        textSvg: json["text_svg"],
-        qpdf: json["qpdf"],
-        textPdf: json["text_pdf"],
-        qimg: json["qimg"],
-        textImg: json["text_img"],
-        examId: json["exam_id"],
-        userId: json["user_id"],
-        isFavorite: json["is_favorite"],
+        name: json["name"],
+        slug: json["slug"],
+        price: json["price"],
+        discount: json["discount"],
+        newPrice: json["new_price"],
+        gender: json["gender"],
+        type: json["type"],
+        season: json["season"],
+        material: json["material"],
+        brand: json["brand"],
+        category: json["category"],
+        isFavorite: json["is_favorite"] ?? false,
+        photo: json["photo"],
+        rating: json["rating"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "book_num": bookNum,
-        "user_ans": userAns,
-        "question_id": questionId,
-        "fan_name": fanName,
-        "subject_code": subjectCode,
-        "qsvg": qsvg,
-        "text_svg": textSvg,
-        "qpdf": qpdf,
-        "text_pdf": textPdf,
-        "qimg": qimg,
-        "text_img": textImg,
-        "exam_id": examId,
-        "user_id": userId,
+        "name": name,
+        "slug": slug,
+        "price": price,
+        "discount": discount,
+        "new_price": newPrice,
+        "gender": gender,
+        "type": type,
+        "season": season,
+        "material": material,
+        "brand": brand,
+        "category": category,
         "is_favorite": isFavorite,
+        "photo": photo,
+        "rating": rating,
       };
 }
 
-class Meta {
-  int totalCount;
-  int pageCount;
-  int currentPage;
-  int perPage;
+class ModelProductListNotifier extends StateNotifier<List<ResultProductList>> {
+  // List<ResultProductList> listResultProductList;
 
-  Meta({
-    required this.totalCount,
-    required this.pageCount,
-    required this.currentPage,
-    required this.perPage,
-  });
+  ModelProductListNotifier(super.state);
 
-  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        totalCount: json["totalCount"],
-        pageCount: json["pageCount"],
-        currentPage: json["currentPage"],
-        perPage: json["perPage"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "totalCount": totalCount,
-        "pageCount": pageCount,
-        "currentPage": currentPage,
-        "perPage": perPage,
-      };
-}
-
-class GetInfinitListRiverpod extends StateNotifier<List<ModelSavedQuestion>> {
-  GetInfinitListRiverpod()
-      : super([
-          ModelSavedQuestion(
-              status: 1,
-              data: DataSavedQuestion(
-                  data: [
-                    DatumSavedQuestion(
-                        id: 1,
-                        bookNum: "",
-                        userAns: "",
-                        questionId: "",
-                        fanName: "",
-                        subjectCode: "",
-                        qsvg: "",
-                        textSvg: "",
-                        qpdf: "",
-                        textPdf: "",
-                        qimg: "",
-                        textImg: "",
-                        examId: "",
-                        userId: "",
-                        isFavorite: "")
-                  ],
-                  meta: Meta(
-                    totalCount: 1,
-                    pageCount: 1,
-                    currentPage: 1,
-                    perPage: 1,
-                  )))
-        ]);
-
-  void addListData(ModelSavedQuestion l) {
-    state = [...state, l];
+  void updateFavorite(String id) {
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].id.toString() == id.toString()) {
+        state[i].isFavorite = !state[i].isFavorite;
+      }
+    }
   }
+
+  getFavorite() {
+    List<ResultProductList> list = [];
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].isFavorite) {
+        list.add(state[i]);
+      }
+    }
+    return list;
+  }
+
+  setOrder({required String idOrder}) {
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].id.toString() == idOrder.toString()) {
+
+        if( state[i].slug  != "987654321") {
+          /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
+          state[i].slug = "987654321";
+        }else{
+          state[i].slug = "slug";
+        }
+      }
+    }
+  }
+
+
+  getOrder() {
+    List<ResultProductList> list = [];
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].slug.toString() == "987654321") {
+        list.add(state[i]);
+      }
+    }
+    return list;
+  }
+
 }

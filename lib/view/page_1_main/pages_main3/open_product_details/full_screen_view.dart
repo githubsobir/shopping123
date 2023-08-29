@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:shopping/data/network/base_url.dart';
 
 class FullScreenView extends StatefulWidget {
   final List<dynamic> imagesList;
+
   const FullScreenView({Key? key, required this.imagesList}) : super(key: key);
 
   @override
@@ -12,6 +13,7 @@ class FullScreenView extends StatefulWidget {
 class _FullScreenViewState extends State<FullScreenView> {
   final PageController _controller = PageController();
   int index = 0;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -21,7 +23,6 @@ class _FullScreenViewState extends State<FullScreenView> {
         elevation: 0,
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
-        // leading: IconButton(onPressed: (){Na}, icon: const Icon(Icons.arrow_back)),
       ),
       body: SafeArea(
         child: Column(
@@ -29,14 +30,16 @@ class _FullScreenViewState extends State<FullScreenView> {
           children: [
             Center(
               child: Text(
-                ("${index + 1}")+("/")+(widget.imagesList.length.toString()),
+                ("${index + 1}") +
+                    ("/") +
+                    (widget.imagesList.length.toString()),
                 style: const TextStyle(fontSize: 24, letterSpacing: 8),
               ),
             ),
             SizedBox(
               height: size.height * 0.5,
               child: PageView(
-                onPageChanged: (value){
+                onPageChanged: (value) {
                   setState(() {
                     index = value;
                   });
@@ -54,13 +57,14 @@ class _FullScreenViewState extends State<FullScreenView> {
       ),
     );
   }
-  Widget imageView(){
+
+  Widget imageView() {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: widget.imagesList.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: (){
+          onTap: () {
             _controller.jumpToPage(index);
           },
           child: Container(
@@ -76,7 +80,7 @@ class _FullScreenViewState extends State<FullScreenView> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.network(
-                widget.imagesList[index],
+                BaseUrl.url + widget.imagesList[index],
                 fit: BoxFit.cover,
               ),
             ),
@@ -86,14 +90,14 @@ class _FullScreenViewState extends State<FullScreenView> {
     );
   }
 
-  List <Widget> images(){
+  List<Widget> images() {
     return List.generate(
       widget.imagesList.length,
-          (index) {
+      (index) {
         return InteractiveViewer(
           transformationController: TransformationController(),
           child: Image.network(
-            widget.imagesList[index].toString(),
+            BaseUrl.url + widget.imagesList[index].toString(),
           ),
         );
       },

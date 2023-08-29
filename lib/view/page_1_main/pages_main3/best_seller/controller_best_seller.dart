@@ -100,4 +100,7 @@ final customExampleProvider =
 ///
 ///
 ///
-final getDataLoad1 = FutureProvider((ref) => null);
+
+final customExampleProvider2 =
+StateNotifierProvider<CustomExampleNotifier, CustomExampleState>(
+        (_) => CustomExampleNotifier());

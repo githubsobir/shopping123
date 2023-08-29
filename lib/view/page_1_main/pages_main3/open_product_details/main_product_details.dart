@@ -1,14 +1,19 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shopping/data/model/model_main_1_page/model_main_product_details.dart';
+import 'package:shopping/data/model/model_details/model_details.dart';
+import 'package:shopping/data/network/base_url.dart';
+import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/full_screen_view.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
@@ -17,11 +22,16 @@ import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
   static String routeName = "/item_detail";
-  final List<ProductModel> data;
-  final int itemIndex;
 
-  const ItemDetailsScreen(
-      {super.key, required this.data, required this.itemIndex});
+  ModelDetails modelDetails;
+  bool isFavourite;
+  String index;
+
+  ItemDetailsScreen(
+      {super.key,
+      required this.index,
+      required this.modelDetails,
+      required this.isFavourite});
 
   @override
   State<ItemDetailsScreen> createState() => _ItemDetailsScreenState();
@@ -30,21 +40,6 @@ class ItemDetailsScreen extends StatefulWidget {
 class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   int selectColorIndex = 0;
   int selectSizeIndex = 0;
-  List<Color> colors = [
-    const Color(0xff20C997),
-    const Color(0xffAF83F8),
-    const Color(0xffE25563),
-    const Color(0xff121212),
-    const Color.fromRGBO(250, 250, 250, 3),
-  ];
-  List<String> sizes = [
-    "S",
-    "M",
-    "L",
-    "XL",
-    "2XL",
-    "",
-  ];
 
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
@@ -57,22 +52,30 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   /// The alignment to be used next time the user scrolls or jumps to an item.
   double alignment = 0;
 
+  List<String> imageAllUrl = [];
+  List<String> colorAll = [];
+  bool isFavourites = false;
+
+  @override
+  void initState() {
+    for (int i = 0; i < widget.modelDetails.variables.length; i++) {
+      for (int j = 0; j < widget.modelDetails.variables[i].media.length; j++) {
+        imageAllUrl.add(widget.modelDetails.variables[i].media[j].file);
+      }
+    }
+    isFavourites = widget.isFavourite;
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> imagesList = [
-      // widget.data[0].image.toString(),
-      "https://sc02.alicdn.com/kf/Uc88eb97c6b134a078079d9ab0e5e2904M.jpg",
-      "https://i.etsystatic.com/10570298/r/il/c3b149/1616240312/il_794xN.1616240312_g6md.jpg",
-      "https://ae01.alicdn.com/kf/HTB17Nd3XBcXBuNjt_Xoq6xIwFXaV/Cotton-Cool-Design-3D-Tee-Shirts-Uzbekistan-Uzbekistani-T-Shirt-Country-National-Map-Flag-Fun-Novelty.jpg",
-      "https://www.seekpng.com/png/detail/25-256357_green-clipart-tshirt-gelbes-t-shirt-clipart.png",
-    ];
-    // SizeConfig().init(context);
     return Scaffold(
       backgroundColor: const Color.fromRGBO(250, 250, 250, 3),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            appbar(context, imagesList),
+            appbar(context, imageAllUrl),
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               sliver: SliverToBoxAdapter(
@@ -81,7 +84,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      widget.data[widget.itemIndex].title.toString(),
+                      widget.modelDetails.name.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -96,7 +99,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         RatingBar.builder(
                           ignoreGestures: true,
                           itemSize: 20,
-                          initialRating: 4.5,
+                          initialRating: 1,
                           minRating: 1,
                           direction: Axis.horizontal,
                           allowHalfRating: true,
@@ -116,20 +119,20 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                       const Row(
+                        Row(
                           children: [
                             Text(
-                              "9909900.00",
-                              style:  TextStyle(
+                              widget.modelDetails.price.toString(),
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
                               ),
                             ),
-                             SizedBox(width: 10),
+                            const SizedBox(width: 10),
                             Text(
-                              "9909900.00",
-                              style:  TextStyle(
+                              widget.modelDetails.price.toString(),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w300,
                                 color: Colors.black,
@@ -139,44 +142,59 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: IconButton(
-                            padding: const EdgeInsets.all(0),
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.favorite_border,
-                              // color: Color(0xffF35383),
-                              color: Colors.red,
-                              size: 30,
-                            ),
-                          ),
-                        ),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Consumer(
+                              builder: (context, ref, child) {
+                                return IconButton(
+                                  padding: const EdgeInsets.all(0),
+                                  onPressed: () {
+                                    ref
+                                        .read(setFavourite2.notifier)
+                                        .updateFavorite(widget.modelDetails.id.toString());
+                                    setState(() {});
+                                    // isFavourites = !isFavourites;
+                                  },
+                                  icon: Icon(
+                                    isFavourites
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    // color: Color(0xffF35383),
+                                    color: Colors.red,
+                                    size: 30,
+                                  ),
+                                );
+                              },
+                            )),
                       ],
                     ),
                     // const SizedBox(height: 12),
                     const Divider(color: Color(0xffbbbaba), thickness: 1),
                     const SizedBox(height: 12),
-                    const Text(
-                      "Color:",
-                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    Text(
+                      "Color: ${widget.modelDetails.id}",
+                      style: const TextStyle(color: Colors.black, fontSize: 15),
                     ),
                     const SizedBox(height: 12),
                     SizedBox(
                       height: 45,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: colors.length ,
+                        itemCount: widget.modelDetails.variables.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: GestureDetector(
                               onTap: () {
                                 log("index colors");
-                                log(index.toString());
-                                setState(() {
-                                  itemScrollController.jumpTo(index: index);
-                                  selectColorIndex = index;
-                                });
+                                log(widget
+                                    .modelDetails.variables[index].media.length
+                                    .toString());
+                                // setState(() {
+                                //   itemScrollController.jumpTo(
+                                //       index: widget.modelDetails
+                                //           .variables[index].media.length);
+                                //   selectColorIndex = index;
+                                // });
                               },
                               child: Container(
                                 height: 45,
@@ -185,7 +203,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                   border: selectColorIndex == index
                                       ? Border.all(
                                           width: 2,
-                                          color: Colors.black,
+                                          color: Colors.yellow,
                                         )
                                       : const Border(),
                                   borderRadius: BorderRadius.circular(100),
@@ -196,7 +214,12 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                     height: 40,
                                     width: 40,
                                     decoration: BoxDecoration(
-                                      color: colors[index],
+                                      color: Color(int.parse(
+                                              widget.modelDetails
+                                                  .variables[index].color
+                                                  .substring(1, 7),
+                                              radix: 16) +
+                                          0xFF000000),
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                   ),
@@ -213,9 +236,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       child: MaterialButton(
                         padding: const EdgeInsets.only(left: 0, top: 0),
                         onPressed: () {
-                          setState(() {
-                            selectColorIndex = colors.length;
-                          });
+                          // setState(() {
+                          //   // selectColorIndex = colors.length;
+                          // });
                         },
                         child: const Row(
                           children: [
@@ -240,15 +263,18 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       height: 45,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: sizes.length - 1,
+                        itemCount: widget.modelDetails.variables.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 10),
                             child: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  selectSizeIndex = index;
-                                });
+                                // setState(() {
+                                //   itemScrollController.jumpTo(
+                                //       index: widget.modelDetails
+                                //           .variables[index].media.length);
+                                //   selectSizeIndex = index;
+                                // });
                               },
                               child: Container(
                                 height: 45,
@@ -271,7 +297,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                     height: 40,
                                     width: 40,
                                     child: Center(
-                                        child: Text(sizes[index].toString())),
+                                        child: Text(
+                                      widget.modelDetails.variables[index].size
+                                          .toString(),
+                                      textAlign: TextAlign.center,
+                                    )),
                                   ),
                                 ),
                               ),
@@ -280,38 +310,39 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.75),
-                      child: MaterialButton(
-                        padding: const EdgeInsets.only(left: 0, top: 0),
-                        onPressed: () {
-                          setState(() {
-                            selectSizeIndex = sizes.length;
-                          });
-                        },
-                        child: const Row(
-                          children: [
-                            Icon(
-                              Icons.clear,
-                              size: 14,
-                            ),
-                            Text(
-                              "Clear",
-                              style: TextStyle(fontSize: 13),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const Row(
+                    // Padding(
+                    //   padding: EdgeInsets.only(
+                    //       right: MediaQuery.of(context).size.width * 0.75),
+                    //   child: MaterialButton(
+                    //     padding: const EdgeInsets.only(left: 0, top: 0),
+                    //     onPressed: () {
+                    //       setState(() {
+                    //         selectSizeIndex = sizes.length;
+                    //       });
+                    //     },
+                    //     child: const Row(
+                    //       children: [
+                    //         Icon(
+                    //           Icons.clear,
+                    //           size: 14,
+                    //         ),
+                    //         Text(
+                    //           "Clear",
+                    //           style: TextStyle(fontSize: 13),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    const SizedBox(height: 10),
+                    Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.person_outline,
                           size: 24,
                           color: Colors.black,
                         ),
-                        Text(
+                        const Text(
                           "Seller: ",
                           style: TextStyle(
                               color: Colors.black,
@@ -319,8 +350,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                               fontWeight: FontWeight.w500),
                         ),
                         Text(
-                          "Terra Pro",
-                          style: TextStyle(
+                          widget.modelDetails.organization.toString(),
+                          style: const TextStyle(
                             color: Colors.redAccent,
                             fontSize: 17,
                             fontWeight: FontWeight.w100,
@@ -332,7 +363,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     const SizedBox(height: 20),
                     ExpandableText(
                         label: "Description",
-                        text: widget.data[widget.itemIndex].description),
+                        text: widget.modelDetails.desc.toString()),
                     const Text(
                       "Similar Items",
                       style: TextStyle(
@@ -349,7 +380,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           ],
         ),
       ),
-      bottomSheet: buildBottomSheet(),
+      // bottomSheet: buildBottomSheet(),
     );
   }
 
@@ -362,15 +393,15 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       itemBuilder: (context, index) {
         return GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ItemDetailsScreen(
-                  itemIndex: index,
-                  data: widget.data,
-                ),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => ItemDetailsScreen(
+            //       itemIndex: index,
+            //       data: widget.data, modelDetails: null,
+            //     ),
+            //   ),
+            // );
           },
           child: Container(
             decoration: BoxDecoration(
@@ -391,7 +422,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CachedNetworkImage(
-                        imageUrl: widget.data[index].image.toString(),
+                        imageUrl: widget
+                            .modelDetails.variables[index].media[0].file
+                            .toString(),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -403,7 +436,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.data[index].title,
+                        widget.modelDetails.name,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -439,7 +472,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.data[index].price.toStringAsFixed(2) +
+                            widget.modelDetails.price.toStringAsFixed(2) +
                                 (" \$"),
                             style: const TextStyle(
                               fontSize: 14,
@@ -501,7 +534,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
               Container(
                 height: 40,
                 width: 130,
-
                 decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(50),
@@ -563,14 +595,15 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
   SliverAppBar appbar(BuildContext context, List<String> images) {
     return SliverAppBar(
-      iconTheme: IconThemeData(color: Colors.black),
+      iconTheme: const IconThemeData(color: Colors.black),
       flexibleSpace: FlexibleSpaceBar(
         background: Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, bottom: 25, top: 5),
           child: GestureDetector(
               onTap: () {
-
-                pushNewScreen(context, screen: FullScreenView(imagesList: images), withNavBar: false);
+                pushNewScreen(context,
+                    screen: FullScreenView(imagesList: images),
+                    withNavBar: false);
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
@@ -580,20 +613,31 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
               child: ScrollablePositionedList.builder(
                 itemCount: images.length,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => CachedNetworkImage(
-                    filterQuality: FilterQuality.high,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                    imageUrl: images[index],
-                    errorWidget: (context, url, text) {
-                      return Image.asset(
-                        "assets/images/image_for_error.png",
-                        fit: BoxFit.cover,
-                      );
-                    },
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            const LoadingShimmer()),
+                itemBuilder: (context, index) => SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        index.toString(),
+                        style: const TextStyle(
+                            color: Colors.red, fontWeight: FontWeight.bold),
+                      ),
+                      CachedNetworkImage(
+                          filterQuality: FilterQuality.high,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                          imageUrl: BaseUrl.url + images[index],
+                          errorWidget: (context, url, text) {
+                            return Image.asset(
+                              "assets/images/image_for_error.png",
+                              fit: BoxFit.cover,
+                            );
+                          },
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  const LoadingShimmer()),
+                    ],
+                  ),
+                ),
                 // CachedNetworkImage(
                 //   width: MediaQuery.of(context).size.width,
                 //   imageUrl: images[index],

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/data/model/model_main_1_page/new_collection/new_collection_model.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
@@ -15,23 +17,37 @@ final getDataNewCollection = FutureProvider<ModelMainNewCollections>((ref) {
 final apiProviderInfiniteList =
     Provider<InternetInfiniteList>((ref) => InternetInfiniteList());
 
-List<DatumSavedQuestion> listData = [];
-late ModelSavedQuestion modelSavedQuestion;
-final getDataInfinitiList = FutureProvider.family
-    .autoDispose<List<DatumSavedQuestion>, String>((ref, dataString) async {
+List<ResultProductList> listData = [];
+late ModelProductList modelSavedQuestion;
 
-      String data = await ref
+final getDataInfinitiList = FutureProvider.family
+    .autoDispose<List<ResultProductList>, String>((ref, dataString) async {
+  String data = await ref
       .read(apiProviderInfiniteList)
       .getInfiniteList(nextPage: dataString);
-  // log(data);
-  modelSavedQuestion =
-      ModelSavedQuestion.fromJson(jsonDecode(data));
-  // log(jsonEncode(modelSavedQuestion).toString());
+  try {
+    modelSavedQuestion = ModelProductList.fromJson(jsonDecode(data));
+  } catch (e) {
+    log(e.toString());
+  }
+  log("123");
 
   if (listData.isEmpty) {
-    listData = modelSavedQuestion.data.data;
+    listData = modelSavedQuestion.results;
   } else {
-    listData.addAll(modelSavedQuestion.data.data);
+    listData.addAll(modelSavedQuestion.results);
   }
+
   return listData;
 });
+
+
+
+final getList = StateProvider<List<ResultProductList>>((ref) => listData);
+
+final setFavourite2 =
+    StateNotifierProvider<ModelProductListNotifier, List<ResultProductList>>(
+        (ref) {
+  return ModelProductListNotifier(listData);
+});
+

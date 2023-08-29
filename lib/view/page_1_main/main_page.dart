@@ -1,11 +1,16 @@
-import 'package:easy_localization/easy_localization.dart';
+library main_page.dart;
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/view/page_1_main/pages_main3/best_seller/best_sellers.dart';
+import 'package:shopping/view/page_1_main/pages_main3/new_collection/new_collections.dart';
+import 'package:shopping/view/page_1_main/pages_main3/sale/sales.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/search_page.dart';
 import 'package:shopping/view/page_1_main/widgets_main/main_body.dart';
 import 'package:shopping/view/page_1_main/widgets_main/main_header.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
+
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,7 +20,6 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-  getData() {}
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +77,41 @@ class _MainPageState extends ConsumerState<MainPage> {
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return [mainHeader(context: context, ref: ref)];
               },
-              body: mainBody(context: context, ref: ref)),
+              // body: mainBody(context: context, ref: ref)),
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ContainedTabBarView(
+                  tabBarProperties: TabBarProperties(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    margin: const EdgeInsets.only(bottom: 5, top: 5),
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xff121212)),
+                    ),
+                    indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
+                    labelStyle: const TextStyle(
+                        color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                    labelColor: Colors.black,
+                    indicatorColor: Colors.red,
+                    height: 35,
+                  ),
+                  tabs: const [
+                    Text('Best Sellers'),
+                    Text('New Arrivals'),
+                    Text('Sale'),
+                  ],
+                  views: const [NewCollection(), BestSellers(), Sales()],
+                  onChange: (index) {
+                    if(index == 1){
+                      setState(() {
+
+                      });
+                      // ref.read(getDataInfinitiList("1"));
+                    }
+                    // setState((){});
+                  },
+                ),
+              ),),
         ));
   }
 }

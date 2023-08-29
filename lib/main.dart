@@ -1,15 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:io';
-
-import 'package:animated_introduction/animated_introduction.dart';
 import 'package:connection_notifier/connection_notifier.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/view/page_0_root/lang_choose.dart';
 import 'package:shopping/view/page_0_root/root_page.dart';
@@ -103,43 +100,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// final List<SingleIntroScreen> pages = [
-//   const SingleIntroScreen(
-//     title: 'Welcome to the Event Management App !',
-//     description:
-//         'You plans your Events, We\'ll do the rest and will be the best! Guaranteed!  ',
-//     imageAsset: 'assets/image1.jpeg',
-//   ),
-//   const SingleIntroScreen(
-//     title: 'Book tickets to cricket matches and events',
-//     description:
-//         'Tickets to the latest movies, crickets matches, concerts, comedy shows, plus lots more !',
-//     imageAsset: 'assets/image2.png',
-//   ),
-//   const SingleIntroScreen(
-//     title: 'Grabs all events now only in your hands',
-//     description: 'All events are now in your hands, just a click away ! ',
-//     imageAsset: 'assets/image1.jpeg',
-//   ),
-// ];
-//
-// class ExamplePage extends StatelessWidget {
-//   const ExamplePage({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return AnimatedIntroduction(
-//       footerPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-//       slides: pages,
-//       footerRadius: 10,
-//       indicatorType: IndicatorType.diamond,
-//       onDone: () {
-//         /// TODO: Go to desire page like login or home
-//       },
-//       isFullScreen: false,
-//
-//     );
-//   }
-// }
-
