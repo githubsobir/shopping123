@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_5_account/identification_page/sign_up/app_bar_sign_up.dart';
-import 'package:shopping/view/page_5_account/identification_page/sign_up/button_sign_up.dart';
 import 'package:shopping/view/page_5_account/identification_page/sign_up/input_sign_up.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
@@ -15,11 +14,11 @@ class SignUp extends ConsumerStatefulWidget {
 }
 
 class _SignUpState extends ConsumerState<SignUp> {
-
   @override
   void initState() {
     super.initState();
   }
+
   final formKey = GlobalKey<FormState>();
   bool myBoolWidget = false;
   bool boolButtonColor1 = false;
@@ -28,8 +27,7 @@ class _SignUpState extends ConsumerState<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: MyColors.appColorWhite(),
-        appBar:
-        appBarSignUp( context: context),
+        appBar: appBarSignUp(context: context),
         body: Form(
             key: formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -39,36 +37,23 @@ class _SignUpState extends ConsumerState<SignUp> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
-                        textWords(
-                            context: context),
-                        inputsSignUp(
-                            context: context, ),
+                        textWords(context: context),
+                        inputsSignUp(context: context, ref: ref),
                         const SizedBox(height: 5),
-                      ],),
-                    Column(children: [
-
-                      buttonSignUp(
-                          context: context,
-                      ref: ref
-                      ),
-                    ],),
-
-
+                      ],
+                    ),
                   ],
                 ),
               ),
             )));
   }
 
-  Widget textWords(
-      {required BuildContext context}) {
+  Widget textWords({required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,

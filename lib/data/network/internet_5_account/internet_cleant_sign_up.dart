@@ -1,32 +1,41 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:shopping/data/network/base_url.dart';
 
 class InternetClientSignUp {
-  Future<String> getISignUp({
-    required fullName,
-    required phoneNumber,
-    required password,
-    required isActive,
-    required fileImage,
+  // dynamic fullName;
+  // dynamic phoneNumber;
+  // dynamic password;
+  // dynamic isActive;
+  // dynamic fileImage;
+  //
+  // InternetClientSignUp({
+  //   required this.fullName,
+  //   required this.phoneNumber,
+  //   required this.password,
+  //   required this.isActive,
+  //   required this.fileImage,
+  // });
 
-
-}) async {
+  Future<String> getISignUp(
+      {required fullName,
+      required phoneNumber,
+      required password,
+      required isActive,
+      required fileImage}) async {
     var dio = Dio();
     Response response;
     FormData formData = FormData.fromMap({
       "full_name": fullName,
       "phone": phoneNumber,
       "password": password,
-      "is_active": isActive,
+      "is_active": "1",
     });
     response =
-        await dio.post("${BaseUrl.url}/api/v1/web/clients/", data: {
-          "full_name": fullName,
-          "phone": phoneNumber,
-          "password": password,
-          "is_active": isActive,
-        });
+        await dio.post("${BaseUrl.url}/api/v1/web/clients/", data: formData);
 
-    return (response.data).toString();
+    return jsonEncode(response.data).toString();
   }
 }

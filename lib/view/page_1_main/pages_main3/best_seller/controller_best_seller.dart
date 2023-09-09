@@ -48,8 +48,6 @@ class CustomExampleNotifier extends StateNotifier<CustomExampleState>
   @override
   Future<List<ProductModel>?> load(String page, int limit) async {
     try {
-      //as build can be called many times, ensure
-      //we only hit our page API once per page
       if (state.previousPageKeys.contains(page)) {
         await Future.delayed(const Duration(seconds: 0), () {
           state = state.copyWith();

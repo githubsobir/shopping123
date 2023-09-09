@@ -81,5 +81,8 @@
   "search": "Qidiruv",
   "brand": "Brendlar",
   "or": "YOKI",
-  "chooseLang": "Til tanlang"
+  "chooseLang": "Til tanlang",
+  "name": "Familiya va ism",
+  "errorName": "Familiya va ismingizni kiriting",
+  "passwordNotEqu": "Parollar mos emas"
 }

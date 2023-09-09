@@ -21,17 +21,15 @@ List<ResultProductList> listData = [];
 late ModelProductList modelSavedQuestion;
 
 final getDataInfinitiList = FutureProvider.family
-    .autoDispose<List<ResultProductList>, String>((ref, dataString) async {
+    .autoDispose<List<ResultProductList>, String>((ref, numberPage) async {
   String data = await ref
       .read(apiProviderInfiniteList)
-      .getInfiniteList(nextPage: dataString);
+      .getInfiniteList(nextPage: numberPage);
   try {
     modelSavedQuestion = ModelProductList.fromJson(jsonDecode(data));
   } catch (e) {
     log(e.toString());
   }
-  log("123");
-
   if (listData.isEmpty) {
     listData = modelSavedQuestion.results;
   } else {
@@ -41,8 +39,6 @@ final getDataInfinitiList = FutureProvider.family
   return listData;
 });
 
-
-
 final getList = StateProvider<List<ResultProductList>>((ref) => listData);
 
 final setFavourite2 =
@@ -50,4 +46,3 @@ final setFavourite2 =
         (ref) {
   return ModelProductListNotifier(listData);
 });
-

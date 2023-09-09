@@ -86,9 +86,9 @@ class _RootPageState extends State<RootPage> {
       controller: controller,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: false,
-      stateManagement: false,
+      stateManagement: true,
       hideNavigationBar: false,
-      hideNavigationBarWhenKeyboardShows: false,
+      hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         borderRadius: const BorderRadius.only(
             topRight: Radius.circular(10), topLeft: Radius.circular(10)),
@@ -99,7 +99,7 @@ class _RootPageState extends State<RootPage> {
       navBarStyle: NavBarStyle.style3,
       selectedTabScreenContext: (p0) {},
       screenTransitionAnimation:
-          ScreenTransitionAnimation(curve: Curves.bounceIn),
+         const ScreenTransitionAnimation(curve: Curves.bounceIn),
       onItemSelected: (value) {
         log(value.toString());
         setState(() {});

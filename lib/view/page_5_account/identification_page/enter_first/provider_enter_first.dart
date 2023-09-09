@@ -20,7 +20,7 @@
 // import 'package:mydtm/data/model_parse/m1_model/authhorization/model_auth_success.dart';
 // import 'package:mydtm/data/model_parse/m1_model/authhorization/model_get_token.dart';
 // import 'package:mydtm/data/model_parse/m1_model/parse_captche.dart';
-// import 'package:mydtm/view/pages/m1_enter_system/sign_up/sign_up.dart';
+// import 'package:mydtm/view/pages/m1_enter_system/sign_up/model_sign_up.dart';
 // import 'package:mydtm/view/pages/m2_main_page/main_page.dart';
 // import 'package:mydtm/view/widgets/app_widget/app_widgets.dart';
 // import 'package:mydtm/view/widgets/app_widget/sms_auto_fill/model/model_captcha_error.dart';

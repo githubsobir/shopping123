@@ -72,7 +72,7 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                     pushNewScreen(context,
                         screen: DetailsPage(
 
-                          idProduct: index.toString(),
+                          idProduct: data[index].id.toString(),
                           isFavourite: data[index].isFavorite,
                         ),
                     withNavBar: false
