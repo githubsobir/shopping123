@@ -266,7 +266,20 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                         )
                             : const LoadingShimmer(),
                       )
-                                  :Center(child: Text("Bosh"),)
+                                  :Center(child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                           color: Colors.white,
+                                          child: Image.asset(
+                                              "assets/images/empty_cart.png",
+                                          height: 120,
+                                          )),
+                                      SizedBox(height: 20),
+                                      Text("Ma'lumot topilmadi !!!"),
+                                    ],
+                                  ),)
                       )
                     ],
                   ),
