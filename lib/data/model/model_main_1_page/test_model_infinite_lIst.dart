@@ -91,8 +91,8 @@ class ResultProductList {
         id: json["id"],
         name: json["name"],
         slug: json["slug"],
-        price: json["price"],
-        discount: json["discount"],
+        price: json["price"]??0,
+        discount: json["discount"]??0,
         newPrice: json["new_price"],
         gender: json["gender"],
         type: json["type"],
@@ -102,7 +102,7 @@ class ResultProductList {
         category: json["category"],
         isFavorite: json["is_favorite"] ?? false,
         photo: json["photo"] ?? "",
-        rating: json["rating"],
+        rating: json["rating"]??0,
       );
 
   Map<String, dynamic> toJson() => {

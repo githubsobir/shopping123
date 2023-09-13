@@ -63,7 +63,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: data.results.length,
                       itemBuilder: (context, index) {
-                        return Column(children: <Widget>[
+                        return Column(children: [
                           const Divider(
                             height: 17.0,
                             color: Colors.white,
@@ -71,15 +71,13 @@ class _CategoryPageState extends State<CategoryPage> {
                           data.results[index].subcategories.isNotEmpty
                               ? ExpansionTile(
                                   key: Key(index.toString()),
-                                  //attention
                                   initiallyExpanded: index == selected,
-                                  //attention
 
-                                  // title: const Icon(
-                                  //   Icons.shopping_basket,
-                                  //   size: 32.0,
-                                  //   color: Colors.blueAccent,
-                                  // ),
+                                  leading: const Icon(
+                                    Icons.shopping_basket,
+                                    size: 32.0,
+                                    color: Colors.blueAccent,
+                                  ),
                                   title: Text(data.results[index].name,
                                       style: const TextStyle(
                                           color: Colors.black,
@@ -348,7 +346,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     )
                   ])));
             }, error: (error, errorText) {
-              return LoadingShimmerList();
+              return const LoadingShimmerList();
             }, loading: () {
               return const LoadingShimmerList();
             }));

@@ -78,9 +78,22 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                           child: Row(
                             children: [
                               Image.network(
-                                 getList(l: listOrder.results)[index].photo??"",
+                                 getList(l: listOrder.results)[index].photo.toString(),
                                 width: 120,
-                              ),
+                                errorBuilder: (context, error,
+                                    stackTrace) =>
+                                    SizedBox(
+                                      height: 150,
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width *
+                                          0.2,
+                                      child: Image.asset(
+                                          "assets/images/shopping1.png"),
+                                    ),
+                              )
+
+                              ,
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
