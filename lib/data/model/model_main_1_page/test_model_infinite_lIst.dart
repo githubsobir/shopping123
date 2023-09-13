@@ -84,40 +84,7 @@ class ResultProductList {
     required this.rating,
   });
 
-  ResultProductList copyWith({
-    dynamic id,
-    dynamic name,
-    dynamic slug,
-    dynamic price,
-    dynamic discount,
-    dynamic newPrice,
-    dynamic gender,
-    dynamic type,
-    dynamic season,
-    dynamic material,
-    dynamic brand,
-    dynamic category,
-    dynamic isFavorite,
-    dynamic photo,
-    dynamic rating,
-  }) {
-    return ResultProductList(
-        id: id ?? this.id,
-        name: name ?? this.name,
-        slug: slug ?? this.slug,
-        price: price ?? this.price,
-        discount: discount ?? this.discount,
-        newPrice: newPrice ?? this.newPrice,
-        gender: gender ?? this.gender,
-        type: type ?? this.type,
-        season: season ?? this.season,
-        material: material ?? this.material,
-        brand: brand ?? this.brand,
-        category: category ?? this.category,
-        isFavorite: isFavorite ?? this.isFavorite,
-        photo: photo ?? this.photo,
-        rating: rating ?? this.rating);
-  }
+
 
   factory ResultProductList.fromJson(Map<String, dynamic> json) =>
       ResultProductList(
@@ -134,7 +101,7 @@ class ResultProductList {
         brand: json["brand"],
         category: json["category"],
         isFavorite: json["is_favorite"] ?? false,
-        photo: json["photo"],
+        photo: json["photo"] ?? "",
         rating: json["rating"],
       );
 
@@ -158,63 +125,124 @@ class ResultProductList {
 }
 
 /// product is favourite, basket-karzinka
-class ModelProductListNotifier extends StateNotifier<List<ResultProductList>> {
-  // List<ResultProductList> listResultProductList;
+class ModelProductListNotifier extends StateNotifier<ModelProductList> {
+  ModelProductListNotifier()
+      : super(
+            ModelProductList(count: "1", next: "", previous: "", results: [])) {
+    getData(modelSearch: ModelSearch());
+  }
 
-  ModelProductListNotifier(super.state);
+  late ModelProductList modelProductList =
+      ModelProductList(count: "1", next: "", previous: "", results: []);
+  List<ResultProductList> listProducts = [];
 
-  void updateFavorite(String id) {
-    for (int i = 0; i < state.length; i++) {
-      if (state[i].id.toString() == id.toString()) {
-        state[i].isFavorite = !state[i].isFavorite;
+  Future<ModelProductList> getData({required ModelSearch modelSearch}) async {
+    var dio = Dio();
+    List<ResultProductList> listProduct2 = [];
+    if (modelSearch.page.toString() == "1" ||
+        modelSearch.page.toString() == "null"
+    ) {
+      state = state.copyWith(results: []);
+    }
+    Response response = await dio.get(
+        "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
+        options: Options(
+            headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
+
+    try {
+      modelProductList = ModelProductList.fromJson(response.data);
+
+
+      if (modelSearch.page.toString() == "1" ||
+          modelSearch.page.toString() == "null"
+      ) {
+        listProduct2.clear();
+        listProduct2 = modelProductList.results;
+        state = state.copyWith(results: listProduct2);
+
+        return state;
+      } else {
+        listProduct2.addAll(modelProductList.results);
+        state = state.copyWith(results: listProduct2);
+        return state;
+      }
+    } catch (e) {
+      log(e.toString());
+      return ModelProductList(count: "", next: "", previous: "", results: []);
+    }
+  }
+
+  List<ResultProductList> getList() {
+    return state.results;
+  }
+
+  updateFavorite(String id) {
+    List<ResultProductList> updateFav = [...state.results];
+    for (int i = 0; i < updateFav.length; i++) {
+      if (updateFav[i].id.toString() == id.toString()) {
+        log(updateFav[i].isFavorite.toString());
+        updateFav[i].isFavorite = !updateFav[i].isFavorite;
+
+        state = state.copyWith(results: updateFav);
+
+        // state.results = updateFav;
+        log(state.results[i].isFavorite.toString());
       }
     }
   }
 
   getFavorite() {
     List<ResultProductList> list = [];
-    for (int i = 0; i < state.length; i++) {
-      if (state[i].isFavorite) {
-        list.add(state[i]);
+    list.addAll(state.results);
+    for (int i = 0; i < list.length; i++) {
+      if (state.results[i].isFavorite) {
+        list.add(state.results[i]);
       }
     }
-    return list;
+    state = state.copyWith(results: list);
+    return state;
   }
 
   setOrder({required String idOrder}) {
-    for (int i = 0; i < state.length; i++) {
-      if (state[i].id.toString() == idOrder.toString()) {
-        if (state[i].slug != "987654321") {
+    List<ResultProductList> updateOrder = [...state.results];
+    for (int i = 0; i < updateOrder.length; i++) {
+      if (updateOrder[i].id.toString() == idOrder.toString()) {
+        if (updateOrder[i].slug != "987654321") {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          state[i].slug = "987654321";
+          updateOrder[i].slug = "987654321";
         } else {
-          state[i].slug = "slug";
+          updateOrder[i].slug = "slug";
         }
       }
     }
+    state = state.copyWith(results: updateOrder);
+    return state;
   }
 
-  getOrder() {
+  List<ResultProductList> getOrder() {
     List<ResultProductList> list = [];
-    for (int i = 0; i < state.length; i++) {
-      if (state[i].slug.toString() == "987654321") {
-        list.add(state[i]);
+    list.addAll(state.results);
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].slug.toString() == "987654321") {
+        // list.add(state.results[i]);
+        // state = state.copyWith(results: )
       }
     }
-    return list;
+    return state.results;
   }
 }
 
 /// search
 class ModelSearchListNotifier extends StateNotifier<List<ResultProductList>> {
   ModelSearchListNotifier() : super([]);
+
   var dio = Dio();
   late ModelProductList modelSavedQuestion;
   List<ResultProductList> listData = [];
 
-  Future getListFromInternet({required ModelSearch modelSearch}) async {
+  Future<List<ResultProductList>> getListFromInternet({required ModelSearch modelSearch}) async {
     Response response = await dio.get(
-        "${BaseUrl.url}/api/v1/web/products/?${getLinkSearch(m: modelSearch)}",
+        "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
         options: Options(
             headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
     log(jsonEncode(response.data).toString());
@@ -228,150 +256,39 @@ class ModelSearchListNotifier extends StateNotifier<List<ResultProductList>> {
         listData.addAll(modelSavedQuestion.results);
       }
       state = listData;
+      return state;
     } catch (e) {
       log("@#§123");
       log(e.toString());
+      return [];
     }
   }
 
-  List<ResultProductList> getList() {
-    return state;
+  //
+  // List<ResultProductList> getList() {
+  //   return state;
+  // }
+
+  /// qidiruv uchun
+  ///
+  void updateFavorite(String id) {
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].id.toString() == id.toString()) {
+        state[i].isFavorite = !state[i].isFavorite;
+      }
+    }
   }
 
-  String getLinkSearch({required ModelSearch m}) {
-    String data = "";
-    try {
-      if (m.minPrice.toString() != "null" && m.minPrice.toString().isNotEmpty) {
-        data = "min_price=${m.minPrice}";
-      }
-      if (m.maxPrice.toString() != "null" && m.maxPrice.toString().isNotEmpty) {
-        data = "max_price=${m.maxPrice}";
-      }
-      if (m.price.toString() != "null" && m.price.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&price=${m.price}";
+  setOrders({required String idOrder}) {
+    for (int i = 0; i < state.length; i++) {
+      if (state[i].id.toString() == idOrder.toString()) {
+        if (state[i].slug != "987654321") {
+          /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
+          state[i].slug = "987654321";
         } else {
-          data = "price=${m.price}";
+          state[i].slug = "slug";
         }
       }
-      if (m.organization.toString() != "null" &&
-          m.organization.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&organization=${m.organization}";
-        } else {
-          data = "organization=${m.organization}";
-        }
-      }
-      if (m.brand.toString() != "null" && m.brand.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&brand=${m.brand}";
-        } else {
-          data = "brand=${m.brand}";
-        }
-      }
-      if (m.category.toString() != "null" && m.category.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&category=${m.category}";
-        } else {
-          data = "category=${m.category}";
-        }
-      }
-      if (m.categorySlug.toString() != "null" &&
-          m.categorySlug.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&category_slug=${m.categorySlug}";
-        } else {
-          data = "category_slug=${m.categorySlug}";
-        }
-      }
-      if (m.material.toString() != "null" && m.material.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&material=${m.material}";
-        } else {
-          data = "material=${m.material}";
-        }
-      }
-      if (m.color.toString() != "null" && m.color.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&color=${m.color}";
-        } else {
-          data = "color=${m.color}";
-        }
-      }
-      if (m.size.toString() != "null" && m.size.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&size=${m.size}";
-        } else {
-          data = "size=${m.size}";
-        }
-      }
-      if (m.type.toString() != "null" && m.type.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&type=${m.type}";
-        } else {
-          data = "type=${m.type}";
-        }
-      }
-      if (m.season.toString() != "null" && m.season.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&season=${m.season}";
-        } else {
-          data = "season=${m.season}";
-        }
-      }
-      if (m.gender.toString() != "null" && m.gender.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&gender=${m.gender}";
-        } else {
-          data = "gender=${m.gender}";
-        }
-      }
-      if (m.search.toString() != "null" && m.search.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&search=${m.search}";
-        } else {
-          data = "search=${m.search}";
-        }
-      }
-      if (m.ordering.toString() != "null" && m.ordering.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&ordering=${m.ordering}";
-        } else {
-          data = "ordering=${m.ordering}";
-        }
-      }
-      if (m.page.toString() != "null" && m.page.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&page=${m.page}";
-        } else {
-          data = "page=${m.page}";
-        }
-      }
-      if (m.pageSize.toString() != "null" && m.pageSize.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&page_size=${m.pageSize}";
-        } else {
-          data = "page_size=${m.pageSize}";
-        }
-      }
-      if (m.sessionId.toString() != "null" &&
-          m.sessionId.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&session_id=${m.sessionId}";
-        } else {
-          data = "session_id=${m.sessionId}";
-        }
-      }
-      if (m.lang.toString() != "null" && m.lang.toString().isNotEmpty) {
-        if (data.isNotEmpty) {
-          data = "$data&lang=${m.lang}";
-        } else {
-          data = "lang=${m.lang}";
-        }
-      }
-    } catch (e) {
-      log(e.toString());
     }
-    return data;
   }
 }

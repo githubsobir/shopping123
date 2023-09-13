@@ -74,34 +74,31 @@ class _MainPageState extends ConsumerState<MainPage> {
               floatHeaderSlivers: false,
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
-                return [mainHeader(context: context, ref: ref)];
+                return [const HeaderMain()];
               },
               // body: mainBody(context: context, ref: ref)),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ContainedTabBarView(
-                  tabBarProperties: TabBarProperties(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    margin: const EdgeInsets.only(bottom: 5, top: 5),
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xff121212)),
-                    ),
-                    indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
-                    labelStyle: const TextStyle(
-                        color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
-                    labelColor: Colors.black,
-                    indicatorColor: Colors.red,
-                    height: 35,
+              body: ContainedTabBarView(
+                tabBarProperties: TabBarProperties(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  margin: const EdgeInsets.only(bottom: 5, top: 5),
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xff121212)),
                   ),
-                  tabs: const [
-                    Text('New Collect'),
-                    Text('Best Sellers'),
-                    Text('Sale'),
-                  ],
-                  views: const [NewCollection(), BestSellers(), Sales()],
-
+                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
+                  labelStyle: const TextStyle(
+                      color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                  labelColor: Colors.black,
+                  indicatorColor: Colors.red,
+                  height: 35,
                 ),
+                tabs: const [
+                  Text('New Collect'),
+                  Text('Best Sellers'),
+                  Text('Sale'),
+                ],
+                views: const [NewCollection(), BestSellers(), Sales()],
+
               ),),
         ));
   }

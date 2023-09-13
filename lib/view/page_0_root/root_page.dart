@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
@@ -17,16 +18,16 @@ import 'package:shopping/view/page_4_favourite/favourite_page.dart';
 import 'package:shopping/view/page_5_account/account_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
-class RootPage extends StatefulWidget {
+class RootPage extends ConsumerStatefulWidget {
   String homeIdMainpage;
 
   RootPage({Key? key, required this.homeIdMainpage}) : super(key: key);
 
   @override
-  State<RootPage> createState() => _RootPageState();
+  ConsumerState<RootPage> createState() => _RootPageState();
 }
 
-class _RootPageState extends State<RootPage> {
+class _RootPageState extends ConsumerState<RootPage> {
   Future getBoshFunc() async {
     // await widget.providerCheckInformation.getQaydVaraqa2();
     setState(() {});
@@ -99,10 +100,13 @@ class _RootPageState extends State<RootPage> {
       navBarStyle: NavBarStyle.style3,
       selectedTabScreenContext: (p0) {},
       screenTransitionAnimation:
-         const ScreenTransitionAnimation(curve: Curves.bounceIn),
+          const ScreenTransitionAnimation(curve: Curves.bounceIn),
       onItemSelected: (value) {
         log(value.toString());
-        setState(() {});
+        if (value.toString() == "0") {
+          // ref.read(getDataInfinitiList());
+        }
+        // setState(() {});
       },
     );
   }

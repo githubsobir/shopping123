@@ -80,7 +80,7 @@ class _FullScreenViewState extends State<FullScreenView> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Image.network(
-                BaseUrl.url + widget.imagesList[index],
+                BaseClass.url + widget.imagesList[index],
                 fit: BoxFit.cover,
               ),
             ),
@@ -97,7 +97,7 @@ class _FullScreenViewState extends State<FullScreenView> {
         return InteractiveViewer(
           transformationController: TransformationController(),
           child: Image.network(
-            BaseUrl.url + widget.imagesList[index].toString(),
+            BaseClass.url + widget.imagesList[index].toString(),
           ),
         );
       },

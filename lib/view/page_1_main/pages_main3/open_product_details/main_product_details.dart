@@ -601,7 +601,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           filterQuality: FilterQuality.high,
                           width: MediaQuery.of(context).size.width,
                           fit: BoxFit.cover,
-                          imageUrl: BaseUrl.url + images[index],
+                          imageUrl: BaseClass.url + images[index],
                           errorWidget: (context, url, text) {
                             return Image.asset(
                               "assets/images/image_for_error.png",

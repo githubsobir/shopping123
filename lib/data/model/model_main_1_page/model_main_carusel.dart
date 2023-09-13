@@ -6,8 +6,8 @@ class ModelMainPageCarusel {
 
   ModelMainPageCarusel({
     required this.count,
-    this.next,
-    this.previous,
+    required this.next,
+    required this.previous,
     required this.results,
   });
 
@@ -31,6 +31,7 @@ class Result {
   dynamic updatedAt;
   dynamic createdAt;
   dynamic title;
+  dynamic type;
   dynamic image;
   dynamic deadline;
   bool isActive;
@@ -40,28 +41,31 @@ class Result {
     required this.updatedAt,
     required this.createdAt,
     required this.title,
+    required this.type,
     required this.image,
     required this.deadline,
     required this.isActive,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
-    id: json["id"],
-    updatedAt: json["updated_at"],
-    createdAt: json["created_at"],
-    title: json["title"],
-    image: json["image"],
-    deadline: json["deadline"],
-    isActive: json["is_active"],
+    id: json["id"]??"",
+    updatedAt: json["updated_at"]??"",
+    createdAt:json["created_at"]??"",
+    title: json["title"]??"",
+    type: json["type"]??"",
+    image: json["image"]??"",
+    deadline: json["deadline"]??"",
+    isActive: json["is_active"]??false,
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "updated_at": updatedAt.toIso8601String(),
-    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt,
+    "created_at": createdAt,
     "title": title,
+    "type": type,
     "image": image,
-    "deadline": deadline.toIso8601String(),
+    "deadline": deadline,
     "is_active": isActive,
   };
 }

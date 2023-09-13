@@ -7,7 +7,7 @@ class InternetMainSearch {
   Future<ModelMainSearchBrend> getMainSearchBrand() async {
     var dio = Dio();
     Response response;
-    response = await dio.get("${BaseUrl.url}/api/v1/web/brands/");
+    response = await dio.get("${BaseClass.url}/api/v1/web/brands/");
     // log(jsonEncode(response.data).toString());
     return ModelMainSearchBrend.fromJson(response.data);
   }

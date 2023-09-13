@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_4_favourite/favourite_empty.dart';
@@ -48,10 +49,21 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
 
   int skip = 0;
   bool shouldLoadMore = true;
+  List<ResultProductList> getList({required List<ResultProductList> l}){
+
+    List<ResultProductList> listReturn = [];
+    for(int i = 0; i < l.length; i++){
+      if (l[i].isFavorite.toString() == "true") {
+        listReturn.add(l[i]);
+      }
+    }
+
+    return listReturn;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final list = ref.watch(setFavourite2.notifier).getFavorite();
+    final list = ref.watch(setFavourite2);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,8 +76,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(8),
-              child: list.length > 0
-                  ? GridView.builder(
+              child:  GridView.builder(
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -75,15 +86,17 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                               childAspectRatio: 0.55),
                       scrollDirection: Axis.vertical,
                       controller: _scrollController,
-                      itemCount: list.length,
+                      itemCount: getList(l: list.results).length,
                       physics: const AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => index < list.length
-                          ? GestureDetector(
+                      itemBuilder: (context, index) =>
+                      getList(l: list.results).isNotEmpty
+                          ?
+                      GestureDetector(
                               onTap: () {
                                 pushNewScreen(context,
                                     screen: DetailsPage(
                                       idProduct: index.toString(),
-                                      isFavourite: list[index].isFavorite,
+                                      isFavourite:getList(l: list.results)[index].isFavorite,
                                     ));
                                 log(index.toString());
                               },
@@ -122,7 +135,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                                         .size
                                                         .width *
                                                     0.4,
-                                                list[index].photo.toString(),
+                                                getList(l: list.results)[index].photo.toString(),
                                                 fit: BoxFit.cover,
                                                 errorBuilder: (context, error,
                                                         stackTrace) =>
@@ -151,13 +164,12 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                                             .read(setFavourite2
                                                                 .notifier)
                                                             .updateFavorite(
-                                                                list[index]
+                                                            getList(l: list.results)[index]
                                                                     .id
                                                                     .toString());
-                                                        setState(() {});
                                                       },
                                                       child: Icon(
-                                                        list[index].isFavorite
+                                                        getList(l: list.results)[index].isFavorite
                                                             ? Icons.favorite
                                                             : Icons
                                                                 .favorite_border,
@@ -168,7 +180,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                      Text(list[index].name.toString(),
+                                      Text(getList(l: list.results)[index].name.toString(),
                                           maxLines: 2,
                                           overflow: TextOverflow.fade,
                                           softWrap: true),
@@ -177,7 +189,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                         height: 30,
                                         child: RatingBar.builder(
                                           initialRating: double.parse(
-                                              list[index].rating.toString()),
+                                              getList(l: list.results)[index].rating.toString()),
                                           minRating: 1,
                                           direction: Axis.horizontal,
                                           allowHalfRating: true,
@@ -207,17 +219,16 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("${list[index].price} so'm"),
+                                            Text("${getList(l: list.results)[index].price} so'm"),
                                             GestureDetector(
                                               onTap: () {
                                                 ref
                                                     .read(
                                                         setFavourite2.notifier)
                                                     .setOrder(
-                                                        idOrder: list[index]
+                                                        idOrder: getList(l: list.results)[index]
                                                             .id
                                                             .toString());
-                                                setState(() {});
                                               },
                                               child: Container(
                                                   // margin: EdgeInsets.all(3),
@@ -226,7 +237,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                                   decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       border: Border.all(
-                                                          color: list[index]
+                                                          color: getList(l: list.results)[index]
                                                                       .slug ==
                                                                   "987654321"
                                                               ? Colors.red
@@ -235,7 +246,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                                   child: Center(
                                                       child: Icon(
                                                     Icons.add_shopping_cart,
-                                                    color: list[index].slug ==
+                                                    color: getList(l: list.results)[index].slug ==
                                                             "987654321"
                                                         ? Colors.red
                                                         : Colors.grey.shade800,
@@ -254,8 +265,9 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                               //         color: Colors.blue, child: Text(data[index].fanName)))
                             )
                           : const LoadingShimmer(),
-                    )
-                  : favouriteEmpty(context: context))),
+
+                  // : favouriteEmpty(context: context)
+              ))),
     );
   }
 }

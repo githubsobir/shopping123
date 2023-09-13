@@ -11,7 +11,7 @@ class InternetDetailsInformation {
     var dio = Dio();
     Response response;
     log(id.toString());
-    response = await dio.get("${BaseUrl.url}/api/v1/web/products/$id");
+    response = await dio.get("${BaseClass.url}/api/v1/web/products/$id");
     log(jsonEncode(response.data).toString());
     return ModelDetails.fromJson(response.data);
   }

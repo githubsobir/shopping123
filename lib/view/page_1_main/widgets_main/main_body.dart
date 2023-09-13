@@ -34,7 +34,7 @@ Widget mainBody({required BuildContext context, required WidgetRef ref}) {
         views: const [NewCollection(), BestSellers(), Sales()],
         onChange: (index) {
           if(index == 1){
-            ref.read(getDataInfinitiList("1"));
+            // ref.read(getDataInfinitiList("1"));
           }
           // setState((){});
         },

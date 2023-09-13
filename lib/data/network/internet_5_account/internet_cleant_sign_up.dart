@@ -34,7 +34,7 @@ class InternetClientSignUp {
       "is_active": "1",
     });
     response =
-        await dio.post("${BaseUrl.url}/api/v1/web/clients/", data: formData);
+        await dio.post("${BaseClass.url}/api/v1/web/clients/", data: formData);
 
     return jsonEncode(response.data).toString();
   }
