@@ -80,14 +80,7 @@ late ModelSearch modelSearch;
     return Scaffold(
         body: ListView(
       children: [
-        SizedBox(
-            height: 60,
-            child: Center(child: GestureDetector(
-                onTap: (){
-                  // ref.read(setFavourite2.notifier).getData(modelSearch: ModelSearch(brand: "1"));
 
-                },
-                child: Text("data")))),
         GridView.builder(
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
