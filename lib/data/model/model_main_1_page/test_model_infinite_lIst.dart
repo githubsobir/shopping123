@@ -34,9 +34,9 @@ class ModelProductList {
 
   factory ModelProductList.fromJson(Map<String, dynamic> json) =>
       ModelProductList(
-        count: json["count"],
-        next: json["next"],
-        previous: json["previous"],
+        count: json["count"]??"",
+        next: json["next"]??"",
+        previous: json["previous"]??"",
         results: List<ResultProductList>.from(
             json["results"].map((x) => ResultProductList.fromJson(x))),
       );
@@ -62,46 +62,46 @@ class ResultProductList {
   dynamic material;
   dynamic brand;
   dynamic category;
-  bool isFavorite;
+  dynamic isFavorite;
   dynamic photo;
   dynamic rating;
 
   ResultProductList({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.price,
-    required this.discount,
-    required this.newPrice,
-    required this.gender,
-    required this.type,
-    required this.season,
-    required this.material,
-    required this.brand,
-    required this.category,
-    required this.isFavorite,
-    required this.photo,
-    required this.rating,
+     this.id,
+     this.name,
+     this.slug,
+     this.price,
+     this.discount,
+     this.newPrice,
+     this.gender,
+     this.type,
+     this.season,
+     this.material,
+     this.brand,
+     this.category,
+     this.isFavorite,
+     this.photo,
+     this.rating,
   });
 
 
 
   factory ResultProductList.fromJson(Map<String, dynamic> json) =>
       ResultProductList(
-        id: json["id"],
-        name: json["name"],
-        slug: json["slug"],
-        price: json["price"]??0,
-        discount: json["discount"]??0,
-        newPrice: json["new_price"],
-        gender: json["gender"],
-        type: json["type"],
-        season: json["season"],
-        material: json["material"],
-        brand: json["brand"],
-        category: json["category"],
+        id: json["id"]??"",
+        name: json["name"]??"",
+        slug: json["slug"]??"",
+        price: json["price"]??0??"",
+        discount: json["discount"]??0??"",
+        newPrice: json["new_price"]??"",
+        gender: json["gender"]??"",
+        type: json["type"]??"",
+        season: json["season"]??"",
+        material: json["material"]??"",
+        brand: json["brand"]??"",
+        category: json["category"]??"",
         isFavorite: json["is_favorite"] ?? false,
-        photo: json["photo"] ?? "",
+        photo: json["photo"] ?? "https://uzb.technostudio.uz/media/Banner/bann.jpg",
         rating: json["rating"]??0,
       );
 

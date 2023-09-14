@@ -10,6 +10,7 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_4_favourite/favourite_empty.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -57,6 +58,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
         listReturn.add(l[i]);
       }
     }
+    log(listReturn.length.toString());
 
     return listReturn;
   }
@@ -64,6 +66,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
   @override
   Widget build(BuildContext context) {
     final list = ref.watch(setFavourite2);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -76,7 +79,9 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(8),
-              child:  GridView.builder(
+              child:
+              getList(l: list.results).isNotEmpty?
+              GridView.builder(
                       shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -89,7 +94,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                       itemCount: getList(l: list.results).length,
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) =>
-                      getList(l: list.results).isNotEmpty
+                        getList(l: list.results).isNotEmpty
                           ?
                       GestureDetector(
                               onTap: () {
@@ -98,7 +103,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                       idProduct: index.toString(),
                                       isFavourite:getList(l: list.results)[index].isFavorite,
                                     ));
-                                log(index.toString());
+                                // log(index.toString());
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(5),
@@ -260,14 +265,12 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
                                   ),
                                 ),
                               ),
-                              // Center(
-                              //     child: Card(
-                              //         color: Colors.blue, child: Text(data[index].fanName)))
                             )
-                          : const LoadingShimmer(),
-
+                       : const LoadingShimmer(),
                   // : favouriteEmpty(context: context)
-              ))),
+              )
+          : favouriteEmpty(context: context)
+          )),
     );
   }
 }

@@ -49,7 +49,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
       body: SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(1),
-              child: ref.watch(setFavourite2.notifier).getOrder().isNotEmpty
+              child: getList(l: listOrder.results).isNotEmpty
                   ? ListView.builder(
                       itemCount:
                       getList(l: listOrder.results).length,

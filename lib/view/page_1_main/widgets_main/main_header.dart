@@ -8,6 +8,7 @@ import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/controller_main_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/show_brands/show_brands.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -121,33 +122,70 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
         SizedBox(
             height: 50,
             child: getDataBanner.when(data: (data) {
-              return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: data.results.length,
-                itemBuilder: (context, index) => Container(
-                    height: 45,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 1,
-                              spreadRadius: 1)
-                        ],
-                        borderRadius: BorderRadius.circular(5)),
-                    margin: const EdgeInsets.all(3),
-                    padding: const EdgeInsets.all(3),
-                    child: Center(
-                      child: GestureDetector(
-                          onTap: () async{
-                            modelSearch = ModelSearch(
-                                brand: data.results[index].id.toString());
-                            ref
-                                .read(setFavourite2.notifier)
-                                .getData(modelSearch: modelSearch);
-                          },
-                          child: Text(data.results[index].title.toString())),
-                    )),
+              return Row(
+                children: [
+                  GestureDetector(
+                    child: Container(
+                        height: 45,
+                        width: 60,
+                        margin: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Colors.grey,
+                                  blurRadius: 1,
+                                  spreadRadius: 1)
+                            ],
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(child: Text("All"))),
+                    onTap: () {
+                      modelSearch = ModelSearch();
+                      ref
+                          .read(setFavourite2.notifier)
+                          .getData(modelSearch: modelSearch);
+                    },
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.results.length,
+                      itemBuilder: (context, index) => Container(
+                          height: 45,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade50,
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 1,
+                                    spreadRadius: 1)
+                              ],
+                              borderRadius: BorderRadius.circular(5)),
+                          margin: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                          padding: const EdgeInsets.all(3),
+                          child: Center(
+                            child: GestureDetector(
+                                onTap: () async {
+                                  // modelSearch = ModelSearch(
+                                  //     brand: data.results[index].id.toString());
+                                  // ref
+                                  //     .read(setFavourite2.notifier)
+                                  //     .getData(modelSearch: modelSearch);
+                                  //
+                                  pushNewScreen(context,
+                                      withNavBar: false,
+                                      screen: ShowBrands(
+                                        brandName: data.results[index].title
+                                            .toString(),
+                                          brandId: data.results[index].id
+                                              .toString()));
+                                },
+                                child:
+                                    Text(data.results[index].title.toString())),
+                          )),
+                    ),
+                  )
+                ],
               );
             }, error: (error, errorText) {
               return Text(errorText.toString());

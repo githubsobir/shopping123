@@ -84,5 +84,6 @@
   "chooseLang": "Til tanlang",
   "name": "Familiya va ism",
   "errorName": "Familiya va ismingizni kiriting",
-  "passwordNotEqu": "Parollar mos emas"
+  "passwordNotEqu": "Parollar mos emas",
+  "emptyCart": "Karzinka bo'sh eng"
 }

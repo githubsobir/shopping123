@@ -6,15 +6,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shopping/data/model/model_details/model_details.dart';
 import 'package:shopping/data/network/base_url.dart';
-import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/full_screen_view.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/review_last.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/similar_items.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -348,7 +348,18 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     // buildSimilarItems(),
-                    const SizedBox(height: 100),
+                     SizedBox(
+                      height: 330,
+                      child: SimilarItems(idDetail:widget.modelDetails.name.toString()),
+                    ),
+
+                    const SizedBox(height: 20),
+                    const Text("oxorgi ko'rilganlar",
+                        style: TextStyle(fontSize: 20)),
+                    const SizedBox(
+                      height: 330,
+                      child: ReviewItems(),
+                    ),
                   ],
                 ),
               ),
