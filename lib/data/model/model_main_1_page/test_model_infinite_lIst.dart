@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/network/base_url.dart';
@@ -234,8 +235,8 @@ log(jsonEncode(response.data).toString());
 }
 
 /// search
-class ModelSearchListNotifier extends StateNotifier<List<ResultProductList>> {
-  ModelSearchListNotifier() : super([]);
+class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
+  ModelSearchListNotifier() : super(ModelProductList(count: "", next: "", previous: "", results: []));
 
   var dio = Dio();
   late ModelProductList modelSavedQuestion;
@@ -256,8 +257,8 @@ class ModelSearchListNotifier extends StateNotifier<List<ResultProductList>> {
       } else {
         listData.addAll(modelSavedQuestion.results);
       }
-      state = listData;
-      return state;
+      state = state.copyWith(results: listData);
+      return state.results;
     } catch (e) {
       log("@#§123");
       log(e.toString());
@@ -273,23 +274,54 @@ class ModelSearchListNotifier extends StateNotifier<List<ResultProductList>> {
   /// qidiruv uchun
   ///
   void updateFavorite(String id) {
-    for (int i = 0; i < state.length; i++) {
-      if (state[i].id.toString() == id.toString()) {
-        state[i].isFavorite = !state[i].isFavorite;
+    // for (int i = 0; i < state.results.length; i++) {
+    //   if (state.results[i].id.toString() == id.toString()) {
+    // state.results[i].isFavorite = !state.results[i].isFavorite;
+    //   }
+    // }
+    // state = state;
+
+
+    List<ResultProductList> updateFav = [...state.results];
+    for (int i = 0; i < updateFav.length; i++) {
+      if (updateFav[i].id.toString() == id.toString()) {
+        log(updateFav[i].isFavorite.toString());
+        updateFav[i].isFavorite = !updateFav[i].isFavorite;
+
+        state = state.copyWith(results: updateFav);
+
+        // state.results = updateFav;
+        log(state.results[i].isFavorite.toString());
       }
     }
   }
 
   setOrders({required String idOrder}) {
-    for (int i = 0; i < state.length; i++) {
-      if (state[i].id.toString() == idOrder.toString()) {
-        if (state[i].slug != "987654321") {
+
+    List<ResultProductList> updateOrder = [...state.results];
+    for (int i = 0; i < updateOrder.length; i++) {
+      if (updateOrder[i].id.toString() == idOrder.toString()) {
+        if (updateOrder[i].slug != "987654321") {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          state[i].slug = "987654321";
+          updateOrder[i].slug = "987654321";
         } else {
-          state[i].slug = "slug";
+          updateOrder[i].slug = "slug";
         }
       }
     }
+    state = state.copyWith(results: updateOrder);
+    return state;
   }
+
+  clearData(){
+    state.results.clear();
+    state = state.copyWith(results: [],previous: "", count: "", next: "");
+  }
+  //
+  // @override
+  // void dispose() {
+  //   state = state.copyWith(results: [], next: "", count: "", previous: "");
+  //   state.results.clear();
+  //   super.dispose();
+  // }
 }

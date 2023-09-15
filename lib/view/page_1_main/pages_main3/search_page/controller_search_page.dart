@@ -50,7 +50,7 @@ final getDataSearch = FutureProvider.family
 });
 
 final cont =
-    StateNotifierProvider<ModelSearchListNotifier, List<ResultProductList>>((
+    StateNotifierProvider<ModelSearchListNotifier, ModelProductList>((
   ref,
 ) {
       return ModelSearchListNotifier();

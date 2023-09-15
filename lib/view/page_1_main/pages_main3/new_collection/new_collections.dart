@@ -167,6 +167,8 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                                               .updateFavorite(getData
                                                   .results[index].id
                                                   .toString());
+
+
                                           // setState(() {});
                                         },
                                         child: Container(

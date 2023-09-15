@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -56,6 +57,12 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
   int skip = 0;
   bool shouldLoadMore = true;
 
+@override
+  void dispose() {
+
+    ref.invalidate(cont);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     /// birinchi kirishda maxsus kalit so'z bilan tekshiraman
@@ -110,7 +117,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                       ),
                       const SizedBox(height: 20),
                       Expanded(
-                          child: getDataSearch.isNotEmpty
+                          child: getDataSearch.results.isNotEmpty
                               ? GridView.builder(
                                   shrinkWrap: true,
                                   gridDelegate:
@@ -121,7 +128,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                           childAspectRatio: 0.58),
                                   scrollDirection: Axis.vertical,
                                   controller: _scrollController,
-                                  itemCount: getDataSearch.length
+                                  itemCount: getDataSearch.results.length
                                   // % 2 == 0
                                   // ? getDataSearch.length + 2
                                   // : getDataSearch.length + 3
@@ -129,18 +136,17 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) => index <
-                                          getDataSearch.length
+                                          getDataSearch.results.length
                                       ? GestureDetector(
                                           onTap: () {
                                             pushNewScreen(context,
                                                 screen: DetailsPage(
-                                                  idProduct:
-                                                      getDataSearch[index]
-                                                          .id
-                                                          .toString(),
-                                                  isFavourite:
-                                                      getDataSearch[index]
-                                                          .isFavorite,
+                                                  idProduct: getDataSearch
+                                                      .results[index].id
+                                                      .toString(),
+                                                  isFavourite: getDataSearch
+                                                      .results[index]
+                                                      .isFavorite,
                                                 ),
                                                 withNavBar: false);
                                             log(index.toString());
@@ -192,7 +198,8 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                     .size
                                                                     .width *
                                                                 0.4,
-                                                            getDataSearch[index]
+                                                            getDataSearch
+                                                                .results[index]
                                                                 .photo
                                                                 .toString(),
                                                             fit: BoxFit.cover,
@@ -223,12 +230,19 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                               ref
                                                                   .read(setFavourite2
                                                                       .notifier)
-                                                                  .updateFavorite(
-                                                                      getDataSearch[
-                                                                              index]
-                                                                          .id
-                                                                          .toString());
-                                                              // setState(() {});
+                                                                  .updateFavorite(getDataSearch
+                                                                      .results[
+                                                                          index]
+                                                                      .id
+                                                                      .toString());
+                                                              ref
+                                                                  .read(cont
+                                                                      .notifier)
+                                                                  .updateFavorite(getDataSearch
+                                                                      .results[
+                                                                          index]
+                                                                      .id
+                                                                      .toString());
                                                             },
                                                             child: Container(
                                                               alignment:
@@ -246,7 +260,8 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                       10,
                                                                       15.0),
                                                               child: Icon(
-                                                                getDataSearch[
+                                                                getDataSearch
+                                                                        .results[
                                                                             index]
                                                                         .isFavorite
                                                                     ? Icons
@@ -265,8 +280,8 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                 ),
                                                 const SizedBox(height: 10),
                                                 Text(
-                                                    getDataSearch[index]
-                                                        .name
+                                                    getDataSearch
+                                                        .results[index].name
                                                         .toString(),
                                                     maxLines: 2,
                                                     overflow:
@@ -274,7 +289,8 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                     softWrap: true),
                                                 const SizedBox(height: 8),
                                                 Visibility(
-                                                  visible: getDataSearch[index]
+                                                  visible: getDataSearch
+                                                              .results[index]
                                                               .rating ==
                                                           -1
                                                       ? true
@@ -287,8 +303,8 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                         color: Colors
                                                             .yellow.shade600,
                                                       ),
-                                                      Text(getDataSearch[index]
-                                                          .rating
+                                                      Text(getDataSearch
+                                                          .results[index].rating
                                                           .toString()),
 
                                                       /// Qo'shimcha qo'shish uchun
@@ -314,7 +330,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                              "${getDataSearch[index].price} so'm",
+                                                              "${getDataSearch.results[index].price} so'm",
                                                               style:
                                                                   const TextStyle(
                                                                 decoration:
@@ -322,7 +338,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                         .lineThrough,
                                                               )),
                                                           Text(
-                                                              "${getDataSearch[index].newPrice.toStringAsFixed(2)} so'm"),
+                                                              "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} so'm"),
                                                         ],
                                                       ),
                                                       Container(
@@ -333,7 +349,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                       .circle,
                                                                   border: Border
                                                                       .all(
-                                                                    color: getDataSearch[index].slug ==
+                                                                    color: getDataSearch.results[index].slug ==
                                                                             "987654321"
                                                                         ? Colors
                                                                             .red
@@ -349,7 +365,18 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                   .read(setFavourite2
                                                                       .notifier)
                                                                   .setOrder(
-                                                                      idOrder: getDataSearch[
+                                                                      idOrder: getDataSearch
+                                                                          .results[
+                                                                              index]
+                                                                          .id
+                                                                          .toString());
+
+                                                              ref
+                                                                  .read(cont
+                                                                      .notifier)
+                                                                  .setOrders(
+                                                                      idOrder: getDataSearch
+                                                                          .results[
                                                                               index]
                                                                           .id
                                                                           .toString());
@@ -362,7 +389,9 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                               child: Icon(
                                                                 Icons
                                                                     .add_shopping_cart,
-                                                                color: getDataSearch[index]
+                                                                color: getDataSearch
+                                                                            .results[
+                                                                                index]
                                                                             .slug ==
                                                                         "987654321"
                                                                     ? Colors.red
@@ -394,8 +423,8 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                             "assets/images/empty_cart.png",
                                             height: 120,
                                           )),
-                                      SizedBox(height: 20),
-                                      Text("Ma'lumot topilmadi !!!"),
+                                      const SizedBox(height: 20),
+                                      const Text("Ma'lumot topilmadi !!!"),
                                     ],
                                   ),
                                 ))
