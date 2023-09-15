@@ -87,9 +87,6 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
                                           const LoadingShimmer(),
-                                  // errorWidget: (context, url, error) => Text(
-                                  //       url.toString(),
-                                  //     ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -191,7 +188,8 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
               return Text(errorText.toString());
             }, loading: () {
               return Text("Loading");
-            }))
+            })),
+       const SizedBox(height: 10),
       ],
     ));
   }

@@ -93,7 +93,7 @@ class ResultProductList {
         slug: json["slug"]??"",
         price: json["price"]??0??"",
         discount: json["discount"]??0??"",
-        newPrice: json["new_price"]??"",
+        newPrice: json["new_price"]??-1.00,
         gender: json["gender"]??"",
         type: json["type"]??"",
         season: json["season"]??"",
@@ -102,7 +102,7 @@ class ResultProductList {
         category: json["category"]??"",
         isFavorite: json["is_favorite"] ?? false,
         photo: json["photo"] ?? "https://uzb.technostudio.uz/media/Banner/bann.jpg",
-        rating: json["rating"]??0,
+        rating: json["rating"]??-1,
       );
 
   Map<String, dynamic> toJson() => {
@@ -135,10 +135,12 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   late ModelProductList modelProductList =
       ModelProductList(count: "1", next: "", previous: "", results: []);
   List<ResultProductList> listProducts = [];
+  List<ResultProductList> listProduct2 = [];
+  var dio = Dio();
 
   Future<ModelProductList> getData({required ModelSearch modelSearch}) async {
-    var dio = Dio();
-    List<ResultProductList> listProduct2 = [];
+
+
     if (modelSearch.page.toString() == "1" ||
         modelSearch.page.toString() == "null"
     ) {
@@ -148,7 +150,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
         "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
         options: Options(
             headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
-
+log(jsonEncode(response.data).toString());
     try {
       modelProductList = ModelProductList.fromJson(response.data);
 
@@ -159,7 +161,6 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
         listProduct2.clear();
         listProduct2 = modelProductList.results;
         state = state.copyWith(results: listProduct2);
-
         return state;
       } else {
         listProduct2.addAll(modelProductList.results);

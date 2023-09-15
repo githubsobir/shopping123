@@ -63,274 +63,210 @@ class _ShowBrandsState extends ConsumerState<ShowBrands> {
 
   @override
   Widget build(BuildContext context) {
-    log(widget.brandId);
     final getBrandProduct =
-        // ref.watch(showBrands);
         ref.watch(showBrands(modelSearch));
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
           elevation: 0,
-          title: Text(widget.brandName, style: TextStyle(color: Colors.black)),
+          title: Text(widget.brandName, style: const TextStyle(color: Colors.black)),
         ),
         body: SafeArea(
-          child: GridView.builder(
+          child:   GridView.builder(
             shrinkWrap: true,
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                mainAxisSpacing: 5.0,
-                crossAxisSpacing: 5.0,
-                childAspectRatio: 0.55),
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+                childAspectRatio: 0.58),
             scrollDirection: Axis.vertical,
             controller: _scrollController,
             itemCount: getBrandProduct.results.length % 2 == 0
                 ? getBrandProduct.results.length + 2
                 : getBrandProduct.results.length + 3,
-            physics:
-            const AlwaysScrollableScrollPhysics(),
-            itemBuilder: (context, index) => index <
-                getBrandProduct.results.length
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemBuilder: (context, index) => index < getBrandProduct.results.length
                 ? GestureDetector(
               onTap: () {
                 pushNewScreen(context,
                     screen: DetailsPage(
-                      idProduct:
-                      getBrandProduct.results[index]
-                          .id
-                          .toString(),
-                      isFavourite:
-                      getBrandProduct.results[index]
-                          .isFavorite,
+                      idProduct: getBrandProduct.results[index].id.toString(),
+                      isFavourite: getBrandProduct.results[index].isFavorite,
                     ),
                     withNavBar: false);
                 log(index.toString());
               },
               child: Container(
-                padding: const EdgeInsets.all(5),
-                margin: const EdgeInsets.all(2),
-                decoration: BoxDecoration(
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Color.fromARGB(
-                            232, 252, 243, 215),
-                        blurRadius: 0.9,
-                        offset: Offset(1, 1),
-                        spreadRadius: 0.1)
-                  ],
-                  color: Colors.white,
-                  borderRadius:
-                  BorderRadius.circular(4),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment:
-                    MainAxisAlignment.start,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 5),
-                      SizedBox(
-                        width:
-                        MediaQuery.of(context)
-                            .size
-                            .width *
-                            0.4,
-                        child: Stack(
-                          children: [
-                            SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(10,3,10,3),
+                margin: const EdgeInsets.fromLTRB(10,3,10,3),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 5),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 1,
+                                color: Colors.grey.shade100,
+                                offset: const Offset(1, 0),
+                                spreadRadius: 10)
+                          ]),
+                      child: Stack(
+                        children: [
+                          SingleChildScrollView(
+                            physics:
+                            const NeverScrollableScrollPhysics(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
                               child: Image.network(
-                                getBrandProduct.results[index]
-                                    .photo ??
-                                    "https://salon.fgl.su/image/icons/delivery-6.png",
-                                height: 150,
-                                width: MediaQuery.of(
-                                    context)
-                                    .size
-                                    .width *
+                                height: 180,
+                                width:
+                                MediaQuery.of(context).size.width *
                                     0.4,
+                                getBrandProduct.results[index].photo.toString(),
                                 fit: BoxFit.cover,
-                                errorBuilder: (context,
-                                    error,
-                                    stackTrace) =>
+                                errorBuilder:
+                                    (context, error, stackTrace) =>
                                     SizedBox(
-                                      height: 150,
-                                      width: MediaQuery.of(
-                                          context)
+                                      height: 160,
+                                      width: MediaQuery.of(context)
                                           .size
                                           .width *
                                           0.4,
                                       child: Image.asset(
+                                          height: 160,
                                           "assets/images/shopping1.png"),
                                     ),
-                                // height: 100,
-                                // width: 150,
                               ),
                             ),
-                            Padding(
-                              padding:
-                              const EdgeInsets
-                                  .fromLTRB(
-                                  10,
-                                  10,
-                                  10,
-                                  15.0),
-                              child: Align(
-                                  alignment:
-                                  Alignment
-                                      .topRight,
-                                  child:
-                                  GestureDetector(
-                                      onTap:
-                                          () {
-
-                                            ref.read(showBrands(ModelSearch(brand: "-1")).notifier).updateFavoriteBrand(getBrandProduct.results[index]
-                                                .id
-                                                .toString());
-
-                                        // ref.read(setFavourite2.notifier).updateFavorite(getBrandProduct.results[index]
-                                        //     .id
-                                        //     .toString());
-                                        //
-                                        //
-                                        // ref.read(cont.notifier).updateFavorite(getBrandProduct.results[index]
-                                        //     .id
-                                        //     .toString());
-                                      },
-                                      child:
-                                      Icon(
-                                        getBrandProduct.results[index].isFavorite
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: Colors
-                                            .red,
-                                      ))),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                          getBrandProduct.results[index]
-                              .name
-                              .toString(),
-                          maxLines: 2,
-                          overflow:
-                          TextOverflow.fade,
-                          softWrap: true),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 30,
-                        child: RatingBar.builder(
-                          initialRating:
-                          double.parse(
-                              getBrandProduct.results[
-                              index]
-                                  .rating
-                                  .toString()),
-                          minRating: 1,
-                          direction:
-                          Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          wrapAlignment:
-                          WrapAlignment.start,
-                          itemPadding:
-                          const EdgeInsets
-                              .symmetric(
-                              horizontal: 1.0),
-                          itemSize: 16,
-                          itemBuilder:
-                              (context, _) =>
-                          const Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: 10,
                           ),
-                          onRatingUpdate: (rating) {
-                            print(rating);
-                          },
-                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  ref
+                                      .read(setFavourite2.notifier)
+                                      .updateFavorite(getBrandProduct.results[index].id
+                                      .toString());
+                                  // setState(() {});
+                                },
+                                child: Container(
+                                  alignment: Alignment.topRight,
+                                  height: 42,
+                                  width: 42,
+                                  color: Colors.transparent,
+                                  padding: const EdgeInsets.fromLTRB(
+                                      10, 10, 10, 15.0),
+                                  child: Icon(
+                                    getBrandProduct.results[index].isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                      const SizedBox(height: 8),
-                      Text("4"),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(
-                            left: 8, right: 8),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
-                          children: [
-                            Text(
-                                "${getBrandProduct.results[index].price} so'm"),
-                            Container(
-                              // margin: EdgeInsets.all(3),
-                                padding:
-                                const EdgeInsets
-                                    .all(5),
-                                decoration:
-                                BoxDecoration(
-                                    shape: BoxShape
-                                        .circle,
-                                    border:
-                                    Border
-                                        .all(
-                                      color: getBrandProduct.results[index].slug ==
-                                          "987654321"
-                                          ? Colors
-                                          .red
-                                          : Colors
-                                          .grey
-                                          .shade400,
-                                    )),
-                                child: Center(
-                                    child:
-                                    GestureDetector(
-                                      onTap: () {
-                                        ref
-                                            .read(setFavourite2
-                                            .notifier)
-                                            .setOrder(
-                                            idOrder: getBrandProduct.results[index]
-                                                .id
-                                                .toString());
-                                        ref
-                                            .read(cont
-                                            .notifier)
-                                            .setOrders(
-                                            idOrder: getBrandProduct.results[index]
-                                                .id
-                                                .toString());
-                                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Text(getBrandProduct.results[index].name.toString(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true),
+                    const SizedBox(height: 8),
+                    Visibility(
+                      visible: getBrandProduct.results[index].rating == -1
+                          ? true
+                          : false,
+                      child: SizedBox(
+                        height: 30,
+                        child: Row(children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.yellow.shade600,
+                          ),
+                          Text(
+                              getBrandProduct.results[index].rating.toString()),
+
+                          /// Qo'shimcha qo'shish uchun
+                        ]),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "${getBrandProduct.results[index].price} so'm",
+                                  style: const TextStyle(
+                                    decoration:
+                                    TextDecoration.lineThrough,
+                                  )),
+                              Text(
+                                  "${getBrandProduct.results[index].newPrice.toStringAsFixed(2)} so'm"),
+                            ],
+                          ),
+                          Container(
+                            // padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color:
+                                    getBrandProduct.results[index].slug ==
+                                        "987654321"
+                                        ? Colors.red
+                                        : Colors.grey.shade400,
+                                  )),
+                              child: Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ref
+                                          .read(setFavourite2.notifier)
+                                          .setOrder(
+                                          idOrder: getBrandProduct.results[index].id
+                                              .toString());
+                                    },
+                                    child: Container(
+                                      width: 45,
+                                      height: 45,
+                                      color: Colors.transparent,
                                       child: Icon(
-                                        Icons
-                                            .add_shopping_cart,
-                                        color: getBrandProduct.results[index]
-                                            .slug ==
+                                        Icons.add_shopping_cart,
+                                        color:
+                                        getBrandProduct.results[index].slug ==
                                             "987654321"
                                             ? Colors.red
-                                            : Colors
-                                            .grey
-                                            .shade800,
+                                            : Colors.grey.shade800,
                                         size: 20,
                                       ),
-                                    ))),
-                          ],
-                        ),
+                                    ),
+                                  ))),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              // Center(
-              //     child: Card(
-              //         color: Colors.blue, child: Text(data[index].fanName)))
             )
                 : const LoadingShimmer(),
-          )
+          ),
         ));
   }
 }

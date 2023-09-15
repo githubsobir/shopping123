@@ -1,8 +1,6 @@
 import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
@@ -73,24 +71,41 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                   child: Column(
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        height: 55,
-                        child: TextField(
-                          onSubmitted: (val) {
-                            ref.read(cont.notifier).getListFromInternet(
-                                modelSearch:
-                                    ModelSearch(search: val.toString()));
-                          },
-                          decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.search),
-                              hintText: "search".tr(),
-                              // prefix: Text("search".tr(), style: TextStyle(color: Colors.grey)),
+                        // width: MediaQuery.of(context).size.width * 0.9,
+                        height: 54,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const SizedBox(width: 5),
+                            GestureDetector(
+                              child: const Icon(Icons.arrow_back_ios),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.83,
+                              child: TextField(
+                                onSubmitted: (val) {
+                                  ref.read(cont.notifier).getListFromInternet(
+                                      modelSearch:
+                                          ModelSearch(search: val.toString()));
+                                },
+                                decoration: InputDecoration(
+                                    prefixIcon: const Icon(Icons.search),
+                                    hintText: "search".tr(),
+                                    // prefix: Text("search".tr(), style: TextStyle(color: Colors.grey)),
 
-                              border: OutlineInputBorder(
-                                  gapPadding: 0,
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide:
-                                      const BorderSide(color: Colors.grey))),
+                                    border: OutlineInputBorder(
+                                        gapPadding: 0,
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                            color: Colors.grey))),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -101,14 +116,16 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2,
-                                          mainAxisSpacing: 5.0,
-                                          crossAxisSpacing: 5.0,
-                                          childAspectRatio: 0.55),
+                                          mainAxisSpacing: 4.0,
+                                          crossAxisSpacing: 4.0,
+                                          childAspectRatio: 0.58),
                                   scrollDirection: Axis.vertical,
                                   controller: _scrollController,
-                                  itemCount: getDataSearch.length % 2 == 0
-                                      ? getDataSearch.length + 2
-                                      : getDataSearch.length + 3,
+                                  itemCount: getDataSearch.length
+                                  // % 2 == 0
+                                  // ? getDataSearch.length + 2
+                                  // : getDataSearch.length + 3
+                                  ,
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
                                   itemBuilder: (context, index) => index <
@@ -129,196 +146,219 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                             log(index.toString());
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.all(5),
-                                            margin: const EdgeInsets.all(2),
-                                            decoration: BoxDecoration(
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                    color: Color.fromARGB(
-                                                        232, 252, 243, 215),
-                                                    blurRadius: 0.9,
-                                                    offset: Offset(1, 1),
-                                                    spreadRadius: 0.1)
-                                              ],
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                            ),
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  const SizedBox(height: 5),
-                                                  SizedBox(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4,
-                                                    child: Stack(
-                                                      children: [
-                                                        SingleChildScrollView(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                10, 3, 10, 3),
+                                            margin: const EdgeInsets.fromLTRB(
+                                                10, 3, 10, 3),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(height: 5),
+                                                Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.4,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                            blurRadius: 1,
+                                                            color: Colors
+                                                                .grey.shade100,
+                                                            offset:
+                                                                const Offset(
+                                                                    1, 0),
+                                                            spreadRadius: 10)
+                                                      ]),
+                                                  child: Stack(
+                                                    children: [
+                                                      SingleChildScrollView(
+                                                        physics:
+                                                            const NeverScrollableScrollPhysics(),
+                                                        child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
                                                           child: Image.network(
-                                                            getDataSearch[index]
-                                                                    .photo ??
-                                                                "https://salon.fgl.su/image/icons/delivery-6.png",
-                                                            height: 150,
+                                                            height: 180,
                                                             width: MediaQuery.of(
                                                                         context)
                                                                     .size
                                                                     .width *
                                                                 0.4,
+                                                            getDataSearch[index]
+                                                                .photo
+                                                                .toString(),
                                                             fit: BoxFit.cover,
                                                             errorBuilder: (context,
                                                                     error,
                                                                     stackTrace) =>
                                                                 SizedBox(
-                                                              height: 150,
+                                                              height: 160,
                                                               width: MediaQuery.of(
                                                                           context)
                                                                       .size
                                                                       .width *
                                                                   0.4,
                                                               child: Image.asset(
+                                                                  height: 160,
                                                                   "assets/images/shopping1.png"),
                                                             ),
-                                                            // height: 100,
-                                                            // width: 150,
                                                           ),
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  10,
-                                                                  10,
-                                                                  10,
-                                                                  15.0),
-                                                          child: Align(
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              ref
+                                                                  .read(setFavourite2
+                                                                      .notifier)
+                                                                  .updateFavorite(
+                                                                      getDataSearch[
+                                                                              index]
+                                                                          .id
+                                                                          .toString());
+                                                              // setState(() {});
+                                                            },
+                                                            child: Container(
                                                               alignment:
                                                                   Alignment
                                                                       .topRight,
+                                                              height: 42,
+                                                              width: 42,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .fromLTRB(
+                                                                      10,
+                                                                      10,
+                                                                      10,
+                                                                      15.0),
+                                                              child: Icon(
+                                                                getDataSearch[
+                                                                            index]
+                                                                        .isFavorite
+                                                                    ? Icons
+                                                                        .favorite
+                                                                    : Icons
+                                                                        .favorite_border,
+                                                                color:
+                                                                    Colors.red,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                    getDataSearch[index]
+                                                        .name
+                                                        .toString(),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    softWrap: true),
+                                                const SizedBox(height: 8),
+                                                Visibility(
+                                                  visible: getDataSearch[index]
+                                                              .rating ==
+                                                          -1
+                                                      ? true
+                                                      : false,
+                                                  child: SizedBox(
+                                                    height: 30,
+                                                    child: Row(children: [
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors
+                                                            .yellow.shade600,
+                                                      ),
+                                                      Text(getDataSearch[index]
+                                                          .rating
+                                                          .toString()),
+
+                                                      /// Qo'shimcha qo'shish uchun
+                                                    ]),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8, right: 8),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                              "${getDataSearch[index].price} so'm",
+                                                              style:
+                                                                  const TextStyle(
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .lineThrough,
+                                                              )),
+                                                          Text(
+                                                              "${getDataSearch[index].newPrice.toStringAsFixed(2)} so'm"),
+                                                        ],
+                                                      ),
+                                                      Container(
+                                                          // padding: const EdgeInsets.all(5),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: getDataSearch[index].slug ==
+                                                                            "987654321"
+                                                                        ? Colors
+                                                                            .red
+                                                                        : Colors
+                                                                            .grey
+                                                                            .shade400,
+                                                                  )),
+                                                          child: Center(
                                                               child:
                                                                   GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        ref.read(setFavourite2.notifier).updateFavorite(getDataSearch[index]
-                                                                            .id
-                                                                            .toString());
-                                                                        ref.read(cont.notifier).updateFavorite(getDataSearch[index]
-                                                                            .id
-                                                                            .toString());
-                                                                      },
-                                                                      child:
-                                                                          Icon(
-                                                                        getDataSearch[index].isFavorite
-                                                                            ? Icons.favorite
-                                                                            : Icons.favorite_border,
-                                                                        color: Colors
-                                                                            .red,
-                                                                      ))),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  Text(
-                                                      getDataSearch[index]
-                                                          .name
-                                                          .toString(),
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      softWrap: true),
-                                                  const SizedBox(height: 8),
-                                                  SizedBox(
-                                                    height: 30,
-                                                    child: RatingBar.builder(
-                                                      initialRating:
-                                                          double.parse(
-                                                              getDataSearch[
-                                                                      index]
-                                                                  .rating
-                                                                  .toString()),
-                                                      minRating: 1,
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      allowHalfRating: true,
-                                                      itemCount: 5,
-                                                      wrapAlignment:
-                                                          WrapAlignment.start,
-                                                      itemPadding:
-                                                          const EdgeInsets
-                                                                  .symmetric(
-                                                              horizontal: 1.0),
-                                                      itemSize: 16,
-                                                      itemBuilder:
-                                                          (context, _) =>
-                                                              const Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                        size: 10,
-                                                      ),
-                                                      onRatingUpdate: (rating) {
-                                                        print(rating);
-                                                      },
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  Text("4"),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 8, right: 8),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                            "${getDataSearch[index].price} so'm"),
-                                                        Container(
-                                                            // margin: EdgeInsets.all(3),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(5),
-                                                            decoration:
-                                                                BoxDecoration(
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      color: getDataSearch[index].slug ==
-                                                                              "987654321"
-                                                                          ? Colors
-                                                                              .red
-                                                                          : Colors
-                                                                              .grey
-                                                                              .shade400,
-                                                                    )),
-                                                            child: Center(
-                                                                child:
-                                                                    GestureDetector(
-                                                              onTap: () {
-                                                                ref
-                                                                    .read(setFavourite2
-                                                                        .notifier)
-                                                                    .setOrder(
-                                                                        idOrder: getDataSearch[index]
-                                                                            .id
-                                                                            .toString());
-                                                                ref
-                                                                    .read(cont
-                                                                        .notifier)
-                                                                    .setOrders(
-                                                                        idOrder: getDataSearch[index]
-                                                                            .id
-                                                                            .toString());
-                                                              },
+                                                            onTap: () {
+                                                              ref
+                                                                  .read(setFavourite2
+                                                                      .notifier)
+                                                                  .setOrder(
+                                                                      idOrder: getDataSearch[
+                                                                              index]
+                                                                          .id
+                                                                          .toString());
+                                                            },
+                                                            child: Container(
+                                                              width: 45,
+                                                              height: 45,
+                                                              color: Colors
+                                                                  .transparent,
                                                               child: Icon(
                                                                 Icons
                                                                     .add_shopping_cart,
@@ -331,17 +371,14 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                         .shade800,
                                                                 size: 20,
                                                               ),
-                                                            ))),
-                                                      ],
-                                                    ),
+                                                            ),
+                                                          ))),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                          // Center(
-                                          //     child: Card(
-                                          //         color: Colors.blue, child: Text(data[index].fanName)))
                                         )
                                       : const LoadingShimmer(),
                                 )
