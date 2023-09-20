@@ -1,9 +1,10 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shopping/data/model/model_5_account/model_sign_up.dart';
 import 'package:shopping/view/page_5_account/identification_page/sign_up/sign_up_controller.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
@@ -308,24 +309,35 @@ Widget inputsSignUp({required BuildContext context, required WidgetRef ref}) {
         child: MyWidgets.robotoFontText(
             text: "registration".tr(), textColor: MyColors.appColorWhite()),
         onPressed: () {
-          ref.read(userSignUp(ModelSignUp(
-              fullName: "Sobir",
-              phoneNumber: "998489914",
-              password: "Parol2345678",
-              isActive: "1",
-              fileImage: "fileImage")));
-          if (textSingUpName.text.length > 1 &&
-              textSingUpLogin.text.length == 9 &&
-              textSingUpPassword.text.length >= 8 &&
-              textSingUpPassword2.text.length >= 8) {
-            ref.read(userSignUp(ModelSignUp(
+          log("123");
+          try {
+            log("log - 0");
+
+            ref.read(getDataSignUp.notifier).getSignUp(modelForSignUp: ModelForSignUp(
                 fullName: "Sobir",
-                phoneNumber: "998489913",
+                phone: "998489900",
                 password: "Parol2345678",
                 isActive: "1",
-                fileImage: "fileImage")));
-          } else {
-            print("error showSnackBar");
+                fileImage: "fileImage"));
+            log("log - 1");
+            // if (textSingUpName.text.length > 1 &&
+            //     textSingUpLogin.text.length == 9 &&
+            //     textSingUpPassword.text.length >= 8 &&
+            //     textSingUpPassword2.text.length >= 8) {
+            //   ref.read(getDataSignUp(ModelForSignUp(
+            //       fullName: "Sobir",
+            //       phone: "998489900",
+            //       password: "Parol2345678",
+            //       isActive: "1",
+            //       fileImage: "fileImage")));
+            //   log("log - 2");
+            //
+            //   log("log - 3");
+            // } else {
+            //   print("error showSnackBar");
+            // }
+          } catch (e) {
+            log(e.toString());
           }
         },
       ),

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/network/base_url.dart';
@@ -141,7 +140,6 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
 
   Future<ModelProductList> getData({required ModelSearch modelSearch}) async {
 
-
     if (modelSearch.page.toString() == "1" ||
         modelSearch.page.toString() == "null"
     ) {
@@ -180,11 +178,11 @@ log(jsonEncode(response.data).toString());
 
   updateFavorite(String id) {
     List<ResultProductList> updateFav = [...state.results];
+
     for (int i = 0; i < updateFav.length; i++) {
       if (updateFav[i].id.toString() == id.toString()) {
         log(updateFav[i].isFavorite.toString());
         updateFav[i].isFavorite = !updateFav[i].isFavorite;
-
         state = state.copyWith(results: updateFav);
 
         // state.results = updateFav;
@@ -192,6 +190,8 @@ log(jsonEncode(response.data).toString());
       }
     }
   }
+
+
 
   getFavorite() {
     List<ResultProductList> list = [];
@@ -274,14 +274,6 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
   /// qidiruv uchun
   ///
   void updateFavorite(String id) {
-    // for (int i = 0; i < state.results.length; i++) {
-    //   if (state.results[i].id.toString() == id.toString()) {
-    // state.results[i].isFavorite = !state.results[i].isFavorite;
-    //   }
-    // }
-    // state = state;
-
-
     List<ResultProductList> updateFav = [...state.results];
     for (int i = 0; i < updateFav.length; i++) {
       if (updateFav[i].id.toString() == id.toString()) {
@@ -298,9 +290,11 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
 
   setOrders({required String idOrder}) {
 
-    List<ResultProductList> updateOrder = [...state.results];
+    List<ResultProductList> updateOrder = [];
+    updateOrder.addAll(  state.results);
+    log(updateOrder.toString());
     for (int i = 0; i < updateOrder.length; i++) {
-      if (updateOrder[i].id.toString() == idOrder.toString()) {
+      if (updateOrder[i].id.toString() == idOrder) {
         if (updateOrder[i].slug != "987654321") {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
           updateOrder[i].slug = "987654321";

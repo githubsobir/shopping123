@@ -1,15 +1,12 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
-import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/show_brands/controller_show_brands.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -26,19 +23,21 @@ class ShowBrands extends ConsumerStatefulWidget {
 class _ShowBrandsState extends ConsumerState<ShowBrands> {
   ScrollController _scrollController = ScrollController();
   int indexGetData = 1;
-  late ModelSearch modelSearch;
 
   @override
   initState() {
     super.initState();
-    modelSearch = ModelSearch(brand: widget.brandId);
+    log("^^^^^");
+    log(widget.brandId);
+    log(widget.brandName);
+    log("^^^^");
     _scrollController = ScrollController(initialScrollOffset: 5.0)
       ..addListener(_scrollListener);
   }
 
   getData({required String item, required WidgetRef ref}) async {
-    if (indexGetData == 0) {
-      ref.watch(showBrands(ModelSearch(search: item)));
+    if (indexGetData != 0) {
+      ref.watch(showBrands);
     } else {
       indexGetData = 0;
     }
@@ -61,11 +60,16 @@ class _ShowBrandsState extends ConsumerState<ShowBrands> {
     }
   }
 
+  var box = Hive.box("online");
+  @override
+  void dispose() {
+    ref.invalidate(showBrands);
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final getBrandProduct =
-        ref.watch(showBrands(modelSearch));
-
+        ref.watch(showBrands);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -155,7 +159,10 @@ class _ShowBrandsState extends ConsumerState<ShowBrands> {
                                       .read(setFavourite2.notifier)
                                       .updateFavorite(getBrandProduct.results[index].id
                                       .toString());
-                                  // setState(() {});
+
+                                  ref.read(showBrands.notifier).updateFavoriteBrand(getBrandProduct.results[index].id
+                                      .toString() ) ;
+
                                 },
                                 child: Container(
                                   alignment: Alignment.topRight,
@@ -242,6 +249,10 @@ class _ShowBrandsState extends ConsumerState<ShowBrands> {
                                           .setOrder(
                                           idOrder: getBrandProduct.results[index].id
                                               .toString());
+
+
+                                      ref.read(showBrands.notifier).setOrdersBrand(idOrder:getBrandProduct.results[index].id
+                                          .toString() );
                                     },
                                     child: Container(
                                       width: 45,

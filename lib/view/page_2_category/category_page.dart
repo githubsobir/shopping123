@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_2_category/category_page_open.dart';
 import 'package:shopping/view/page_2_category/page_2_controller.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
@@ -32,7 +34,7 @@ class _CategoryPageState extends State<CategoryPage> {
   int selected4 = -1; //attention
   int selected5 = -1; //attention
   int selected6 = -1; //attention
-
+  var box = Hive.box("online");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -354,18 +356,24 @@ class _CategoryPageState extends State<CategoryPage> {
         ));
   }
 
+
   void getAction(
       {required String categoryId,
       required String parentId,
       required String categoryName}) {
-    Navigator.push(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => CategoryPageOpen(
-            categoryId: categoryId,
-            parentId: parentId,
-            categoryName: categoryName,
-          ),
-        ));
+
+    box.delete("categoryId");
+    box.delete("parentId");
+    box.put("categoryId", categoryId);
+    box.put("parentId", parentId);
+
+    pushNewScreen(context, screen: CategoryPageOpen(
+      categoryId: categoryId,
+      parentId: parentId,
+      categoryName: categoryName,
+    ),
+    withNavBar: false
+    );
+
   }
 }

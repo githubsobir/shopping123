@@ -7,7 +7,9 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
+import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/data/network/base_url.dart';
 
 ModelCategoryGet modelCategoryGetFromJson(String str) =>
@@ -80,139 +82,31 @@ class Result {
       };
 }
 
-class ModelProductListForCategory {
-  dynamic count;
-  dynamic next;
-  dynamic previous;
-  List<ResultProductListCategory> results;
+class CategoryNotifier extends StateNotifier<ModelProductList> {
+  var box = Hive.box("online");
 
-  ModelProductListForCategory({
-    required this.count,
-    required this.next,
-    required this.previous,
-    required this.results,
-  });
+  // box.get("parentId");
 
-  ModelProductListForCategory copyWith({
-    dynamic count,
-    dynamic next,
-    dynamic previous,
-    required List<ResultProductListCategory> results,
-  }) {
-    return ModelProductListForCategory(
-        count: count ?? this.count,
-        next: next ?? this.next,
-        previous: previous ?? this.previous,
-        results: results ?? this.results);
-  }
-
-  factory ModelProductListForCategory.fromJson(Map<String, dynamic> json) =>
-      ModelProductListForCategory(
-        count: json["count"],
-        next: json["next"],
-        previous: json["previous"],
-        results: List<ResultProductListCategory>.from(
-            json["results"].map((x) => ResultProductListCategory.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "count": count,
-        "next": next,
-        "previous": previous,
-        "results": List<dynamic>.from(results.map((x) => x.toJson())),
-      };
-}
-
-class ResultProductListCategory {
-  dynamic id;
-  dynamic name;
-  dynamic slug;
-  dynamic price;
-  dynamic discount;
-  dynamic newPrice;
-  dynamic gender;
-  dynamic type;
-  dynamic season;
-  dynamic material;
-  dynamic brand;
-  dynamic category;
-  bool isFavorite;
-  dynamic photo;
-  dynamic rating;
-
-  ResultProductListCategory({
-    required this.id,
-    required this.name,
-    required this.slug,
-    required this.price,
-    required this.discount,
-    required this.newPrice,
-    required this.gender,
-    required this.type,
-    required this.season,
-    required this.material,
-    required this.brand,
-    required this.category,
-    required this.isFavorite,
-    required this.photo,
-    required this.rating,
-  });
-
-  factory ResultProductListCategory.fromJson(Map<String, dynamic> json) =>
-      ResultProductListCategory(
-        id: json["id"],
-        name: json["name"],
-        slug: json["slug"],
-        price: json["price"],
-        discount: json["discount"],
-        newPrice: json["new_price"],
-        gender: json["gender"],
-        type: json["type"],
-        season: json["season"],
-        material: json["material"],
-        brand: json["brand"],
-        category: json["category"],
-        isFavorite: json["is_favorite"] ?? false,
-        photo: json["photo"] ?? "",
-        rating: json["rating"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "slug": slug,
-        "price": price,
-        "discount": discount,
-        "new_price": newPrice,
-        "gender": gender,
-        "type": type,
-        "season": season,
-        "material": material,
-        "brand": brand,
-        "category": category,
-        "is_favorite": isFavorite,
-        "photo": photo,
-        "rating": rating,
-      };
-}
-
-class CategoryNotifier extends StateNotifier<ModelProductListForCategory> {
   CategoryNotifier()
-      : super(ModelProductListForCategory(
-            count: "", next: "", previous: "", results: [])){
-     getDataCategoryPage(modelSearch: ModelSearch());
+      : super(
+            ModelProductList(count: "", next: "", previous: "", results: [])) {
+    log("Konstruktor open page ---");
+    getDataCategoryPage(
+        modelSearch: ModelSearch(category: box.get("categoryId")));
   }
 
-  ModelProductListForCategory modelProductListForCategory =
-      ModelProductListForCategory(
-          count: "", next: "", previous: "", results: []);
+  ModelProductList modelProductListForCategory =
+      ModelProductList(count: "", next: "", previous: "", results: []);
 
-  Future<ModelProductListForCategory> getDataCategoryPage(
+  Future<ModelProductList> getDataCategoryPage(
       {required ModelSearch modelSearch}) async {
+
+    log("get Data Category page");
     var dio = Dio();
-    List<ResultProductListCategory> listProduct2 = [];
+    List<ResultProductList> listProduct2 = [];
     if (modelSearch.page.toString() == "1" ||
-        modelSearch.page.toString() == "null") {
+        modelSearch.page.toString() == "null" ||
+        modelSearch.page.toString() == "") {
       state = state.copyWith(results: []);
     }
     Response response = await dio.get(
@@ -222,7 +116,7 @@ class CategoryNotifier extends StateNotifier<ModelProductListForCategory> {
     log(modelSearch.page.toString());
     log(jsonEncode(response.data).toString());
     try {
-      modelProductListForCategory = ModelProductListForCategory.fromJson(response.data);
+      modelProductListForCategory = ModelProductList.fromJson(response.data);
 
       if (modelSearch.page.toString() == "1" ||
           modelSearch.page.toString() == "null") {
@@ -238,7 +132,39 @@ class CategoryNotifier extends StateNotifier<ModelProductListForCategory> {
       }
     } catch (e) {
       log(e.toString());
-      return ModelProductListForCategory(count: "", next: "", previous: "", results: []);
+      return ModelProductList(count: "", next: "", previous: "", results: []);
     }
   }
+
+  void updateFavoriteBrand(String id) {
+    List<ResultProductList> listUpFavBrand = [];
+    listUpFavBrand.addAll(state.results);
+    log(jsonEncode(state));
+
+    for (int i = 0; i < listUpFavBrand.length; i++) {
+      if (listUpFavBrand[i].id.toString() == id.toString()) {
+        listUpFavBrand[i].isFavorite = !listUpFavBrand[i].isFavorite;
+      }
+    }
+
+    state = state.copyWith(results: listUpFavBrand);
+  }
+
+  setOrdersBrand({required String idOrder}) {
+    List<ResultProductList> updateOrder = [];
+    updateOrder.addAll(state.results);
+    log(updateOrder.toString());
+    for (int i = 0; i < updateOrder.length; i++) {
+      if (updateOrder[i].id.toString() == idOrder) {
+        if (updateOrder[i].slug != "987654321") {
+          /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
+          updateOrder[i].slug = "987654321";
+        } else {
+          updateOrder[i].slug = "slug";
+        }
+      }
+    }
+    state = state.copyWith(results: updateOrder);
+  }
+
 }

@@ -3,26 +3,29 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/data/network/base_url.dart';
 
-final showBrands = StateNotifierProvider.family<
+final showBrands = StateNotifierProvider<
     ShowBrandsNotifier,
-    ModelProductList,
-    ModelSearch>((ref, m) => ShowBrandsNotifier(modelSearch: m));
+    ModelProductList>((ref) => ShowBrandsNotifier());
 
 
 class ShowBrandsNotifier extends StateNotifier<ModelProductList> {
-  ModelSearch modelSearch;
-
-  ShowBrandsNotifier({required this.modelSearch})
+var box = Hive.box("online");
+  ShowBrandsNotifier()
       : super(
             ModelProductList(count: "", next: "", previous: "", results: []))
   {
     // log(jsonEncode(modelSearch).toString());
-    // if(modelSearch.brand == "-1") {
-      getDataBrand(modelSearch: modelSearch);
+    // if(modelSearch.brand == "-1") { //box.get("brand")
+        log("^^^log^^^");
+        log(box.get("brand").toString());
+        log("^^^log^^^");
+
+      getDataBrand(modelSearch:ModelSearch(brand: box.get("brand")) );
     // }
   }
 
@@ -37,7 +40,7 @@ class ShowBrandsNotifier extends StateNotifier<ModelProductList> {
     try {
       if (modelSearch.page.toString() == "1" ||
           modelSearch.page.toString() == "null") {
-        // state = state.copyWith(results: []);
+        state = state.copyWith(results: []);
       }
       Response response = await dio.get(
           "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
@@ -66,7 +69,6 @@ class ShowBrandsNotifier extends StateNotifier<ModelProductList> {
 
   void updateFavoriteBrand(String id) {
     List<ResultProductList> listUpFavBrand = [];
-    // listUpFavBrand.clear();
     listUpFavBrand.addAll(state.results);
     log(jsonEncode(state));
 
@@ -80,16 +82,20 @@ class ShowBrandsNotifier extends StateNotifier<ModelProductList> {
   }
 
   setOrdersBrand({required String idOrder}) {
-    for (int i = 0; i < state.results.length; i++) {
-      if (state.results[i].id.toString() == idOrder.toString()) {
-        if (state.results[i].slug != "987654321") {
+    List<ResultProductList> updateOrder = [];
+    updateOrder.addAll(state.results);
+    log(updateOrder.toString());
+    for (int i = 0; i < updateOrder.length; i++) {
+      if (updateOrder[i].id.toString() == idOrder) {
+        if (updateOrder[i].slug != "987654321") {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          state.results[i].slug = "987654321";
+          updateOrder[i].slug = "987654321";
         } else {
-          state.results[i].slug = "slug";
+          updateOrder[i].slug = "slug";
         }
       }
     }
+    state = state.copyWith(results: updateOrder);
   }
 }
 

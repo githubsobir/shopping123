@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/controller_main_page.dart';
@@ -20,6 +21,8 @@ class HeaderMain extends ConsumerStatefulWidget {
 }
 
 class _HeaderMainState extends ConsumerState<HeaderMain> {
+  var box = Hive.box("online");
+
   @override
   Widget build(BuildContext context) {
     final carouselData = ref.watch(getDataCarousel);
@@ -169,11 +172,14 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                                   //     .read(setFavourite2.notifier)
                                   //     .getData(modelSearch: modelSearch);
                                   //
+                                  box.delete("brand");
+                                  box.put("brand",
+                                      data.results[index].id.toString());
                                   pushNewScreen(context,
                                       withNavBar: false,
                                       screen: ShowBrands(
-                                        brandName: data.results[index].title
-                                            .toString(),
+                                          brandName: data.results[index].title
+                                              .toString(),
                                           brandId: data.results[index].id
                                               .toString()));
                                 },
@@ -189,7 +195,7 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
             }, loading: () {
               return Text("Loading");
             })),
-       const SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     ));
   }

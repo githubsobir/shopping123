@@ -25,6 +25,7 @@ class _SignUpState extends ConsumerState<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         backgroundColor: MyColors.appColorWhite(),
         appBar: appBarSignUp(context: context),

@@ -43,6 +43,4 @@ final setFavourite2 =
         (ref) {return ModelProductListNotifier();
 });
 
-final isLoadingProvider = StateProvider.family<bool, bool>((ref, b) {
-  return b;
-});
+

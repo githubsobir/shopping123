@@ -11,10 +11,20 @@ class BaseClass {
     String data = "";
     try {
       if (m.minPrice.toString() != "null" && m.minPrice.toString().isNotEmpty) {
-        data = "min_price=${m.minPrice}";
+        if (data.isNotEmpty) {
+          data = "$data&min_price=${m.minPrice}";
+        } else {
+          data = "min_price=${m.minPrice}";
+        }
       }
       if (m.maxPrice.toString() != "null" && m.maxPrice.toString().isNotEmpty) {
-        data = "max_price=${m.maxPrice}";
+
+        if (data.isNotEmpty) {
+          data = "$data&max_price=${m.maxPrice}";
+        } else {
+          data = "max_price=${m.maxPrice}";
+        }
+
       }
       if (m.price.toString() != "null" && m.price.toString().isNotEmpty) {
         if (data.isNotEmpty) {

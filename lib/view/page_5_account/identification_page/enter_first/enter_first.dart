@@ -1,22 +1,25 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/app_bar.dart';
+import 'package:shopping/view/page_5_account/identification_page/enter_first/controller_login.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/enter_button.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/forgot_pasword.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/inputs.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
-class EnterFirst extends StatefulWidget {
+class EnterFirst extends ConsumerStatefulWidget {
   String windowIdEnterFirst = "";
 
   EnterFirst({Key? key, required this.windowIdEnterFirst}) : super(key: key);
 
   @override
-  State<EnterFirst> createState() => _EnterFirstState();
+  ConsumerState<EnterFirst> createState() => _EnterFirstState();
 }
 
-class _EnterFirstState extends State<EnterFirst> {
+class _EnterFirstState extends ConsumerState<EnterFirst> {
   // var box = Hive.box("online");
 
   bool boolPasswordVisible = true;
@@ -28,10 +31,13 @@ class _EnterFirstState extends State<EnterFirst> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(checkSignIn);
     return Scaffold(
         backgroundColor: MyColors.appColorWhite(),
         appBar: enterFirstAppBar(context: context),
-        body: Center(
+        body:
+        ref.watch(checkSignIn).boolGetData ?
+        Center(
             child: Form(
           key: formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -67,6 +73,8 @@ class _EnterFirstState extends State<EnterFirst> {
               ),
             ),
           ),
-        )));
+        ))
+    :Center(child: CupertinoActivityIndicator(),)
+    );
   }
 }

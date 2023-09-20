@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/data/model/model_2_category/model_category.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
+import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/data/network/internet_2_category/internet_category.dart';
 
 
@@ -13,7 +14,7 @@ final getCategoryData = FutureProvider<ModelCategoryGet>((ref) {
 });
 
 final getCategoryOpenPage = FutureProvider.family<
-    ModelProductListForCategory,
+    ModelProductList,
     ModelSearch>((ref, m){
       return ref.read(apiCategory).getCategoryOpen(modelSearch: m);
 });
@@ -21,4 +22,4 @@ final getCategoryOpenPage = FutureProvider.family<
 
 final getCategoryPage = StateNotifierProvider<
     CategoryNotifier,
-    ModelProductListForCategory>((ref) => CategoryNotifier());
+    ModelProductList>((ref) => CategoryNotifier());

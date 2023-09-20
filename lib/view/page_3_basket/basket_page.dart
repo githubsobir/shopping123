@@ -48,13 +48,12 @@ class _BasketPageState extends ConsumerState<BasketPage> {
       ),
       body: SafeArea(
           child: Padding(
-              padding: const EdgeInsets.all(1),
+              padding: const EdgeInsets.all(5),
               child: getList(l: listOrder.results).isNotEmpty
                   ? ListView.builder(
                       itemCount:
                       getList(l: listOrder.results).length,
                       itemBuilder: (context, index) =>
-
                           Container(
                         margin: const EdgeInsets.all(3),
                         height: 120,
@@ -77,20 +76,27 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                           },
                           child: Row(
                             children: [
-                              Image.network(
-                                 getList(l: listOrder.results)[index].photo.toString(),
-                                width: 120,
-                                errorBuilder: (context, error,
-                                    stackTrace) =>
-                                    SizedBox(
-                                      height: 150,
-                                      width: MediaQuery.of(context)
-                                          .size
-                                          .width *
-                                          0.2,
-                                      child: Image.asset(
-                                          "assets/images/shopping1.png"),
-                                    ),
+                              const SizedBox(width: 8),
+                              ClipRRect(
+                                
+                                borderRadius: BorderRadius.circular(10),
+
+                                child: Image.network(
+                                   getList(l: listOrder.results)[index].photo.toString(),
+
+                                  height: 90,
+                                  errorBuilder: (context, error,
+                                      stackTrace) =>
+                                      SizedBox(
+                                        height: 120,
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width *
+                                            0.2,
+                                        child: Image.asset(
+                                            "assets/images/shopping1.png"),
+                                      ),
+                                ),
                               )
 
                               ,
@@ -100,6 +106,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    const SizedBox(height: 10),
                                     SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
@@ -113,31 +120,22 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                         )),
                                     SizedBox(
                                       height: 30,
-                                      child: RatingBar.builder(
-                                        initialRating: 3,
-                                        minRating: 1,
-                                        direction: Axis.horizontal,
-                                        allowHalfRating: true,
-                                        itemCount: 5,
-                                        wrapAlignment: WrapAlignment.start,
-                                        itemPadding: const EdgeInsets.symmetric(
-                                            horizontal: 1.0),
-                                        itemSize: 16,
-                                        itemBuilder: (context, _) => const Icon(
-                                          Icons.star,
-                                          color: Colors.amber,
-                                          size: 10,
-                                        ),
-                                        onRatingUpdate: (rating) {},
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.star, color: Colors.yellow.shade700, size: 18),
+                                          const SizedBox(width: 10),
+                                          Text( getList(l: listOrder.results)[index].rating.toString())
+                                        ],
                                       ),
                                     ),
+
                                     SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.5,
                                         child: Text(
-                                          getList(l: listOrder.results)[index].price.toString(),
-                                          style: TextStyle(fontSize: 15),
+                                          "${getList(l: listOrder.results)[index].price} so'm",
+                                          style: const TextStyle(fontSize: 15),
                                         )),
                                   ],
                                 ),

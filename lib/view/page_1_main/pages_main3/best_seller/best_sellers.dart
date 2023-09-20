@@ -38,7 +38,6 @@ class _BestSellersState extends ConsumerState<BestSellers> {
         pageCount = pageCount + 1;
         log(pageCount.toString());
         getData(item: pageCount.toString(), ref: ref);
-        setState(() {});
         // log(getData(item: pageCount.toString(), ref: ref));
       } catch (e) {
         log(e.toString());
@@ -53,7 +52,7 @@ class _BestSellersState extends ConsumerState<BestSellers> {
   Widget build(BuildContext context) {
     return Scaffold(body: Consumer(builder: (context, ref, child) {
       final getList = ref.watch(setFavourite2);
-      return Text(getList.results[0].name);
+      return Text(getList.results[3].name);
     }));
   }
 }
