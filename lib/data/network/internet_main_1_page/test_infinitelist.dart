@@ -18,9 +18,9 @@ class InternetInfiniteList {
           "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
           options: Options(
               headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
-      log("@@@@@@@");
-      log(jsonEncode(response.data).toString());
-      log("@@@@@@@");
+      // log("@@@@@@@");
+      // log(jsonEncode(response.data).toString());
+      // log("@@@@@@@");
       return jsonEncode(response.data).toString();
     } catch (e) {
       return "Serverda xatolik";

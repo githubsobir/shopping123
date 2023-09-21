@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/network/base_url.dart';
 
@@ -137,6 +138,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   List<ResultProductList> listProducts = [];
   List<ResultProductList> listProduct2 = [];
   var dio = Dio();
+  var box = Hive.box("online");
 
   Future<ModelProductList> getData({required ModelSearch modelSearch}) async {
 
@@ -145,10 +147,12 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     ) {
       state = state.copyWith(results: []);
     }
+    log("####");
+    log(box.get("token").toString());
     Response response = await dio.get(
         "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
-        options: Options(
-            headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
+        options: Options(headers: {"X-CSRFToken":box.get("token")})
+);
 log(jsonEncode(response.data).toString());
     try {
       modelProductList = ModelProductList.fromJson(response.data);

@@ -25,7 +25,7 @@ class InternetMainBody {
   Future<List<ResultProductList>> getInfiniteList(
       {required ModelSearch modelSearch}) async {
     try {
-      log(jsonEncode(modelSearch).toString());
+      // log(jsonEncode(modelSearch).toString());
       response = await dio.get(
           "${BaseClass.url}/api/v1/web/products/?${getLinkSearch(
               m: modelSearch)}",
@@ -34,7 +34,7 @@ class InternetMainBody {
 
       modelProductList = ModelProductList.fromJson(response.data);
       // return jsonEncode(response.data).toString();
-      log(jsonEncode(response.data).toString());
+      // log(jsonEncode(response.data).toString());
       return modelProductList.results;
     } catch (e) {
       return [];

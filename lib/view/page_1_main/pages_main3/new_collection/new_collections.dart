@@ -24,11 +24,13 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
 
   //
   getData({required ModelSearch modelSearch, required WidgetRef ref}) async {
-  data = await ref.read(setFavourite2.notifier).getData(modelSearch: modelSearch);
-   // await ref.watch(setFavourite2.notifier).getdata.results(modelSearch: modelSearch);
-   //  setState(() {
-   //
-   //  });
+    data = await ref
+        .read(setFavourite2.notifier)
+        .getData(modelSearch: modelSearch);
+    // await ref.watch(setFavourite2.notifier).getdata.results(modelSearch: modelSearch);
+    //  setState(() {
+    //
+    //  });
   }
 
   @override
@@ -45,15 +47,14 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
   _scrollListener() async {
     log(_scrollController.offset.toString());
     log(_scrollController.position.maxScrollExtent.toString());
-    log( _scrollController.position.outOfRange.toString());
+    log(_scrollController.position.outOfRange.toString());
 
     if (_scrollController.offset <=
             _scrollController.position.maxScrollExtent &&
         _scrollController.position.outOfRange) {
-
       try {
         modelSearch = ModelSearch(page: pageCount + 1);
-        await  getData(modelSearch:  modelSearch, ref: ref);
+        await getData(modelSearch: modelSearch, ref: ref);
         if (value == 0) {
           await ref
               .read(setFavourite2.notifier)
@@ -87,14 +88,14 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  childAspectRatio: 0.58),
+                  crossAxisSpacing: 1.0,
+                  childAspectRatio: 0.56),
               scrollDirection: Axis.vertical,
               controller: _scrollController,
               itemCount: getData.results.length
-                  // % 2 == 0
-                  // ? getData.results.length + 2
-                  // : getData.results.length + 3
+              // % 2 == 0
+              // ? getData.results.length + 2
+              // : getData.results.length + 3
               ,
               physics: const NeverScrollableScrollPhysics(),
               // AlwaysScrollableScrollPhysics(),
@@ -110,15 +111,15 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                         log(index.toString());
                       },
                       child: Container(
-                        padding: const EdgeInsets.fromLTRB(10,3,10,3),
-                        margin: const EdgeInsets.fromLTRB(10,3,10,3),
+                        padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                        margin: const EdgeInsets.fromLTRB(7, 3, 7, 3),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 5),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
+                              width: MediaQuery.of(context).size.width * 0.45,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   boxShadow: [
@@ -139,12 +140,12 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                                         height: 180,
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.4,
+                                                0.44,
                                         getData.results[index].photo.toString(),
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) =>
-                                      SizedBox(
+                                                SizedBox(
                                           height: 160,
                                           width: MediaQuery.of(context)
                                                   .size
@@ -167,7 +168,6 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                                               .updateFavorite(getData
                                                   .results[index].id
                                                   .toString());
-
 
                                           // setState(() {});
                                         },
@@ -217,7 +217,7 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                             ),
                             const SizedBox(height: 5),
                             Padding(
-                              padding: const EdgeInsets.only(left: 8, right: 8),
+                              padding: const EdgeInsets.only(left: 8, right: 1),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -230,11 +230,12 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                                       Text(
                                           "${getData.results[index].price} so'm",
                                           style: const TextStyle(
-                                            decoration:
-                                                TextDecoration.lineThrough,
-                                          )),
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              fontSize: 12)),
                                       Text(
-                                          "${getData.results[index].newPrice.toStringAsFixed(2)} so'm"),
+                                          "${getData.results[index].newPrice.toStringAsFixed(2)} so'm",
+                                          style: const TextStyle(fontSize: 12)),
                                     ],
                                   ),
                                   Container(
@@ -250,28 +251,28 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                                           )),
                                       child: Center(
                                           child: GestureDetector(
-                                        onTap: () {
-                                          ref
-                                              .read(setFavourite2.notifier)
+                                            onTap: () {
+                                           ref
+                                                .read(setFavourite2.notifier)
                                               .setOrder(
                                                   idOrder: getData
                                                       .results[index].id
                                                       .toString());
-                                        },
-                                        child: Container(
-                                          width: 45,
-                                          height: 45,
-                                          color: Colors.transparent,
-                                          child: Icon(
-                                            Icons.add_shopping_cart,
-                                            color:
-                                                getData.results[index].slug ==
-                                                        "987654321"
-                                                    ? Colors.red
-                                                    : Colors.grey.shade800,
-                                            size: 20,
-                                          ),
-                                        ),
+                                           },
+                                             child: Container(
+                                              width: 40,
+                                              height: 45,
+                                              color: Colors.transparent,
+                                              child: Icon(
+                                                Icons.add_shopping_cart,
+                                                color:
+                                                    getData.results[index].slug ==
+                                                            "987654321"
+                                                        ? Colors.red
+                                                        : Colors.grey.shade800,
+                                                size: 20,
+                                              ),
+                                            ),
                                       ))),
                                 ],
                               ),

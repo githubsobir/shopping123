@@ -110,13 +110,13 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                     SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.5,
+                                                0.4,
                                         child: Text(
                                           getList(l: listOrder.results)[index].name.toString(),
                                           maxLines: 2,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 18),
+                                              fontSize: 15),
                                         )),
                                     SizedBox(
                                       height: 30,
@@ -132,10 +132,10 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                     SizedBox(
                                         width:
                                             MediaQuery.of(context).size.width *
-                                                0.5,
+                                                0.4,
                                         child: Text(
                                           "${getList(l: listOrder.results)[index].price} so'm",
-                                          style: const TextStyle(fontSize: 15),
+                                          style: const TextStyle(fontSize: 12),
                                         )),
                                   ],
                                 ),
