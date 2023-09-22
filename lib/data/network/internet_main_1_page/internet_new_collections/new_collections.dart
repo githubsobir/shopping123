@@ -12,13 +12,9 @@ class InternetMainNewCollectionsBody {
     var box = Hive.box("online");
     var dio = Dio();
     Response response;
-    log("S001");
-    log("${BaseClass.url}/api/v1/web/banners/");
-    log(box.get("token").toString());
     response = await dio.get("${BaseClass.url}/api/v1/web/banners/",
     options: Options(headers: {"X-CSRFToken":box.get("token")})
     );
-    log(jsonEncode(response.data).toString());
     return ModelBanners.fromJson(response.data);
   }
 }

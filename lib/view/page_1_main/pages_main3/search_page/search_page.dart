@@ -31,7 +31,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
 
   getData({required String item, required WidgetRef ref}) async {
     if (indexGetData == 0) {
-      ref.watch(getDataSearch(ModelSearch(search: "-1")));
+      // ref.watch(getDataSearch(ModelSearch(search: "-1")));
     } else {
       indexGetData = 0;
     }
@@ -121,11 +121,11 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                               ? GridView.builder(
                                   shrinkWrap: true,
                                   gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          mainAxisSpacing: 4.0,
-                                          crossAxisSpacing: 4.0,
-                                          childAspectRatio: 0.58),
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 4.0,
+                                      crossAxisSpacing: 1.0,
+                                      childAspectRatio: 0.54),
                                   scrollDirection: Axis.vertical,
                                   controller: _scrollController,
                                   itemCount: getDataSearch.results.length
@@ -152,34 +152,23 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                             log(index.toString());
                                           },
                                           child: Container(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 3, 10, 3),
-                                            margin: const EdgeInsets.fromLTRB(
-                                                10, 3, 10, 3),
+                                            padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                                            margin: const EdgeInsets.fromLTRB(7, 3, 7, 3),
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                const SizedBox(height: 5),
+                                                const SizedBox(height: 2),
                                                 Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
+                                                  width:
+                                                  MediaQuery.of(context).size.width * 0.45,
                                                   decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
+                                                      borderRadius: BorderRadius.circular(8),
                                                       boxShadow: [
                                                         BoxShadow(
                                                             blurRadius: 1,
-                                                            color: Colors
-                                                                .grey.shade100,
-                                                            offset:
-                                                                const Offset(
-                                                                    1, 0),
+                                                            color: Colors.grey.shade100,
+                                                            offset: const Offset(1, 0),
                                                             spreadRadius: 10)
                                                       ]),
                                                   child: Stack(
@@ -197,7 +186,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                         context)
                                                                     .size
                                                                     .width *
-                                                                0.4,
+                                                                0.44,
                                                             getDataSearch
                                                                 .results[index]
                                                                 .photo
@@ -315,7 +304,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 8, right: 8),
+                                                          left: 1, right: 1),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -336,9 +325,14 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                 decoration:
                                                                     TextDecoration
                                                                         .lineThrough,
+                                                                    fontSize: 13
                                                               )),
                                                           Text(
-                                                              "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} so'm"),
+                                                              "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} so'm", style:
+                                                          const TextStyle(
+
+                                                              fontSize: 13
+                                                          )),
                                                         ],
                                                       ),
                                                       Container(
@@ -382,7 +376,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                                           .toString());
                                                             },
                                                             child: Container(
-                                                              width: 45,
+                                                              width: 42,
                                                               height: 45,
                                                               color: Colors
                                                                   .transparent,
@@ -405,6 +399,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                     ],
                                                   ),
                                                 ),
+
                                               ],
                                             ),
                                           ),
@@ -420,7 +415,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                       Container(
                                           color: Colors.white,
                                           child: Image.asset(
-                                            "assets/images/empty_cart.png",
+                                            "assets/images/shopping1.png",
                                             height: 120,
                                           )),
                                       const SizedBox(height: 20),

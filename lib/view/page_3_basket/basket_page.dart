@@ -56,7 +56,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                       itemBuilder: (context, index) =>
                           Container(
                         margin: const EdgeInsets.all(3),
-                        height: 120,
+                        height: 130,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
@@ -135,8 +135,12 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                                 0.4,
                                         child: Text(
                                           "${getList(l: listOrder.results)[index].price} so'm",
-                                          style: const TextStyle(fontSize: 12),
+                                          style: const TextStyle(fontSize: 12,  decoration:
+                                          TextDecoration.lineThrough,),
                                         )),
+                                    Text("${getList(l: listOrder.results)[index].newPrice}", style:  const TextStyle(
+
+                                    ))
                                   ],
                                 ),
                               ),
