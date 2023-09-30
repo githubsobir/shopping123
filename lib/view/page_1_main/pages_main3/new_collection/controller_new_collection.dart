@@ -50,8 +50,9 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     try {
       Response response = await dio.get(
           "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
-          options: Options(headers: {"X-CSRFToken": box.get("token")}));
-
+        options: Options(headers: {"Authorization":"Bearer ${box.get("token")}" }),
+      );
+      log(response.data.toString());
       modelProductList = ModelProductList.fromJson(response.data);
 
       // if (modelSearch.page.toString() == "1" ||
@@ -103,15 +104,20 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     return state;
   }
 
-  setOrder({required String idOrder}) {
+  setOrder({required String idOrder, required String count, required String colorProduct, required sizeProduct}) {
     List<ResultProductList> updateOrder = [...state.results];
     for (int i = 0; i < updateOrder.length; i++) {
       if (updateOrder[i].id.toString() == idOrder.toString()) {
         if (updateOrder[i].slug != "987654321") {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
           updateOrder[i].slug = "987654321";
+          updateOrder[i].count = count;
+          updateOrder[i].colorProduct = colorProduct;
+          updateOrder[i].sizeProduct = sizeProduct;
         } else {
+
           updateOrder[i].slug = "slug";
+          updateOrder[i].count = "0";
         }
       }
     }
@@ -134,12 +140,14 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   Future setFavoritesServer({required String idProduct}) async {
     try {
       var dio = Dio();
+        log(idProduct);
+        log(box.get("token").toString());
       Response response = await dio
-          .post("https://uzb.technostudio.uz/api/v1/web/favorites/", data: {
-        "session_id": box.get("token"),
-        "is_active": true,
+          .post("https://uzb.technostudio.uz/api/v1/web/favorites/",
+          options: Options(headers: {"Authorization":"Bearer ${box.get("token")}" }),
+          data: {
+            "session_id": box.get("token"),
         "product": idProduct,
-        "user": ""
       });
       log(jsonEncode(response.data).toString());
 

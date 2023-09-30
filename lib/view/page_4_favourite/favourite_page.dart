@@ -8,8 +8,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
+import 'package:shopping/view/page_0_root/controller_root_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_4_favourite/favourite_empty.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
@@ -21,14 +24,33 @@ class FavouritePage extends ConsumerStatefulWidget {
   _FavouritePageState createState() => _FavouritePageState();
 }
 
-class _FavouritePageState extends ConsumerState<FavouritePage> {
+class _FavouritePageState extends ConsumerState<FavouritePage>  with SingleTickerProviderStateMixin<FavouritePage> {
   ScrollController _scrollController = ScrollController();
+  late AnimationController _slideAnimationController;
 
+
+ late  Animation<double> _heightFactorAnimation;
   @override
   initState() {
-    super.initState();
+
+    _slideAnimationController = AnimationController(
+      vsync: this,
+      //whatever duration you want
+      duration: const Duration(milliseconds: 800),
+    );
+    _heightFactorAnimation = CurvedAnimation(
+        parent: _slideAnimationController.drive(
+          //a Tween from 1.0 to 0.0 is what makes the slide effect by shrinking
+          // the container using the [Align.heightFactor] parameter
+          Tween<double>(
+            begin: 1.0,
+            end: 0.0,
+          ),
+        ),
+        curve: Curves.ease);
     _scrollController = ScrollController(initialScrollOffset: 5.0)
       ..addListener(_scrollListener);
+    super.initState();
   }
 
   int pageCount = 1;
@@ -63,6 +85,39 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
     return listReturn;
   }
 
+  bottomSheetCount({
+    required String idProduct,
+    required bool isFavourite,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      backgroundColor: Colors.white,
+      builder: (
+          context,
+          ) {
+        return Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child:
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MiniDetails(idProduct: idProduct, isFavourite: isFavourite),
+            ));
+      },
+    ).then((value) {
+      ref.read(boolHideNavBar.notifier).state = false;
+      ref.watch(countMiniDetails.notifier).state = 1;
+      ref.read(selectColorMiniDetails.notifier).state = -1;
+      ref.read(selectSizeMiniDetails.notifier).state = -1;
+      ref.read(noSelectSizeMiniDetails.notifier).state = 0;
+      ref.read(noSelectColorMiniDetails.notifier).state = 0;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final list = ref.watch(setFavourite2);
@@ -77,208 +132,227 @@ class _FavouritePageState extends ConsumerState<FavouritePage> {
         backgroundColor: Colors.white,
       ),
       body: SafeArea(
-          child: Padding(
-              padding: const EdgeInsets.all(8),
+          child: getList(l: list.results).isNotEmpty?
+          GridView.builder(
+            shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
+            // physics: ScrollPhysics(),
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 1.0,
+                childAspectRatio: 0.58),
+            itemCount: getList(l: list.results).length,
+            itemBuilder: (context, index) => index <
+                getList(l: list.results).length
+                ? GestureDetector(
+              onTap: () {
+                pushNewScreen(context,
+                    screen: DetailsPage(
+                      idProduct:
+                      getList(l: list.results)[index].id.toString(),
+                      isFavourite:
+                      getList(l: list.results)[index].isFavorite,
+                    ),
+                    withNavBar: false);
+                log(index.toString());
+              },
               child:
-              getList(l: list.results).isNotEmpty?
-              GridView.builder(
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 4.0,
-                    crossAxisSpacing: 4.0,
-                    childAspectRatio: 0.58),
-                scrollDirection: Axis.vertical,
-                controller: _scrollController,
-                itemCount: getList(l: list.results).length,
-                    // % 2 == 0
-                    // ? getList(l: list.results).length + 2
-                    // : getList(l: list.results).length + 3,
-                physics: const NeverScrollableScrollPhysics(),
-                // AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) => index < getList(l: list.results).length
-                    ? GestureDetector(
-                  onTap: () {
-                    pushNewScreen(context,
-                        screen: DetailsPage(
-                          idProduct: getList(l: list.results)[index].id.toString(),
-                          isFavourite: getList(l: list.results)[index].isFavorite,
-                        ),
-                        withNavBar: false);
-                    log(index.toString());
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(10,3,10,3),
-                    margin: const EdgeInsets.fromLTRB(10,3,10,3),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 5),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 1,
-                                    color: Colors.grey.shade100,
-                                    offset: const Offset(1, 0),
-                                    spreadRadius: 10)
-                              ]),
-                          child: Stack(
-                            children: [
-                              SingleChildScrollView(
-                                physics:
-                                const NeverScrollableScrollPhysics(),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    height: 180,
-                                    width:
-                                    MediaQuery.of(context).size.width *
-                                        0.4,
-                                    getList(l: list.results)[index].photo.toString(),
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                        SizedBox(
-                                          height: 160,
-                                          width: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                              0.4,
-                                          child: Image.asset(
-                                              height: 160,
-                                              "assets/images/shopping1.png"),
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+              AnimatedBuilder(animation: _slideAnimationController, builder: (context, child) =>
+                  ClipRect(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      heightFactor: _heightFactorAnimation.value,
+                      child:   Container(
+                        padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                        margin: const EdgeInsets.fromLTRB(7, 3, 7, 3),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 5),
+                            Container(
+                              width:
+                              MediaQuery.of(context).size.width * 0.45,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 1,
+                                        color: Colors.grey.shade100,
+                                        offset: const Offset(1, 0),
+                                        spreadRadius: 10)
+                                  ]),
+                              child: Stack(
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      ref
-                                          .read(setFavourite2.notifier)
-                                          .updateFavorite(getList(l: list.results)
-                                          [index].id
-                                          .toString());
-                                      // setState(() {});
-                                    },
-                                    child: Container(
-                                      alignment: Alignment.topRight,
-                                      height: 42,
-                                      width: 42,
-                                      color: Colors.transparent,
-                                      padding: const EdgeInsets.fromLTRB(
-                                          10, 10, 10, 15.0),
-                                      child: Icon(
-                                        getList(l: list.results)[index].isFavorite
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: Colors.red,
+                                  SingleChildScrollView(
+                                    physics:
+                                    const NeverScrollableScrollPhysics(),
+                                    child: ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.circular(10),
+                                      child: Image.network(
+                                        height: 180,
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width *
+                                            0.44,
+                                        getList(l: list.results)[index].photo
+                                            .toString(),
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                            SizedBox(
+                                              height: 160,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                                  0.4,
+                                              child: Image.asset(
+                                                  height: 160,
+                                                  "assets/images/shopping1.png"),
+                                            ),
                                       ),
                                     ),
                                   ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(getList(l: list.results)[index].name.toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true),
-                        const SizedBox(height: 8),
-                        Visibility(
-                          visible: getList(l: list.results)[index].rating == -1
-                              ? true
-                              : false,
-                          child: SizedBox(
-                            height: 30,
-                            child: Row(children: [
-                              Icon(
-                                Icons.star,
-                                color: Colors.yellow.shade600,
-                              ),
-                              Text(
-                                  getList(l: list.results)[index].rating.toString()),
-
-                              /// Qo'shimcha qo'shish uchun
-                            ]),
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      "${getList(l: list.results)[index].price} so'm",
-                                      style: const TextStyle(
-                                        decoration:
-                                        TextDecoration.lineThrough,
-                                      )),
-                                  Text(
-                                      "${getList(l: list.results)[index].newPrice.toStringAsFixed(2)} so'm"),
-                                ],
-                              ),
-                              Container(
-                                // padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color:
-                                        getList(l: list.results)[index].slug ==
-                                            "987654321"
-                                            ? Colors.red
-                                            : Colors.grey.shade400,
-                                      )),
-                                  child: Center(
-                                      child: GestureDetector(
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
                                         onTap: () {
+                                          _slideAnimationController.forward();
                                           ref
                                               .read(setFavourite2.notifier)
-                                              .setOrder(
-                                              idOrder: getList(l: list.results)[index].id
-                                                  .toString());
+                                              .updateFavorite(getList(l: list.results)[index].id
+                                              .toString());
+
+                                          // setState(() {});
                                         },
                                         child: Container(
-                                          width: 45,
-                                          height: 45,
+                                          alignment: Alignment.topRight,
+                                          height: 42,
+                                          width: 42,
                                           color: Colors.transparent,
+                                          padding:
+                                          const EdgeInsets.fromLTRB(
+                                              10, 10, 10, 15.0),
                                           child: Icon(
-                                            Icons.add_shopping_cart,
-                                            color:
-                                            getList(l: list.results)[index].slug ==
-                                                "987654321"
-                                                ? Colors.red
-                                                : Colors.grey.shade800,
-                                            size: 20,
+                                            getList(l: list.results)[index]
+                                                .isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: Colors.red,
                                           ),
                                         ),
-                                      ))),
-                            ],
-                          ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(getList(l: list.results)[index].name.toString(),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true),
+                            const SizedBox(height: 8),
+                            Visibility(
+                              visible: getList(l: list.results)[index].rating == -1
+                                  ? true
+                                  : false,
+                              child: SizedBox(
+                                height: 30,
+                                child: Row(children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow.shade600,
+                                  ),
+                                  Text(getList(l: list.results)[index].rating
+                                      .toString()),
+
+                                  /// Qo'shimcha qo'shish uchun
+                                ]),
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Padding(
+                              padding:
+                              const EdgeInsets.only(left: 8, right: 8),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          "${getList(l: list.results)[index].price} \$",
+                                          style: const TextStyle(
+                                              decoration: TextDecoration
+                                                  .lineThrough,
+                                              fontSize: 12)),
+                                      Text("$index",
+                                          // "${getData.results[index].newPrice.toStringAsFixed(2)} so'm",
+                                          style: const TextStyle(
+                                              fontSize: 12)),
+                                    ],
+                                  ),
+                                  Container(
+                                    // padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: getList(l: list.results)[index]
+                                                .slug ==
+                                                "987654321"
+                                                ? Colors.red
+                                                : Colors.grey.shade400,
+                                          )),
+                                      child: Center(
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              ref
+                                                  .read(boolHideNavBar.notifier)
+                                                  .state = true;
+                                              bottomSheetCount(idProduct: getList(l: list.results)[index].id-1
+                                                  .toString(),
+                                                  isFavourite: getList(l: list.results)[index].isFavorite);
+
+                                            },
+                                            child: Container(
+                                              width: 40,
+                                              height: 45,
+                                              color: Colors.transparent,
+                                              child: Icon(
+                                                Icons.add_shopping_cart,
+                                                color: getList(l: list.results)[index]
+                                                    .slug ==
+                                                    "987654321"
+                                                    ? Colors.red
+                                                    : Colors.grey.shade800,
+                                                size: 20,
+                                              ),
+                                            ),
+                                          ))),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                )
-                    : const LoadingShimmer(),
-              )
-          : favouriteEmpty(context: context)
-          )),
+                ),
+
+            )
+                : const LoadingShimmer(),
+          )
+          : favouriteEmpty(context: context)),
     );
   }
 }

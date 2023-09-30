@@ -11,6 +11,7 @@ import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_0_root/model_ip_address.dart';
+import 'package:shopping/view/page_0_root/controller_root_page.dart';
 import 'package:shopping/view/page_1_main/main_page.dart';
 import 'package:shopping/view/page_2_category/category_page.dart';
 import 'package:shopping/view/page_3_basket/basket_page.dart';
@@ -34,11 +35,11 @@ class _RootPageState extends ConsumerState<RootPage> {
   }
 
   List<Widget> myPages() => [
-        MainPage(),
-        CategoryPage(),
-        BasketPage(),
-        FavouritePage(),
-        AccountPage()
+        const MainPage(),
+        const CategoryPage(),
+        const BasketPage(),
+        const FavouritePage(),
+        const AccountPage()
       ];
   int index = 0;
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
@@ -88,7 +89,7 @@ class _RootPageState extends ConsumerState<RootPage> {
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: false,
       stateManagement: true,
-      hideNavigationBar: false,
+      hideNavigationBar: ref.watch(boolHideNavBar),
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
         borderRadius: const BorderRadius.only(

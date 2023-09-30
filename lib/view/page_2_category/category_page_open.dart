@@ -8,6 +8,7 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_2_category/page_2_controller.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -276,7 +277,10 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
                                             .read(setFavourite2.notifier)
                                             .setOrder(
                                             idOrder: getData.results[index].id
-                                                .toString());
+                                                .toString(), count: "-1",
+                                            sizeProduct: ref.read(sizeSelectProduct).toString(),
+                                            colorProduct: ref.read(colorSelectProduct).toString()
+                                        );
                                         ref.read(getCategoryPage.notifier).setOrdersBrand(idOrder:  getData.results[index].id
                                             .toString() ) ;
 

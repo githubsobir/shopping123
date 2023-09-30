@@ -5,9 +5,9 @@ class ModelProductList {
   List<ResultProductList> results;
 
   ModelProductList({
-    required this.count,
-    required this.next,
-    required this.previous,
+     this.count,
+     this.next,
+     this.previous,
     required this.results,
   });
 
@@ -43,6 +43,7 @@ class ModelProductList {
 
 class ResultProductList {
   dynamic id;
+  dynamic count;
   dynamic name;
   dynamic slug;
   dynamic price;
@@ -57,9 +58,12 @@ class ResultProductList {
   dynamic isFavorite;
   dynamic photo;
   dynamic rating;
+  dynamic colorProduct;
+  dynamic sizeProduct;
 
   ResultProductList({
      this.id,
+    this.count,
      this.name,
      this.slug,
      this.price,
@@ -74,6 +78,9 @@ class ResultProductList {
      this.isFavorite,
      this.photo,
      this.rating,
+     this.colorProduct,
+     this.sizeProduct,
+
   });
 
 
@@ -81,6 +88,7 @@ class ResultProductList {
   factory ResultProductList.fromJson(Map<String, dynamic> json) =>
       ResultProductList(
         id: json["id"]??"",
+        count: json["count"]??0,
         name: json["name"]??"",
         slug: json["slug"]??"",
         price: json["price"]??0??"",
@@ -95,10 +103,13 @@ class ResultProductList {
         isFavorite: json["is_favorite"] ?? false,
         photo: json["photo"] ?? "https://uzb.technostudio.uz/media/Banner/bann.jpg",
         rating: json["rating"]??-1,
+        colorProduct: json["colorProduct"]??-1,
+        sizeProduct: json["sizeProduct"]??-1,
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "count": count,
         "name": name,
         "slug": slug,
         "price": price,
@@ -113,6 +124,8 @@ class ResultProductList {
         "is_favorite": isFavorite,
         "photo": photo,
         "rating": rating,
+        "colorProduct": colorProduct,
+        "sizeProduct": sizeProduct,
       };
 }
 

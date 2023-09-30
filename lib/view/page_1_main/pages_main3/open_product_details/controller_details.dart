@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -7,21 +8,27 @@ import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/data/network/base_url.dart';
 import 'package:shopping/data/network/internet_details/internet_details.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
+
 
 final apiProviderDetails =
     Provider<InternetDetailsInformation>((ref) => InternetDetailsInformation());
 
 final getDetails = FutureProvider.family<ModelDetails, String>((ref, id) async {
-  return await ref.read(apiProviderDetails).getDetailsInformation(id: id);
+  ModelDetails modelDetails =
+      await ref.read(apiProviderDetails).getDetailsInformation(id: id);
+  log(jsonEncode(modelDetails.variables).toString());
+  ref.read(getListDetails.notifier).state = modelDetails.variables;
+  return modelDetails;
 });
 
 final getSimilarItem =
-    StateNotifierProvider.family<SimilarItemPage, ModelProductList, String>((ref, id) => SimilarItemPage(
-      data: id
-    ));
+    StateNotifierProvider.family<SimilarItemPage, ModelProductList, String>(
+        (ref, id) => SimilarItemPage(data: id));
 
 class SimilarItemPage extends StateNotifier<ModelProductList> {
-  String data ;
+  String data;
+
   SimilarItemPage({required this.data})
       : super(
             ModelProductList(count: "", next: "", previous: "", results: [])) {

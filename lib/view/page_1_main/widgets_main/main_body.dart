@@ -6,7 +6,7 @@ import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/new_collections.dart';
 import 'package:shopping/view/page_1_main/pages_main3/sale/sales.dart';
 
-
+// ishlatilinmagan
 Widget mainBody({required BuildContext context, required WidgetRef ref}) {
   return Scaffold(
     body: Padding(

@@ -7,6 +7,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/show_brands/controller_show_brands.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -248,7 +249,11 @@ class _ShowBrandsState extends ConsumerState<ShowBrands> {
                                           .read(setFavourite2.notifier)
                                           .setOrder(
                                           idOrder: getBrandProduct.results[index].id
-                                              .toString());
+                                              .toString(),
+                                          count: "-1",
+                                          sizeProduct: ref.read(sizeSelectProduct).toString(),
+                                          colorProduct: ref.read(colorSelectProduct).toString()
+                                      );
 
 
                                       ref.read(showBrands.notifier).setOrdersBrand(idOrder:getBrandProduct.results[index].id

@@ -74,6 +74,11 @@
   "name": "Familiya va ism",
   "errorName": "Familiya va ismingizni kiriting",
   "passwordNotEqu": "Parollar mos emas",
-  "emptyCart": "Karzinka bo'sh"
+  "emptyCart": "Karzinka bo'sh",
+  "chooseColor": "Rang tanlang",
+  "chooseSize": "O'lcham tanlang",
+  "addCart": "Savatga qo'shish",
+  "removeCart": "Savatdan o'chirish"
+
 
 }
