@@ -319,7 +319,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage>  with SingleTicke
                                               ref
                                                   .read(boolHideNavBar.notifier)
                                                   .state = true;
-                                              bottomSheetCount(idProduct: getList(l: list.results)[index].id-1
+                                              bottomSheetCount(idProduct: getList(l: list.results)[index].id
                                                   .toString(),
                                                   isFavourite: getList(l: list.results)[index].isFavorite);
 

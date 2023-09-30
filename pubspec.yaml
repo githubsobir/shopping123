@@ -43,6 +43,7 @@ dependencies:
   expandable: ^5.0.1
   scrollable_positioned_list: ^0.3.8
   get_ip_address: ^0.0.6
+  list_picker_dialog_plus: ^0.0.2
 
 
 dev_dependencies:

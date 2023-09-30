@@ -9,6 +9,7 @@ import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_controller.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
 class MainSearchPage extends ConsumerStatefulWidget {
@@ -57,6 +58,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
 
   int skip = 0;
   bool shouldLoadMore = true;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 @override
   void dispose() {
@@ -64,12 +66,15 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
     ref.invalidate(cont);
     super.dispose();
   }
+
+
   @override
   Widget build(BuildContext context) {
     /// birinchi kirishda maxsus kalit so'z bilan tekshiraman
     // final listGet = ref.watch(getDataSearch(ModelSearch(search: "@@@1")));
     final getDataSearch = ref.watch(cont);
     return Scaffold(
+      key: _scaffoldKey,
         body: SafeArea(
             child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -94,7 +99,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                             ),
                             const SizedBox(width: 10),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.83,
+                              width: MediaQuery.of(context).size.width * 0.7,
                               child: TextField(
                                 onSubmitted: (val) {
                                   ref.read(cont.notifier).getListFromInternet(
@@ -112,6 +117,18 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                         borderSide: const BorderSide(
                                             color: Colors.grey))),
                               ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                if (_scaffoldKey.currentState!.isDrawerOpen) {
+                                  _scaffoldKey.currentState!.closeDrawer();
+                                  //close drawer, if drawer is open
+                                } else {
+                                  _scaffoldKey.currentState!.openEndDrawer();
+                                  //open drawer, if drawer is closed
+                                }
+                              },
+                              icon: const Icon(Icons.tune),
                             ),
                           ],
                         ),
@@ -431,6 +448,9 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                 ))
                     ],
                   ),
-                )))));
+                )))),
+      endDrawer: Filter(),
+
+    );
   }
 }
