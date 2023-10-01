@@ -10,9 +10,25 @@ import 'package:shopping/data/network/base_url.dart';
 import 'package:shopping/data/network/internet_details/internet_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 
+///
+
+final getListDetailsPage = StateProvider<List<Variable>>((ref) => []);
+final countMiniDetailsPage = StateProvider<int>((ref) => 1);
+final selectColorMiniDetailsPage = StateProvider<int>((ref) => -1);
+final selectSizeMiniDetailsPage = StateProvider<int>((ref) => -1);
+final noSelectColorMiniDetailsPage = StateProvider<int>((ref) => -1);
+final noSelectSizeMiniDetailsPage = StateProvider<int>((ref) => -1);
+final sizeSelectProductPage = StateProvider<String>((ref) => "");
+final colorSelectProductPage = StateProvider<String>((ref) => "");
+
+
+
+///
 
 final apiProviderDetails =
     Provider<InternetDetailsInformation>((ref) => InternetDetailsInformation());
+
+final boolIsFavourite = StateProvider<bool>((ref) => false);
 
 final getDetails = FutureProvider.family<ModelDetails, String>((ref, id) async {
   ModelDetails modelDetails =

@@ -7,11 +7,12 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/main_
 
 class DetailsPage extends StatefulWidget {
   String idProduct;
+  String idProduct2;
 
   // int indexs;
   bool isFavourite;
 
-  DetailsPage({super.key, required this.idProduct, required this.isFavourite});
+  DetailsPage({super.key, required this.idProduct, required this.isFavourite, required this.idProduct2});
 
   @override
   State<DetailsPage> createState() => _DatailsPageState();

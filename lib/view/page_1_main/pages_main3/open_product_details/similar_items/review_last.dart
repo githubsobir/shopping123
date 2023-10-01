@@ -9,6 +9,7 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/contr
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
 class ReviewItems extends ConsumerStatefulWidget {
@@ -35,12 +36,17 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
             getDataSearch.results.length
             ? GestureDetector(
           onTap: () {
+            ref.read(boolIsFavourite.notifier).state =  getDataSearch.results[index]
+                .isFavorite;
+
+            MyWidgets.getDefaultStateDetailPage(ref: ref);
             pushNewScreen(context,
                 screen: DetailsPage(
                   idProduct:
                   getDataSearch.results[index]
                       .id
                       .toString(),
+                  idProduct2: "",
                   isFavourite:
                   getDataSearch.results[index]
                       .isFavorite,

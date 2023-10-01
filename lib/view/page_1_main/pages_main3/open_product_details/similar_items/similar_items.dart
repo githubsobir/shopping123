@@ -35,9 +35,12 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
         itemBuilder: (context, index) => index < getDataSearch.results.length
             ? GestureDetector(
                 onTap: () {
+                  ref.read(boolIsFavourite.notifier).state =  getDataSearch.results[index]
+                      .isFavorite;
                   pushNewScreen(context,
                       screen: DetailsPage(
                         idProduct: getDataSearch.results[index].id.toString(),
+                        idProduct2: "",
                         isFavourite: getDataSearch.results[index].isFavorite,
                       ),
                       withNavBar: false);

@@ -6,9 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/show_brands/controller_show_brands.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
 class ShowBrands extends ConsumerStatefulWidget {
@@ -95,10 +97,13 @@ class _ShowBrandsState extends ConsumerState<ShowBrands> {
             itemBuilder: (context, index) => index < getBrandProduct.results.length
                 ? GestureDetector(
               onTap: () {
+                ref.read(boolIsFavourite.notifier).state =  getBrandProduct.results[index].isFavorite;
+                MyWidgets.getDefaultStateDetailPage(ref: ref);
                 pushNewScreen(context,
                     screen: DetailsPage(
                       idProduct: getBrandProduct.results[index].id.toString(),
                       isFavourite: getBrandProduct.results[index].isFavorite,
+                      idProduct2: "",
                     ),
                     withNavBar: false);
                 log(index.toString());

@@ -3,21 +3,25 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shopping/data/model/model_details/model_details.dart';
 import 'package:shopping/data/network/base_url.dart';
+import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/full_screen_view.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/rating_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/review_last.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/similar_items.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
-import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
@@ -71,7 +75,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(250, 250, 250, 3),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -95,27 +99,64 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     ),
                     const SizedBox(height: 12),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        RatingBar.builder(
-                          ignoreGestures: true,
-                          itemSize: 20,
-                          initialRating: 1,
-                          minRating: 1,
-                          direction: Axis.horizontal,
-                          allowHalfRating: true,
-                          itemCount: 5,
-                          itemPadding:
-                              const EdgeInsets.symmetric(horizontal: 0.0),
-                          itemBuilder: (context, _) => const Icon(
-                            Icons.star,
-                            color: Color(0xffFD7E14),
-                          ),
-                          onRatingUpdate: (rating) {},
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                showBottomSheetForRating(
+                                  productName: widget.modelDetails.name.toString()
+                                );
+                              },
+                              child: RatingBar.builder(
+                                ignoreGestures: true,
+                                itemSize: 20,
+                                initialRating: 1,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                itemPadding:
+                                    const EdgeInsets.symmetric(horizontal: 0.0),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Color(0xffFD7E14),
+                                ),
+                                onRatingUpdate: (rating) {},
+                              ),
+                            ),
+                            const Text("4.5"),
+                          ],
                         ),
-                        Text("4.5"),
+                        Consumer(
+                          builder: (context, ref, child) => GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(setFavourite2.notifier)
+                                  .updateFavorite(widget.index.toString());
+                              ref.read(boolIsFavourite.notifier).state =
+                                  !ref.read(boolIsFavourite);
+                            },
+                            child: Container(
+                              alignment: Alignment.topRight,
+                              height: 42,
+                              width: 42,
+                              color: Colors.transparent,
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 15.0),
+                              child: Icon(
+                                ref.watch(boolIsFavourite)
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                    // const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -141,205 +182,340 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             ),
                           ],
                         ),
-                        // Padding(
-                        //     padding: const EdgeInsets.symmetric(horizontal: 15),
-                        //     child: Consumer(
-                        //       builder: (context, ref, child) {
-                        //         return IconButton(
-                        //           padding: const EdgeInsets.all(0),
-                        //           onPressed: () {
-                        //             ref
-                        //                 .read(setFavourite2.notifier)
-                        //                 .updateFavorite(widget.modelDetails.id.toString());
-                        //             setState(() {});
-                        //             // isFavourites = !isFavourites;
-                        //           },
-                        //           icon: Icon(
-                        //             isFavourites
-                        //                 ? Icons.favorite
-                        //                 : Icons.favorite_border,
-                        //             // color: Color(0xffF35383),
-                        //             color: Colors.red,
-                        //             size: 30,
-                        //           ),
-                        //         );
-                        //       },
-                        //     )),
                       ],
                     ),
-                    // const SizedBox(height: 12),
                     const Divider(color: Color(0xffbbbaba), thickness: 1),
-                    const SizedBox(height: 12),
-                    Text(
-                      "Color: ${widget.modelDetails.id}",
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 45,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.modelDetails.variables.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: GestureDetector(
-                              onTap: () {
-                                log("index colors");
-                                log(widget
-                                    .modelDetails.variables[index].media.length
-                                    .toString());
-                                // setState(() {
-                                //   itemScrollController.jumpTo(
-                                //       index: widget.modelDetails
-                                //           .variables[index].media.length);
-                                //   selectColorIndex = index;
-                                // });
-                              },
-                              child: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  border: selectColorIndex == index
-                                      ? Border.all(
-                                          width: 2,
-                                          color: Colors.yellow,
-                                        )
-                                      : const Border(),
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                      color: Color(int.parse(
-                                              widget.modelDetails
-                                                  .variables[index].color
-                                                  .substring(1, 7),
-                                              radix: 16) +
-                                          0xFF000000),
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: MediaQuery.of(context).size.width * 0.75),
-                      child: MaterialButton(
-                        padding: const EdgeInsets.only(left: 0, top: 0),
-                        onPressed: () {
-                          // setState(() {
-                          //   // selectColorIndex = colors.length;
-                          // });
-                        },
-                        child: const Row(
+                    const SizedBox(height: 10),
+
+                    const SizedBox(height: 10),
+
+                    /// color list
+                    Consumer(
+                      builder: (context, ref, child) => Container(
+                        height: 75,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: ref.watch(noSelectColorMiniDetailsPage) == -1
+                                ? Colors.white
+                                : Colors.red.shade100,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                              Icons.clear,
-                              size: 14,
-                            ),
                             Text(
-                              "Clear",
-                              style: TextStyle(fontSize: 13),
+                              "chooseColor".tr(),
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 15),
+                            ),
+                            const SizedBox(height: 5),
+                            SizedBox(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.modelDetails.variables.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        log("index colors");
+                                        log(widget.modelDetails.variables[index]
+                                            .media.length
+                                            .toString());
+                                        ref
+                                                .read(colorSelectProductPage
+                                                    .notifier)
+                                                .state =
+                                            widget.modelDetails.variables[index]
+                                                .id
+                                                .toString();
+                                        ref
+                                            .read(selectColorMiniDetailsPage
+                                                .notifier)
+                                            .state = index;
+                                        ref
+                                            .read(noSelectColorMiniDetailsPage
+                                                .notifier)
+                                            .state = -1;
+
+                                        // setState(() {
+                                        //   itemScrollController.jumpTo(
+                                        //       index: widget.modelDetails
+                                        //           .variables[index].media.length);
+                                        //   selectColorIndex = index;
+                                        // });
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width: 40,
+                                        decoration: BoxDecoration(
+                                          border: ref.watch(
+                                                      selectColorMiniDetailsPage) ==
+                                                  index
+                                              ? Border.all(
+                                                  width: 3,
+                                                  color: Colors.red,
+                                                )
+                                              : Border.all(
+                                                  width: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: Container(
+                                            height: 40,
+                                            width: 40,
+                                            decoration: BoxDecoration(
+                                              color: Color(int.parse(
+                                                      widget
+                                                          .modelDetails
+                                                          .variables[index]
+                                                          .color
+                                                          .substring(1, 7),
+                                                      radix: 16) +
+                                                  0xFF000000),
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
-                    const Text(
-                      "Size",
-                      style: TextStyle(color: Colors.black, fontSize: 15),
-                    ),
-                    const SizedBox(height: 12),
-                    SizedBox(
-                      height: 45,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.modelDetails.variables.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: GestureDetector(
-                              onTap: () {
-                                // setState(() {
-                                //   itemScrollController.jumpTo(
-                                //       index: widget.modelDetails
-                                //           .variables[index].media.length);
-                                //   selectSizeIndex = index;
-                                // });
-                              },
-                              child: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  border: selectSizeIndex == index
-                                      ? Border.all(
-                                          width: 2,
-                                          color: Colors.black,
-                                        )
-                                      : Border.all(
-                                          width: 2,
-                                          color: const Color(0xffCBCBCB),
+
+                    const SizedBox(height: 10),
+
+                    /// size list
+                    Consumer(
+                      builder: (context, ref, child) => Container(
+                        height: 80,
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: ref.watch(noSelectSizeMiniDetailsPage) == -1
+                                ? Colors.white
+                                : Colors.red.shade100,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "chooseSize".tr(),
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 15),
+                            ),
+                            const SizedBox(height: 5),
+                            SizedBox(
+                              height: 40,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.modelDetails.variables.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 10),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ref
+                                            .read(selectSizeMiniDetailsPage
+                                                .notifier)
+                                            .state = index;
+                                        ref
+                                            .read(noSelectSizeMiniDetailsPage
+                                                .notifier)
+                                            .state = -1;
+                                        // setState(() {
+                                        //   itemScrollController.jumpTo(
+                                        //       index: widget.modelDetails
+                                        //           .variables[index].media.length);
+                                        //   selectSizeIndex = index;
+                                        // });
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: ref.watch(
+                                                      selectSizeMiniDetailsPage) ==
+                                                  index
+                                              ? Border.all(
+                                                  width: 2,
+                                                  color: Colors.red,
+                                                )
+                                              : Border.all(
+                                                  width: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                          // borderRadius: BorderRadius.circular(100),
                                         ),
-                                  // borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: SizedBox(
-                                    height: 40,
-                                    width: 40,
-                                    child: Center(
-                                        child: Text(
-                                      widget.modelDetails.variables[index].size
-                                          .toString(),
-                                      textAlign: TextAlign.center,
-                                    )),
-                                  ),
-                                ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(3.0),
+                                          child: SizedBox(
+                                            height: 30,
+                                            width: 40,
+                                            child: Center(
+                                                child: Text(
+                                              widget.modelDetails
+                                                  .variables[index].size
+                                                  .toString(),
+                                              textAlign: TextAlign.center,
+                                            )),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
-                          );
-                        },
+                          ],
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.person_outline,
-                          size: 24,
-                          color: Colors.black,
-                        ),
-                        const Text(
-                          "Seller: ",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Text(
-                          widget.modelDetails.organization.toString(),
-                          style: const TextStyle(
-                            color: Colors.redAccent,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w100,
-                            decoration: TextDecoration.underline,
+
+                    /// seller
+                    const SizedBox(height: 10),
+
+                    /// store
+                    SizedBox(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Container(
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("seller".tr()),
+                              Container(
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade50
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        const Icon(
+                                          Icons.person_outline,
+                                          size: 24,
+                                          color: Colors.black,
+                                        ),
+                                        // Text(
+                                        //   "seller".tr(),
+                                        //   style:const TextStyle(
+                                        //       color: Colors.black,
+                                        //       fontSize: 18,
+                                        //       fontWeight: FontWeight.w500),
+                                        // ),
+                                        const SizedBox(width: 5),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          child: Text(
+                                            widget.modelDetails.organization
+                                                .toString(),
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(
+                                      width: 45,
+                                      child: MaterialButton(
+                                        padding: const EdgeInsets.only(left: 0),
+                                        onPressed: () {},
+                                        child: Column(
+                                          children: [
+                                            const Icon(
+                                                LineIcons.alternateStore),
+                                            Text(
+                                              "store".tr(),
+                                              style:
+                                                  const TextStyle(fontSize: 12),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                 const   SizedBox(width: 1),
+                                  const  SizedBox(width: 1),
+
+                                    Container(
+                                      height: 40,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: InkWell(
+                                        onTap: () {
+                                          launchUrl(Uri(
+                                              scheme: "tel",
+                                              path: "+998901234567"));
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            const Icon(
+                                              LineIcons.alternatePhone,
+                                              color: Colors.white,
+                                            ),
+                                            Text(
+                                              "callNow".tr(),
+                                              style: const TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                    const SizedBox(height: 20),
+
+                    /// description
+                    const SizedBox(height: 10),
                     ExpandableText(
-                        label: "Description",
+                        label: "description".tr(),
                         text: widget.modelDetails.desc.toString()),
+
+                    const SizedBox(height: 10),
                     const Text(
                       "Similar Items",
                       style: TextStyle(
@@ -348,9 +524,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           fontWeight: FontWeight.bold),
                     ),
                     // buildSimilarItems(),
-                     SizedBox(
+                    SizedBox(
                       height: 330,
-                      child: SimilarItems(idDetail:widget.modelDetails.name.toString()),
+                      child: SimilarItems(
+                          idDetail: widget.modelDetails.name.toString()),
                     ),
 
                     const SizedBox(height: 20),
@@ -367,217 +544,100 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           ],
         ),
       ),
-      // bottomSheet: buildBottomSheet(),
-    );
-  }
-
-  StaggeredGridView buildSimilarItems() {
-    return StaggeredGridView.countBuilder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 4,
-      crossAxisCount: 2,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => ItemDetailsScreen(
-            //       itemIndex: index,
-            //       data: widget.data, modelDetails: null,
-            //     ),
-            //   ),
-            // );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadiusDirectional.circular(15),
-            ),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(15),
-                      topLeft: Radius.circular(15)),
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minHeight: 100,
-                      maxHeight: 250,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CachedNetworkImage(
-                        imageUrl: widget
-                            .modelDetails.variables[index].media[0].file
-                            .toString(),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.modelDetails.name,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey.shade600,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          RatingBar.builder(
-                            ignoreGestures: true,
-                            itemSize: 15,
-                            initialRating: (4.5),
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 0.0),
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Color(0xffFD7E14),
-                            ),
-                            onRatingUpdate: (rating) {},
-                          ),
-                          Text("(count: 100"),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.modelDetails.price.toStringAsFixed(2) +
-                                (" \$"),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.favorite_border_outlined,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      staggeredTileBuilder: (context) => const StaggeredTile.fit(1),
-    );
-  }
-
-  SizedBox buildBottomSheet() {
-    return SizedBox(
-      height: 70,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Container(
-          padding: EdgeInsets.only(bottom: 20),
+      bottomNavigationBar: Consumer(
+        builder: (context, ref, child) => Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 45,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        if (ref.watch(countMiniDetailsPage.notifier).state >
+                            1) {
+                          ref.watch(countMiniDetailsPage.notifier).state--;
+                        }
+                      },
+                      icon: const Icon(Icons.remove)),
+                  const SizedBox(width: 12),
+                  Text(ref.watch(countMiniDetailsPage).toString(),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 12),
+                  IconButton(
+                      onPressed: () {
+                        ref.watch(countMiniDetailsPage.notifier).state++;
+                      },
+                      icon: const Icon(Icons.add)),
+                ],
+              ),
+              MaterialButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(4)),
+                color: Colors.red,
+                onPressed: () {
+                  getActionCheck(
+                      ref: ref, idProduct: widget.modelDetails.id.toString());
+                },
                 height: 40,
-                child: MaterialButton(
-                  padding: const EdgeInsets.only(left: 0),
-                  onPressed: () {},
-                  child: const Column(
-                    children: [
-                      Icon(LineIcons.alternateStore),
-                      Text(
-                        "Store",
-                        style: TextStyle(fontSize: 10),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Container(
-                height: 40,
-                width: 130,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(
-                      color: Colors.black45,
-                      width: 2,
-                    )),
-                child: InkWell(
-                  onTap: () {
-                    launchUrl(Uri(scheme: "sms", path: "+998977177298"));
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        LineIcons.weixinWechat,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        "Chat Now",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 40,
-                width: 130,
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    launchUrl(Uri(scheme: "tel", path: "+998977177298"));
-                  },
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        LineIcons.alternatePhone,
-                        color: Colors.white,
-                      ),
-                      Text(
-                        "Call Now",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                textColor: Colors.white,
+                child: Text("addCart".tr()),
+              )
             ],
           ),
         ),
       ),
+      // bottomSheet: buildBottomSheet(),
     );
+  }
+
+  showBottomSheetForRating({required String productName}) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      builder: (context) {
+        return Container(
+          // margin:const EdgeInsets.only(top: 10),
+          height: MediaQuery.of(context).size.height*0.5,
+          color: Colors.white,
+          child: RatingPage(productName: productName)
+        );
+      },
+    );
+  }
+
+  getActionCheck({required WidgetRef ref, required String idProduct}) {
+    if (ref.read(selectSizeMiniDetailsPage) > 0 &&
+        ref.read(selectColorMiniDetailsPage) > 0) {
+      ref.read(setFavourite2.notifier).setOrder(
+          idOrder: idProduct.toString(),
+          count: ref.read(countMiniDetailsPage).toString(),
+          sizeProduct: ref.read(sizeSelectProductPage).toString(),
+          colorProduct: ref.read(colorSelectProductPage).toString());
+
+      ref.read(sendServer.notifier).setCartWithProductId(
+          idProduct: idProduct,
+          colorProduct: ref.read(colorSelectProductPage),
+          countProduct: ref.read(countMiniDetailsPage).toString(),
+          sizeProduct: ref.read(sizeSelectProductPage));
+
+      // Navigator.of(context).pop();
+    } else {
+      if (ref.read(selectSizeMiniDetailsPage) == -1) {
+        ref.read(noSelectSizeMiniDetailsPage.notifier).state = 1;
+      }
+
+      if (ref.read(selectColorMiniDetailsPage) == -1) {
+        ref.read(noSelectColorMiniDetailsPage.notifier).state = 1;
+      }
+    }
   }
 
   SliverAppBar appbar(BuildContext context, List<String> images) {
@@ -601,56 +661,30 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                 itemCount: images.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) => SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text(
-                        index.toString(),
-                        style: const TextStyle(
-                            color: Colors.red, fontWeight: FontWeight.bold),
-                      ),
-                      CachedNetworkImage(
-                          filterQuality: FilterQuality.high,
-                          width: MediaQuery.of(context).size.width,
+                  child: CachedNetworkImage(
+                      filterQuality: FilterQuality.high,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      imageUrl: BaseClass.url + images[index],
+                      errorWidget: (context, url, text) {
+                        return Image.asset(
+                          "assets/images/image_for_error.png",
                           fit: BoxFit.cover,
-                          imageUrl: BaseClass.url + images[index],
-                          errorWidget: (context, url, text) {
-                            return Image.asset(
-                              "assets/images/image_for_error.png",
-                              fit: BoxFit.cover,
-                            );
-                          },
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  const LoadingShimmer()),
-                    ],
-                  ),
+                        );
+                      },
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              const LoadingShimmer()),
                 ),
-                // CachedNetworkImage(
-                //   width: MediaQuery.of(context).size.width,
-                //   imageUrl: images[index],
-                //   fit: BoxFit.cover,
-                //
-                // ),
                 itemScrollController: itemScrollController,
                 scrollOffsetController: scrollOffsetController,
                 itemPositionsListener: itemPositionsListener,
                 scrollOffsetListener: scrollOffsetListener,
               )
-              // Swiper(
-              //     pagination:
-              //     const SwiperPagination(builder: SwiperPagination.fraction),
-              //     itemBuilder: (context, index) {
-              //       return CachedNetworkImage(
-              //         imageUrl: images[index],
-              //         fit: BoxFit.contain,
-              //       );
-              //     },
-              //     itemCount: images.length),
               ),
         ),
       ),
-      // (inputHeight / 812.0) * screenHeight;
-      expandedHeight: (MediaQuery.of(context).size.height / 812) * 400,
+      expandedHeight:MediaQuery.of(context).size.height*0.38,
       backgroundColor: Colors.white,
       // const Color.fromARGB(255, 238, 238, 238),
       bottom: PreferredSize(
@@ -667,7 +701,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           ),
           child: Column(
             children: [
-              const SizedBox(height: 7),
+
               Container(
                 height: 4,
                 width: 100,

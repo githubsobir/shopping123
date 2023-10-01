@@ -12,6 +12,7 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/contr
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/mini_details.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
 class NewCollection extends ConsumerStatefulWidget {
@@ -82,37 +83,37 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
     super.dispose();
   }
 
-  bottomSheetCount({
-    required String idProduct,
-    required bool isFavourite,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      backgroundColor: Colors.white,
-      builder: (
-        context,
-      ) {
-        return Container(
-            height: MediaQuery.of(context).size.height * 0.5,
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child:
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MiniDetails(idProduct: idProduct, isFavourite: isFavourite),
-                ));
-      },
-    ).then((value) {
-      ref.read(boolHideNavBar.notifier).state = false;
-      ref.watch(countMiniDetails.notifier).state = 1;
-      ref.read(selectColorMiniDetails.notifier).state = -1;
-      ref.read(selectSizeMiniDetails.notifier).state = -1;
-      ref.read(noSelectSizeMiniDetails.notifier).state = 0;
-      ref.read(noSelectColorMiniDetails.notifier).state = 0;
-    });
-  }
+  // bottomSheetCount({
+  //   required String idProduct,
+  //   required bool isFavourite,
+  // }) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //     backgroundColor: Colors.white,
+  //     builder: (
+  //       context,
+  //     ) {
+  //       return Container(
+  //           height: MediaQuery.of(context).size.height * 0.5,
+  //           margin: const EdgeInsets.all(10),
+  //           decoration: BoxDecoration(
+  //               color: Colors.white, borderRadius: BorderRadius.circular(10)),
+  //           child:
+  //               Padding(
+  //                 padding: const EdgeInsets.all(8.0),
+  //                 child: MiniDetails(idProduct: idProduct, isFavourite: isFavourite),
+  //               ));
+  //     },
+  //   ).then((value) {
+  //     ref.read(boolHideNavBar.notifier).state = false;
+  //     ref.watch(countMiniDetails.notifier).state = 1;
+  //     ref.read(selectColorMiniDetails.notifier).state = -1;
+  //     ref.read(selectSizeMiniDetails.notifier).state = -1;
+  //     ref.read(noSelectSizeMiniDetails.notifier).state = 0;
+  //     ref.read(noSelectColorMiniDetails.notifier).state = 0;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -136,14 +137,23 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 4.0,
                     crossAxisSpacing: 1.0,
-                    childAspectRatio: 0.58),
+                    childAspectRatio: 0.56),
                 itemCount: getData.results.length,
                 itemBuilder: (context, index) => index < getData.results.length
                     ? GestureDetector(
                         onTap: () {
+                          try {
+                            log("3333");
+                          } catch (e) {
+                            log(e.toString());
+                          }
+                          ref.read(boolIsFavourite.notifier).state =
+                              getData.results[index].isFavorite;
+                          MyWidgets.getDefaultStateDetailPage(ref: ref);
                           pushNewScreen(context,
                               screen: DetailsPage(
                                 idProduct: getData.results[index].id.toString(),
+                                idProduct2: "",
                                 isFavourite: getData.results[index].isFavorite,
                               ),
                               withNavBar: false);
@@ -296,15 +306,29 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
                                         child: Center(
                                             child: GestureDetector(
                                           onTap: () {
-                                            ref
-                                                .read(boolHideNavBar.notifier)
-                                                .state = true;
-                                            bottomSheetCount(
-                                                idProduct: getData
-                                                    .results[index].id
-                                                    .toString(),
-                                                isFavourite: getData
-                                                    .results[index].isFavorite);
+                                            if(getData.results[index].slug ==
+                                                "987654321"){
+                                              ref
+                                                  .read(
+                                                  setFavourite2.notifier)
+                                                  .setOrder(
+                                                  idOrder: getData.results[index].id.toString() ,
+                                                  count: "0",
+                                                  colorProduct:
+                                                  "",
+                                                  sizeProduct:
+                                                  "");
+                                            }else{
+                                              MyWidgets.bottomSheetDetails(
+                                                  idProduct: getData
+                                                      .results[index].id
+                                                      .toString(),
+                                                  isFavourite: getData
+                                                      .results[index]
+                                                      .isFavorite,
+                                                  context: context,
+                                                  ref: ref);
+                                            }
 
                                           },
                                           child: Container(

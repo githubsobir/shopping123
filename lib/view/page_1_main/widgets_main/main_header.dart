@@ -8,8 +8,10 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/controller_main_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/show_brands/show_brands.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -55,10 +57,14 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                     builder: (BuildContext context) {
                       return GestureDetector(
                         onTap: () {
+                          ref.read(boolIsFavourite.notifier).state =  i.isActive;
+                          MyWidgets.getDefaultStateDetailPage(ref: ref);
                           pushNewScreen(context,
                               screen: DetailsPage(
                                   idProduct: i.id.toString(),
-                                  isFavourite: false),
+                                  isFavourite: i.isActive,
+                              idProduct2: "",
+                              ),
                               withNavBar: false);
                         },
                         child: Container(

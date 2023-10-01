@@ -6,10 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_controller.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
 class MainSearchPage extends ConsumerStatefulWidget {
@@ -157,6 +159,10 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                           getDataSearch.results.length
                                       ? GestureDetector(
                                           onTap: () {
+                                            ref.read(boolIsFavourite.notifier).state =  getDataSearch
+                                                .results[index]
+                                                .isFavorite;
+                                            MyWidgets.getDefaultStateDetailPage(ref: ref);
                                             pushNewScreen(context,
                                                 screen: DetailsPage(
                                                   idProduct: getDataSearch
@@ -165,6 +171,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                   isFavourite: getDataSearch
                                                       .results[index]
                                                       .isFavorite,
+                                                  idProduct2: "",
                                                 ),
                                                 withNavBar: false);
                                             log(index.toString());

@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_3_basket/basket_empty.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 
 class BasketPage extends ConsumerStatefulWidget {
   const BasketPage({Key? key}) : super(key: key);
@@ -50,7 +52,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                       itemCount: getList(l: listOrder.results).length,
                       itemBuilder: (context, index) => Container(
                         margin: const EdgeInsets.all(3),
-                        height: MediaQuery.of(context).size.height * 0.2,
+                        height: 180,
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -63,7 +65,11 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                             ]),
                         child: GestureDetector(
                           onTap: () {
+                            ref.read(boolIsFavourite.notifier).state = getList(l: listOrder.results)[index]
+                                .isFavorite;
+                            MyWidgets.getDefaultStateDetailPage(ref: ref);
                             pushNewScreen(context,
+                                withNavBar: false,
                                 screen: DetailsPage(
                                     idProduct:
                                         getList(l: listOrder.results)[index]
@@ -71,7 +77,9 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                             .toString(),
                                     isFavourite:
                                         getList(l: listOrder.results)[index]
-                                            .isFavorite));
+                                            .isFavorite,
+                                idProduct2: "",
+                                ));
                           },
                           child: Row(
                             children: [
@@ -271,14 +279,18 @@ class _BasketPageState extends ConsumerState<BasketPage> {
     AwesomeDialog(
             context: context,
             title: "removeCart".tr(),
+            dialogBackgroundColor: Colors.white,
             desc: productName,
             headerAnimationLoop: false,
             dialogType: DialogType.noHeader,
             btnCancelText: "yes".tr(),
             btnOkText: "no".tr(),
+            barrierColor: Colors.white24,
+            buttonsTextStyle: const TextStyle(  color:  Colors.black),
             // btnCancelIcon: Icons.delete_forever_rounded,
-            btnCancelColor: Colors.red,
-            btnOkColor: Colors.blueAccent.shade700,
+            btnCancelColor: Colors.grey[400],
+            btnOkColor: Colors.grey[100],
+
             buttonsBorderRadius: BorderRadius.circular(10),
             btnCancelOnPress: () {
               ref.watch(setFavourite2.notifier).setOrder(

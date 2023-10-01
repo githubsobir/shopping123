@@ -172,7 +172,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                                   ),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(3.0),
+                                            padding: const EdgeInsets.all(1.0),
                                             child: Container(
                                               height: 40,
                                               width: 40,
@@ -255,10 +255,10 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                               color: Colors.red,
                                             )
                                           : Border.all(
-                                              width: 2,
+                                              width: 1,
                                               color: const Color(0xffCBCBCB),
                                             ),
-                                      borderRadius: BorderRadius.circular(100),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(3.0),

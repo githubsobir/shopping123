@@ -85,9 +85,15 @@
   "name": "Familiya va ism",
   "errorName": "Familiya va ismingizni kiriting",
   "passwordNotEqu": "Parollar mos emas",
-  "emptyCart": "Karzinka bo'sh eng",
-  "chooseColor": "Rang tanlang qq",
-  "chooseSize": "O'lcham tanlang qq",
+  "emptyCart": "Karzinka bo'sh",
+  "chooseColor": "Rang tanlang",
+  "chooseSize": "O'lcham tanlang",
   "addCart": "Savatga qo'shish",
-  "removeCart": "Savatdan o'chirish"
+  "removeCart": "Savatdan o'chirish",
+  "seller": "Sotuvchi",
+  "store": "Barcha e'lonlar",
+  "callNow": "Telefon qilish",
+  "description": "Maxsulot haqida",
+  "rating": "Baho bering:",
+  "send": "Yuborish"
 }
