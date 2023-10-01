@@ -110,7 +110,7 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
             getData.results.isNotEmpty?
             GridView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+              // physics: const NeverScrollableScrollPhysics(),
               // physics: ScrollPhysics(),
               controller: _scrollController,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -130,6 +130,8 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
                   ref.read(boolIsFavourite.notifier).state =
                       getData.results[index].isFavorite;
                   MyWidgets.getDefaultStateDetailPage(ref: ref);
+
+
                   pushNewScreen(context,
                       screen: DetailsPage(
                         idProduct: getData.results[index].id.toString(),
@@ -197,6 +199,10 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
                                     ref
                                         .read(setFavourite2.notifier)
                                         .updateFavorite(getData
+                                        .results[index].id
+                                        .toString());
+
+                                    ref.read(getCategoryPage.notifier).updateFavoriteBrand(getData
                                         .results[index].id
                                         .toString());
 
@@ -288,6 +294,7 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
                                       onTap: () {
                                         if(getData.results[index].slug ==
                                             "987654321"){
+                                          ref.read(getCategoryPage.notifier).setOrdersBrand(idOrder: getData.results[index].id.toString());
                                           ref
                                               .read(
                                               setFavourite2.notifier)

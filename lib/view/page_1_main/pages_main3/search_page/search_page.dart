@@ -8,7 +8,6 @@ import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
-import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_controller.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
@@ -141,7 +140,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                               ?
                           GridView.builder(
                             shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
+                            // physics: const NeverScrollableScrollPhysics(),
                             controller: _scrollController,
                             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
@@ -291,13 +290,12 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                             CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                  "${getDataSearch.results[index].price} so'm",
+                                                  "${getDataSearch.results[index].price} \$",
                                                   style: const TextStyle(
                                                       decoration:
                                                       TextDecoration.lineThrough,
                                                       fontSize: 12)),
-                                              Text("$index",
-                                                  // "${getData.results[index].newPrice.toStringAsFixed(2)} so'm",
+                                              Text( "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} \$",
                                                   style:
                                                   const TextStyle(fontSize: 12)),
                                             ],

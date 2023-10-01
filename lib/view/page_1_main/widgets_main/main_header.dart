@@ -80,40 +80,20 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                                       blurRadius: 5,
                                       spreadRadius: 0.1)
                                 ]),
-                            child: Stack(
-                              children: [
-                                CachedNetworkImage(
-                                  filterQuality: FilterQuality.high,
-                                  width: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.cover,
-                                  imageUrl: i.image,
-                                  errorWidget: (context, url, text) {
-                                    return Image.asset(
-                                      "assets/images/shopping1.png",
-                                      fit: BoxFit.fill,
-                                    );
-                                  },
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          const LoadingShimmer(),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: MaterialButton(
-                                      onPressed: () {},
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
-                                      height: 40,
-                                      minWidth: 120,
-                                      color: Colors.white,
-                                      child: Text("more".tr()),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: CachedNetworkImage(
+                              filterQuality: FilterQuality.high,
+                              width: MediaQuery.of(context).size.width,
+                              fit: BoxFit.cover,
+                              imageUrl: i.image,
+                              errorWidget: (context, url, text) {
+                                return Image.asset(
+                                  "assets/images/shopping1.png",
+                                  fit: BoxFit.fill,
+                                );
+                              },
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      const LoadingShimmer(),
                             )),
                       );
                     },
@@ -130,28 +110,28 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
             child: getDataBanner.when(data: (data) {
               return Row(
                 children: [
-                  GestureDetector(
-                    child: Container(
-                        height: 45,
-                        width: 60,
-                        margin: const EdgeInsets.fromLTRB(5, 3, 5, 3),
-                        decoration: BoxDecoration(
-                            color: Colors.grey.shade50,
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 1,
-                                  spreadRadius: 1)
-                            ],
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Center(child: Text("All"))),
-                    onTap: () {
-                      modelSearch = ModelSearch();
-                      ref
-                          .read(setFavourite2.notifier)
-                          .getData(modelSearch: modelSearch);
-                    },
-                  ),
+                  // GestureDetector(
+                  //   child: Container(
+                  //       height: 45,
+                  //       width: 60,
+                  //       margin: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                  //       decoration: BoxDecoration(
+                  //           color: Colors.grey.shade50,
+                  //           boxShadow: const [
+                  //             BoxShadow(
+                  //                 color: Colors.grey,
+                  //                 blurRadius: 1,
+                  //                 spreadRadius: 1)
+                  //           ],
+                  //           borderRadius: BorderRadius.circular(5)),
+                  //       child: Center(child: Text("All"))),
+                  //   onTap: () {
+                  //     modelSearch = ModelSearch();
+                  //     ref
+                  //         .read(setFavourite2.notifier)
+                  //         .getData(modelSearch: modelSearch);
+                  //   },
+                  // ),
                   Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
@@ -168,7 +148,7 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                               ],
                               borderRadius: BorderRadius.circular(5)),
                           margin: const EdgeInsets.fromLTRB(5, 3, 5, 3),
-                          padding: const EdgeInsets.all(3),
+                          padding: const EdgeInsets.all(7),
                           child: Center(
                             child: GestureDetector(
                                 onTap: () async {

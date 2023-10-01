@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
+import 'package:shopping/view/page_2_category/page_2_controller.dart';
 
 class MiniDetails extends ConsumerStatefulWidget {
   String idProduct;
@@ -19,6 +20,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
   getActionCheck() {
     if (ref.read(selectSizeMiniDetails) > -1 &&
         ref.read(selectColorMiniDetails) > -1) {
+
       ref.read(setFavourite2.notifier).setOrder(
           idOrder: widget.idProduct.toString(),
           count: ref.read(countMiniDetails).toString(),
@@ -31,6 +33,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
           colorProduct: ref.read(colorSelectProduct),
           countProduct: ref.read(countMiniDetails).toString(),
           sizeProduct: ref.read(sizeSelectProduct));
+      ref.read(getCategoryPage.notifier).setOrdersBrand(idOrder: widget.idProduct);
 
       Navigator.of(context).pop();
     } else {

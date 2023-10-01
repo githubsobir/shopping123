@@ -79,8 +79,8 @@ class _MainPageState extends ConsumerState<MainPage> {
             // body: mainBody(context: context, ref: ref)),
             body: ContainedTabBarView(
               tabBarProperties: TabBarProperties(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                margin: const EdgeInsets.only(bottom: 5, top: 5),
+                // padding: const EdgeInsets.symmetric(horizontal: 1),
+                margin: const EdgeInsets.only(bottom: 5, top: 5, right: 1, left: 1),
                 isScrollable: false,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -93,6 +93,7 @@ class _MainPageState extends ConsumerState<MainPage> {
                     fontWeight: FontWeight.bold),
                 labelColor: Colors.black,
                 indicatorColor: Colors.red,
+
                 height: 35,
               ),
               tabs: [

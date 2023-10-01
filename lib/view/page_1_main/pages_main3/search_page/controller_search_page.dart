@@ -92,10 +92,6 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
     }
   }
 
-  //
-  // List<ResultProductList> getList() {
-  //   return state;
-  // }
 
   /// qidiruv uchun
   ///
