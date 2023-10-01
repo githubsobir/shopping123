@@ -189,7 +189,10 @@ Container selectRegion(BuildContext context) {
       onPressed: () async {
         var item = await showTextListPicker(
             context: context,
-            selectedItem: ref.watch(selectRegionProvider),
+
+            selectedItem: ref.watch(selectRegionProvider,
+
+            ),
             findFn: (str) async => regions);
         if (item != null) {
           ref.read(selectRegionProvider.notifier).state = item;

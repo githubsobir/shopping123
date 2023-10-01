@@ -21,6 +21,7 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/rating_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/review_last.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/similar_items.dart';
+import 'package:shopping/view/page_2_category/category_page_open.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -106,8 +107,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                             GestureDetector(
                               onTap: () {
                                 showBottomSheetForRating(
-                                  productName: widget.modelDetails.name.toString()
-                                );
+                                    productName:
+                                        widget.modelDetails.name.toString());
                               },
                               child: RatingBar.builder(
                                 ignoreGestures: true,
@@ -403,13 +404,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                               Text("seller".tr()),
                               Container(
                                 padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade50
-                                ),
+                                decoration:
+                                    BoxDecoration(color: Colors.grey.shade50),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-
                                   children: [
                                     Column(
                                       crossAxisAlignment:
@@ -447,12 +446,17 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                         ),
                                       ],
                                     ),
-
                                     SizedBox(
                                       width: 45,
                                       child: MaterialButton(
                                         padding: const EdgeInsets.only(left: 0),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          pushNewScreen(context,
+                                              screen: CategoryPageOpen(
+                                                  categoryId: widget.modelDetails.category.toString(),
+                                                  parentId:  widget.modelDetails.id.toString()  ,
+                                                  categoryName: widget.modelDetails.name));
+                                        },
                                         child: Column(
                                           children: [
                                             const Icon(
@@ -466,9 +470,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                         ),
                                       ),
                                     ),
-                                 const   SizedBox(width: 1),
-                                  const  SizedBox(width: 1),
-
+                                    const SizedBox(width: 1),
+                                    const SizedBox(width: 1),
                                     Container(
                                       height: 40,
                                       padding: const EdgeInsets.symmetric(
@@ -604,11 +607,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       builder: (context) {
         return Container(
-          // margin:const EdgeInsets.only(top: 10),
-          height: MediaQuery.of(context).size.height*0.5,
-          color: Colors.white,
-          child: RatingPage(productName: productName)
-        );
+            // margin:const EdgeInsets.only(top: 10),
+            height: MediaQuery.of(context).size.height * 0.5,
+            color: Colors.white,
+            child: RatingPage(productName: productName));
       },
     );
   }
@@ -680,11 +682,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                 scrollOffsetController: scrollOffsetController,
                 itemPositionsListener: itemPositionsListener,
                 scrollOffsetListener: scrollOffsetListener,
-              )
-              ),
+              )),
         ),
       ),
-      expandedHeight:MediaQuery.of(context).size.height*0.38,
+      expandedHeight: MediaQuery.of(context).size.height * 0.38,
       backgroundColor: Colors.white,
       // const Color.fromARGB(255, 238, 238, 238),
       bottom: PreferredSize(
@@ -701,7 +702,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           ),
           child: Column(
             children: [
-
               Container(
                 height: 4,
                 width: 100,
