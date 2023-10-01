@@ -24,6 +24,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text("UzBazar", style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [
             Padding(

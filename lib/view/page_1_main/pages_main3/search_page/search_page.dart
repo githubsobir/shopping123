@@ -138,304 +138,531 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                       const SizedBox(height: 20),
                       Expanded(
                           child: getDataSearch.results.isNotEmpty
-                              ? GridView.builder(
-                                  shrinkWrap: true,
-                                  gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 4.0,
-                                      crossAxisSpacing: 1.0,
-                                      childAspectRatio: 0.54),
-                                  scrollDirection: Axis.vertical,
-                                  controller: _scrollController,
-                                  itemCount: getDataSearch.results.length
-                                  // % 2 == 0
-                                  // ? getDataSearch.length + 2
-                                  // : getDataSearch.length + 3
-                                  ,
-                                  physics:
-                                      const AlwaysScrollableScrollPhysics(),
-                                  itemBuilder: (context, index) => index <
-                                          getDataSearch.results.length
-                                      ? GestureDetector(
-                                          onTap: () {
-                                            ref.read(boolIsFavourite.notifier).state =  getDataSearch
-                                                .results[index]
-                                                .isFavorite;
-                                            MyWidgets.getDefaultStateDetailPage(ref: ref);
-                                            pushNewScreen(context,
-                                                screen: DetailsPage(
-                                                  idProduct: getDataSearch
-                                                      .results[index].id
-                                                      .toString(),
-                                                  isFavourite: getDataSearch
-                                                      .results[index]
-                                                      .isFavorite,
-                                                  idProduct2: "",
-                                                ),
-                                                withNavBar: false);
-                                            log(index.toString());
-                                          },
-                                          child: Container(
-                                            padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
-                                            margin: const EdgeInsets.fromLTRB(7, 3, 7, 3),
-                                            child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                const SizedBox(height: 2),
-                                                Container(
-                                                  width:
-                                                  MediaQuery.of(context).size.width * 0.45,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(8),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                            blurRadius: 1,
-                                                            color: Colors.grey.shade100,
-                                                            offset: const Offset(1, 0),
-                                                            spreadRadius: 10)
-                                                      ]),
-                                                  child: Stack(
-                                                    children: [
-                                                      SingleChildScrollView(
-                                                        physics:
-                                                            const NeverScrollableScrollPhysics(),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          child: Image.network(
-                                                            height: 180,
-                                                            width: MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.44,
-                                                            getDataSearch
-                                                                .results[index]
-                                                                .photo
-                                                                .toString(),
-                                                            fit: BoxFit.cover,
-                                                            errorBuilder: (context,
-                                                                    error,
-                                                                    stackTrace) =>
-                                                                SizedBox(
-                                                              height: 160,
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.4,
-                                                              child: Image.asset(
-                                                                  height: 160,
-                                                                  "assets/images/shopping1.png"),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              ref
-                                                                  .read(setFavourite2
-                                                                      .notifier)
-                                                                  .updateFavorite(getDataSearch
-                                                                      .results[
-                                                                          index]
-                                                                      .id
-                                                                      .toString());
-                                                              ref
-                                                                  .read(cont
-                                                                      .notifier)
-                                                                  .updateFavorite(getDataSearch
-                                                                      .results[
-                                                                          index]
-                                                                      .id
-                                                                      .toString());
-                                                            },
-                                                            child: Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topRight,
-                                                              height: 42,
-                                                              width: 42,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .fromLTRB(
-                                                                      10,
-                                                                      10,
-                                                                      10,
-                                                                      15.0),
-                                                              child: Icon(
-                                                                getDataSearch
-                                                                        .results[
-                                                                            index]
-                                                                        .isFavorite
-                                                                    ? Icons
-                                                                        .favorite
-                                                                    : Icons
-                                                                        .favorite_border,
-                                                                color:
-                                                                    Colors.red,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Text(
-                                                    getDataSearch
-                                                        .results[index].name
-                                                        .toString(),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    softWrap: true),
-                                                const SizedBox(height: 8),
-                                                Visibility(
-                                                  visible: getDataSearch
-                                                              .results[index]
-                                                              .rating ==
-                                                          -1
-                                                      ? true
-                                                      : false,
-                                                  child: SizedBox(
-                                                    height: 30,
-                                                    child: Row(children: [
-                                                      Icon(
-                                                        Icons.star,
-                                                        color: Colors
-                                                            .yellow.shade600,
-                                                      ),
-                                                      Text(getDataSearch
-                                                          .results[index].rating
-                                                          .toString()),
-
-                                                      /// Qo'shimcha qo'shish uchun
-                                                    ]),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 1, right: 1),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                              "${getDataSearch.results[index].price} so'm",
-                                                              style:
-                                                                  const TextStyle(
-                                                                decoration:
-                                                                    TextDecoration
-                                                                        .lineThrough,
-                                                                    fontSize: 13
-                                                              )),
-                                                          Text(
-                                                              "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} so'm", style:
-                                                          const TextStyle(
-
-                                                              fontSize: 13
-                                                          )),
-                                                        ],
-                                                      ),
-                                                      Container(
-                                                          // padding: const EdgeInsets.all(5),
-                                                          decoration:
-                                                              BoxDecoration(
-                                                                  shape: BoxShape
-                                                                      .circle,
-                                                                  border: Border
-                                                                      .all(
-                                                                    color: getDataSearch.results[index].slug ==
-                                                                            "987654321"
-                                                                        ? Colors
-                                                                            .red
-                                                                        : Colors
-                                                                            .grey
-                                                                            .shade400,
-                                                                  )),
-                                                          child: Center(
-                                                              child:
-                                                                  GestureDetector(
-                                                            onTap: () {
-                                                              ref
-                                                                  .read(setFavourite2
-                                                                      .notifier)
-                                                                  .setOrder(
-                                                                      idOrder: getDataSearch
-                                                                          .results[
-                                                                              index]
-                                                                          .id
-                                                                          .toString(),
-                                                              count: "-1",
-                                                                  sizeProduct: ref.read(sizeSelectProduct).toString(),
-                                                                  colorProduct: ref.read(colorSelectProduct).toString()
-
-                                                              );
-
-                                                              ref
-                                                                  .read(cont
-                                                                      .notifier)
-                                                                  .setOrders(
-                                                                      idOrder: getDataSearch
-                                                                          .results[
-                                                                              index]
-                                                                          .id
-                                                                          .toString());
-                                                            },
-                                                            child: Container(
-                                                              width: 42,
-                                                              height: 45,
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child: Icon(
-                                                                Icons
-                                                                    .add_shopping_cart,
-                                                                color: getDataSearch
-                                                                            .results[
-                                                                                index]
-                                                                            .slug ==
-                                                                        "987654321"
-                                                                    ? Colors.red
-                                                                    : Colors
-                                                                        .grey
-                                                                        .shade800,
-                                                                size: 20,
-                                                              ),
-                                                            ),
-                                                          ))),
-                                                    ],
-                                                  ),
-                                                ),
-
-                                              ],
+                              ?
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            controller: _scrollController,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 4.0,
+                                crossAxisSpacing: 1.0,
+                                childAspectRatio: 0.56),
+                            itemCount: getDataSearch.results.length,
+                            itemBuilder: (context, index) => index < getDataSearch.results.length
+                                ? GestureDetector(
+                              onTap: () {
+                                try {
+                                  log("3333");
+                                } catch (e) {
+                                  log(e.toString());
+                                }
+                                ref.read(boolIsFavourite.notifier).state =
+                                    getDataSearch.results[index].isFavorite;
+                                MyWidgets.getDefaultStateDetailPage(ref: ref);
+                                pushNewScreen(context,
+                                    screen: DetailsPage(
+                                      idProduct: getDataSearch.results[index].id.toString(),
+                                      idProduct2: "",
+                                      isFavourite: getDataSearch.results[index].isFavorite,
+                                    ),
+                                    withNavBar: false);
+                                log(index.toString());
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                                margin: const EdgeInsets.fromLTRB(7, 3, 7, 3),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // const SizedBox(height: 5),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 0.45,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(8),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                blurRadius: 1,
+                                                color: Colors.grey.shade100,
+                                                offset: const Offset(1, 0),
+                                                spreadRadius: 10)
+                                          ]),
+                                      child: Stack(
+                                        children: [
+                                          SingleChildScrollView(
+                                            physics:
+                                            const NeverScrollableScrollPhysics(),
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(10),
+                                              child: Image.network(
+                                                height: 170,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                    0.44,
+                                                getDataSearch.results[index].photo
+                                                    .toString(),
+                                                fit: BoxFit.cover,
+                                                errorBuilder:
+                                                    (context, error, stackTrace) =>
+                                                    SizedBox(
+                                                      height: 160,
+                                                      width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                          0.4,
+                                                      child: Image.asset(
+                                                          height: 160,
+                                                          "assets/images/shopping1.png"),
+                                                    ),
+                                              ),
                                             ),
                                           ),
-                                        )
-                                      : const LoadingShimmer(),
-                                )
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  ref
+                                                      .read(setFavourite2.notifier)
+                                                      .updateFavorite(getDataSearch
+                                                      .results[index].id
+                                                      .toString());
+
+                                                  // setState(() {});
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment.topRight,
+                                                  height: 42,
+                                                  width: 42,
+                                                  color: Colors.transparent,
+                                                  padding: const EdgeInsets.fromLTRB(
+                                                      10, 10, 10, 15.0),
+                                                  child: Icon(
+                                                    getDataSearch.results[index].isFavorite
+                                                        ? Icons.favorite
+                                                        : Icons.favorite_border,
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(getDataSearch.results[index].name.toString(),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        softWrap: true),
+                                    const SizedBox(height: 8),
+                                    Visibility(
+                                      visible: getDataSearch.results[index].rating == -1
+                                          ? true
+                                          : false,
+                                      child: SizedBox(
+                                        height: 30,
+                                        child: Row(children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.yellow.shade600,
+                                          ),
+                                          Text(getDataSearch.results[index].rating
+                                              .toString()),
+
+                                          /// Qo'shimcha qo'shish uchun
+                                        ]),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Padding(
+                                      padding:
+                                      const EdgeInsets.only(left: 8, right: 8),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                  "${getDataSearch.results[index].price} so'm",
+                                                  style: const TextStyle(
+                                                      decoration:
+                                                      TextDecoration.lineThrough,
+                                                      fontSize: 12)),
+                                              Text("$index",
+                                                  // "${getData.results[index].newPrice.toStringAsFixed(2)} so'm",
+                                                  style:
+                                                  const TextStyle(fontSize: 12)),
+                                            ],
+                                          ),
+                                          Container(
+                                            // padding: const EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color:
+                                                    getDataSearch.results[index].slug ==
+                                                        "987654321"
+                                                        ? Colors.red
+                                                        : Colors.grey.shade400,
+                                                  )),
+                                              child: Center(
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      if(getDataSearch.results[index].slug ==
+                                                          "987654321"){
+                                                        ref
+                                                            .read(
+                                                            setFavourite2.notifier)
+                                                            .setOrder(
+                                                            idOrder: getDataSearch.results[index].id.toString() ,
+                                                            count: "0",
+                                                            colorProduct:
+                                                            "",
+                                                            sizeProduct:
+                                                            "");
+                                                      }else{
+                                                        MyWidgets.bottomSheetDetails(
+                                                            idProduct: getDataSearch
+                                                                .results[index].id
+                                                                .toString(),
+                                                            isFavourite: getDataSearch
+                                                                .results[index]
+                                                                .isFavorite,
+                                                            context: context,
+                                                            ref: ref);
+                                                      }
+
+                                                    },
+                                                    child: Container(
+                                                      width: 40,
+                                                      height: 45,
+                                                      color: Colors.transparent,
+                                                      child: Icon(
+                                                        Icons.add_shopping_cart,
+                                                        color:
+                                                        getDataSearch.results[index].slug ==
+                                                            "987654321"
+                                                            ? Colors.red
+                                                            : Colors.grey.shade800,
+                                                        size: 20,
+                                                      ),
+                                                    ),
+                                                  ))),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                                : const LoadingShimmer(),
+                          )
+                          // GridView.builder(
+                          //         shrinkWrap: true,
+                          //         gridDelegate:
+                          //         const SliverGridDelegateWithFixedCrossAxisCount(
+                          //             crossAxisCount: 2,
+                          //             mainAxisSpacing: 4.0,
+                          //             crossAxisSpacing: 1.0,
+                          //             childAspectRatio: 0.54),
+                          //         scrollDirection: Axis.vertical,
+                          //         controller: _scrollController,
+                          //         itemCount: getDataSearch.results.length
+                          //         // % 2 == 0
+                          //         // ? getDataSearch.length + 2
+                          //         // : getDataSearch.length + 3
+                          //         ,
+                          //         physics:
+                          //             const AlwaysScrollableScrollPhysics(),
+                          //         itemBuilder: (context, index) => index <
+                          //                 getDataSearch.results.length
+                          //             ? GestureDetector(
+                          //                 onTap: () {
+                          //                   ref.read(boolIsFavourite.notifier).state =  getDataSearch
+                          //                       .results[index]
+                          //                       .isFavorite;
+                          //                   MyWidgets.getDefaultStateDetailPage(ref: ref);
+                          //                   pushNewScreen(context,
+                          //                       screen: DetailsPage(
+                          //                         idProduct: getDataSearch
+                          //                             .results[index].id
+                          //                             .toString(),
+                          //                         isFavourite: getDataSearch
+                          //                             .results[index]
+                          //                             .isFavorite,
+                          //                         idProduct2: "",
+                          //                       ),
+                          //                       withNavBar: false);
+                          //                   log(index.toString());
+                          //                 },
+                          //                 child: Container(
+                          //                   padding: const EdgeInsets.fromLTRB(5, 3, 5, 3),
+                          //                   margin: const EdgeInsets.fromLTRB(7, 3, 7, 3),
+                          //                   child: Column(
+                          //                     mainAxisAlignment: MainAxisAlignment.start,
+                          //                     crossAxisAlignment: CrossAxisAlignment.start,
+                          //                     children: [
+                          //                       const SizedBox(height: 2),
+                          //                       Container(
+                          //                         width:
+                          //                         MediaQuery.of(context).size.width * 0.45,
+                          //                         decoration: BoxDecoration(
+                          //                             borderRadius: BorderRadius.circular(8),
+                          //                             boxShadow: [
+                          //                               BoxShadow(
+                          //                                   blurRadius: 1,
+                          //                                   color: Colors.grey.shade100,
+                          //                                   offset: const Offset(1, 0),
+                          //                                   spreadRadius: 10)
+                          //                             ]),
+                          //                         child: Stack(
+                          //                           children: [
+                          //                             SingleChildScrollView(
+                          //                               physics:
+                          //                                   const NeverScrollableScrollPhysics(),
+                          //                               child: ClipRRect(
+                          //                                 borderRadius:
+                          //                                     BorderRadius
+                          //                                         .circular(10),
+                          //                                 child: Image.network(
+                          //                                   height: 180,
+                          //                                   width: MediaQuery.of(
+                          //                                               context)
+                          //                                           .size
+                          //                                           .width *
+                          //                                       0.44,
+                          //                                   getDataSearch
+                          //                                       .results[index]
+                          //                                       .photo
+                          //                                       .toString(),
+                          //                                   fit: BoxFit.cover,
+                          //                                   errorBuilder: (context,
+                          //                                           error,
+                          //                                           stackTrace) =>
+                          //                                       SizedBox(
+                          //                                     height: 160,
+                          //                                     width: MediaQuery.of(
+                          //                                                 context)
+                          //                                             .size
+                          //                                             .width *
+                          //                                         0.4,
+                          //                                     child: Image.asset(
+                          //                                         height: 160,
+                          //                                         "assets/images/shopping1.png"),
+                          //                                   ),
+                          //                                 ),
+                          //                               ),
+                          //                             ),
+                          //                             Row(
+                          //                               mainAxisAlignment:
+                          //                                   MainAxisAlignment
+                          //                                       .end,
+                          //                               children: [
+                          //                                 GestureDetector(
+                          //                                   onTap: () {
+                          //                                     ref
+                          //                                         .read(setFavourite2
+                          //                                             .notifier)
+                          //                                         .updateFavorite(getDataSearch
+                          //                                             .results[
+                          //                                                 index]
+                          //                                             .id
+                          //                                             .toString());
+                          //                                     ref
+                          //                                         .read(cont
+                          //                                             .notifier)
+                          //                                         .updateFavorite(getDataSearch
+                          //                                             .results[
+                          //                                                 index]
+                          //                                             .id
+                          //                                             .toString());
+                          //                                   },
+                          //                                   child: Container(
+                          //                                     alignment:
+                          //                                         Alignment
+                          //                                             .topRight,
+                          //                                     height: 42,
+                          //                                     width: 42,
+                          //                                     color: Colors
+                          //                                         .transparent,
+                          //                                     padding:
+                          //                                         const EdgeInsets
+                          //                                                 .fromLTRB(
+                          //                                             10,
+                          //                                             10,
+                          //                                             10,
+                          //                                             15.0),
+                          //                                     child: Icon(
+                          //                                       getDataSearch
+                          //                                               .results[
+                          //                                                   index]
+                          //                                               .isFavorite
+                          //                                           ? Icons
+                          //                                               .favorite
+                          //                                           : Icons
+                          //                                               .favorite_border,
+                          //                                       color:
+                          //                                           Colors.red,
+                          //                                     ),
+                          //                                   ),
+                          //                                 ),
+                          //                               ],
+                          //                             )
+                          //                           ],
+                          //                         ),
+                          //                       ),
+                          //                       const SizedBox(height: 10),
+                          //                       Text(
+                          //                           getDataSearch
+                          //                               .results[index].name
+                          //                               .toString(),
+                          //                           maxLines: 2,
+                          //                           overflow:
+                          //                               TextOverflow.ellipsis,
+                          //                           softWrap: true),
+                          //                       const SizedBox(height: 8),
+                          //                       Visibility(
+                          //                         visible: getDataSearch
+                          //                                     .results[index]
+                          //                                     .rating ==
+                          //                                 -1
+                          //                             ? true
+                          //                             : false,
+                          //                         child: SizedBox(
+                          //                           height: 30,
+                          //                           child: Row(children: [
+                          //                             Icon(
+                          //                               Icons.star,
+                          //                               color: Colors
+                          //                                   .yellow.shade600,
+                          //                             ),
+                          //                             Text(getDataSearch
+                          //                                 .results[index].rating
+                          //                                 .toString()),
+                          //
+                          //                             /// Qo'shimcha qo'shish uchun
+                          //                           ]),
+                          //                         ),
+                          //                       ),
+                          //                       const SizedBox(height: 5),
+                          //                       Padding(
+                          //                         padding:
+                          //                             const EdgeInsets.only(
+                          //                                 left: 1, right: 1),
+                          //                         child: Row(
+                          //                           mainAxisAlignment:
+                          //                               MainAxisAlignment
+                          //                                   .spaceBetween,
+                          //                           children: [
+                          //                             Column(
+                          //                               mainAxisAlignment:
+                          //                                   MainAxisAlignment
+                          //                                       .start,
+                          //                               crossAxisAlignment:
+                          //                                   CrossAxisAlignment
+                          //                                       .start,
+                          //                               children: [
+                          //                                 Text(
+                          //                                     "${getDataSearch.results[index].price} so'm",
+                          //                                     style:
+                          //                                         const TextStyle(
+                          //                                       decoration:
+                          //                                           TextDecoration
+                          //                                               .lineThrough,
+                          //                                           fontSize: 13
+                          //                                     )),
+                          //                                 Text(
+                          //                                     "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} so'm", style:
+                          //                                 const TextStyle(
+                          //
+                          //                                     fontSize: 13
+                          //                                 )),
+                          //                               ],
+                          //                             ),
+                          //                             Container(
+                          //                                 // padding: const EdgeInsets.all(5),
+                          //                                 decoration:
+                          //                                     BoxDecoration(
+                          //                                         shape: BoxShape
+                          //                                             .circle,
+                          //                                         border: Border
+                          //                                             .all(
+                          //                                           color: getDataSearch.results[index].slug ==
+                          //                                                   "987654321"
+                          //                                               ? Colors
+                          //                                                   .red
+                          //                                               : Colors
+                          //                                                   .grey
+                          //                                                   .shade400,
+                          //                                         )),
+                          //                                 child: Center(
+                          //                                     child:
+                          //                                         GestureDetector(
+                          //                                   onTap: () {
+                          //                                     ref
+                          //                                         .read(setFavourite2
+                          //                                             .notifier)
+                          //                                         .setOrder(
+                          //                                             idOrder: getDataSearch
+                          //                                                 .results[
+                          //                                                     index]
+                          //                                                 .id
+                          //                                                 .toString(),
+                          //                                     count: "-1",
+                          //                                         sizeProduct: ref.read(sizeSelectProduct).toString(),
+                          //                                         colorProduct: ref.read(colorSelectProduct).toString()
+                          //
+                          //                                     );
+                          //
+                          //                                     ref
+                          //                                         .read(cont
+                          //                                             .notifier)
+                          //                                         .setOrders(
+                          //                                             idOrder: getDataSearch
+                          //                                                 .results[
+                          //                                                     index]
+                          //                                                 .id
+                          //                                                 .toString());
+                          //                                   },
+                          //                                   child: Container(
+                          //                                     width: 42,
+                          //                                     height: 45,
+                          //                                     color: Colors
+                          //                                         .transparent,
+                          //                                     child: Icon(
+                          //                                       Icons
+                          //                                           .add_shopping_cart,
+                          //                                       color: getDataSearch
+                          //                                                   .results[
+                          //                                                       index]
+                          //                                                   .slug ==
+                          //                                               "987654321"
+                          //                                           ? Colors.red
+                          //                                           : Colors
+                          //                                               .grey
+                          //                                               .shade800,
+                          //                                       size: 20,
+                          //                                     ),
+                          //                                   ),
+                          //                                 ))),
+                          //                           ],
+                          //                         ),
+                          //                       ),
+                          //
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               )
+                          //             : const LoadingShimmer(),
+                          //       )
                               : Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
