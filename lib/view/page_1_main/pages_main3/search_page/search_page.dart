@@ -229,6 +229,12 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                       .results[index].id
                                                       .toString());
 
+                                                  ref
+                                                      .read(cont.notifier)
+                                                      .updateFavorite(getDataSearch
+                                                      .results[index].id
+                                                      .toString());
+
                                                   // setState(() {});
                                                 },
                                                 child: Container(
@@ -326,6 +332,14 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                             "",
                                                             sizeProduct:
                                                             "");
+
+
+                                                        ref
+                                                            .read(
+                                                            cont.notifier)
+                                                            .setOrders(
+                                                            idOrder: getDataSearch.results[index].id.toString());
+
                                                       }else{
                                                         MyWidgets.bottomSheetDetails(
                                                             idProduct: getDataSearch
