@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/view/page_0_root/lang_choose.dart';
 import 'package:shopping/view/page_5_account/chat_page/chat_pages.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/enter_first.dart';
 import 'package:shopping/view/page_5_account/information_page/information_pages.dart';
@@ -93,6 +94,21 @@ class _AccountPageState extends State<AccountPage> {
                       color: Colors.black),
                   title: Text(
                     "connectWithUs".tr(),
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios,
+                      color: Colors.black, size: 20),
+                ),
+                ListTile(
+                  onTap: (){
+                    pushNewScreen(context, screen: EnterFirst0(windowId: "1"),
+                    withNavBar: false
+                    );
+                  },
+                  leading: const Icon(Icons.language,
+                      color: Colors.black),
+                  title: Text(
+                    "languageApp".tr(),
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios,

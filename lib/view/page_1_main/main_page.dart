@@ -1,5 +1,7 @@
 library main_page.dart;
+
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
@@ -10,7 +12,6 @@ import 'package:shopping/view/page_1_main/pages_main3/search_page/search_page.da
 import 'package:shopping/view/page_1_main/widgets_main/main_header.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
-
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -19,7 +20,6 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,13 +30,12 @@ class _MainPageState extends ConsumerState<MainPage> {
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
               child: GestureDetector(
-                onTap: (){
-                  pushNewScreen(context, screen: MainSearchPage(),
-                  withNavBar: false
-                  );
+                onTap: () {
+                  pushNewScreen(context,
+                      screen: MainSearchPage(), withNavBar: false);
                 },
                 child: Container(
-                  padding: EdgeInsets.all(2),
+                    padding: EdgeInsets.all(2),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.grey.shade200)),
@@ -72,38 +71,38 @@ class _MainPageState extends ConsumerState<MainPage> {
         ),
         body: SafeArea(
           child: NestedScrollView(
-              floatHeaderSlivers: false,
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return [const HeaderMain()];
-              },
-              // body: mainBody(context: context, ref: ref)),
-              body:
-              ContainedTabBarView(
-
-                tabBarProperties: TabBarProperties(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  margin: const EdgeInsets.only(bottom: 5, top: 5),
-                  isScrollable: false,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: const Color(0xff121212)),
-                  ),
-                  indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
-                  labelStyle: const TextStyle(
-                      color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
-                  labelColor: Colors.black,
-                  indicatorColor: Colors.red,
-                  height: 35,
+            floatHeaderSlivers: true,
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [const HeaderMain()];
+            },
+            // body: mainBody(context: context, ref: ref)),
+            body: ContainedTabBarView(
+              tabBarProperties: TabBarProperties(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.only(bottom: 5, top: 5),
+                isScrollable: false,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: const Color(0xff121212)),
                 ),
-                tabs: const [
-                  Text('New Collect'),
-                  Text('Best Sellers'),
-                  Text('Sale'),
-                ],
-                views: const [NewCollection(), BestSellers(), Sales()],
-
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
+                labelStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+                labelColor: Colors.black,
+                indicatorColor: Colors.red,
+                height: 35,
               ),
+              tabs: [
+                Text('bestSeller'.tr()),
+                Text('newArrivals'.tr()),
+                Text('sale'.tr()),
+              ],
+              views: const [NewCollection(), BestSellers(), Sales()],
+              // views: const [NewCollection(), NewCollection(), NewCollection()],
+            ),
           ),
         ));
   }

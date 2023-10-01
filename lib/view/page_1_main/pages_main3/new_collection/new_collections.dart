@@ -41,11 +41,6 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
   late ModelSearch modelSearch;
 
   _scrollListener() async {
-    log("message");
-    log(jsonEncode(_scrollController.offset).toString());
-    log(jsonEncode(_scrollController.position.maxScrollExtent).toString());
-    log(jsonEncode(_scrollController.position.outOfRange).toString());
-    log("message");
 
     // if (
     // _scrollController.offset >=
@@ -82,38 +77,6 @@ class _NewCollectionState extends ConsumerState<NewCollection> {
     _scrollController.dispose();
     super.dispose();
   }
-
-  // bottomSheetCount({
-  //   required String idProduct,
-  //   required bool isFavourite,
-  // }) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-  //     backgroundColor: Colors.white,
-  //     builder: (
-  //       context,
-  //     ) {
-  //       return Container(
-  //           height: MediaQuery.of(context).size.height * 0.5,
-  //           margin: const EdgeInsets.all(10),
-  //           decoration: BoxDecoration(
-  //               color: Colors.white, borderRadius: BorderRadius.circular(10)),
-  //           child:
-  //               Padding(
-  //                 padding: const EdgeInsets.all(8.0),
-  //                 child: MiniDetails(idProduct: idProduct, isFavourite: isFavourite),
-  //               ));
-  //     },
-  //   ).then((value) {
-  //     ref.read(boolHideNavBar.notifier).state = false;
-  //     ref.watch(countMiniDetails.notifier).state = 1;
-  //     ref.read(selectColorMiniDetails.notifier).state = -1;
-  //     ref.read(selectSizeMiniDetails.notifier).state = -1;
-  //     ref.read(noSelectSizeMiniDetails.notifier).state = 0;
-  //     ref.read(noSelectColorMiniDetails.notifier).state = 0;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -56,7 +56,7 @@ class _EnterFirstState extends ConsumerState<EnterFirst> {
                         fontWeight: FontWeight.bold,
                         fontSize: 25),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 40),
                   enterFirstBodyInput(
                     context: context,
                   ),
@@ -66,15 +66,15 @@ class _EnterFirstState extends ConsumerState<EnterFirst> {
                   ),
                   const SizedBox(height: 20),
                   const SizedBox(height: 20),
-                  enterButton(
-                    context: context,
-                  )
+                  // enterButton(
+                  //   context: context,
+                  // )
                 ],
               ),
             ),
           ),
         ))
-    :Center(child: CupertinoActivityIndicator(),)
+    :const Center(child: CupertinoActivityIndicator(),)
     );
   }
 }

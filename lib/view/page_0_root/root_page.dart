@@ -44,9 +44,8 @@ class _RootPageState extends ConsumerState<RootPage> {
   int index = 0;
   PersistentTabController controller = PersistentTabController(initialIndex: 0);
 
-  getFunction() {
-    setState(() {});
-  }
+
+
 
   var box = Hive.box("online");
 
@@ -88,7 +87,7 @@ class _RootPageState extends ConsumerState<RootPage> {
       controller: controller,
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: false,
-      stateManagement: true,
+      // stateManagement: true,
       hideNavigationBar: ref.watch(boolHideNavBar),
       hideNavigationBarWhenKeyboardShows: true,
       decoration: NavBarDecoration(
@@ -99,16 +98,9 @@ class _RootPageState extends ConsumerState<RootPage> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       navBarStyle: NavBarStyle.style3,
-      selectedTabScreenContext: (p0) {},
+      // selectedTabScreenContext: (p0) {},
       screenTransitionAnimation:
           const ScreenTransitionAnimation(curve: Curves.bounceIn),
-      onItemSelected: (value) {
-        log(value.toString());
-        if (value.toString() == "0") {
-          // ref.read(getDataInfinitiList());
-        }
-        // setState(() {});
-      },
     );
   }
 }

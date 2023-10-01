@@ -29,13 +29,18 @@ class SignInNotifier extends StateNotifier<ModelForSignIn> {
       String data = await internetClientSignIn.getISignUp(
           userName:userName , password: password);
 
-      modelForSignInParse = ModelForSignInParse.fromJson(jsonDecode(data));
+      try{
+        modelForSignInParse = ModelForSignInParse.fromJson(jsonDecode(data));
 
-      box.put("token", modelForSignInParse.token.toString());
-      state = state.copyWith(true, false, "");
+        box.put("token", modelForSignInParse.token.toString());
+        state = state.copyWith(true, false, "");
+      }catch(e){log(e.toString());}
       log(data);
       log(modelForSignInParse.pk.toString());
       log(modelForSignInParse.token);
+
+
+
     } catch (e) {
       log(e.toString());
     }

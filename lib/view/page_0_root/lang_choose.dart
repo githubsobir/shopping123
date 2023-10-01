@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -7,7 +8,8 @@ import 'package:shopping/widgets/colors/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 class EnterFirst0 extends StatefulWidget {
-  const EnterFirst0({Key? key}) : super(key: key);
+  String windowId;
+   EnterFirst0({Key? key, required this.windowId}) : super(key: key);
 
   @override
   State<EnterFirst0> createState() => _EnterFirst0State();
@@ -15,7 +17,29 @@ class EnterFirst0 extends StatefulWidget {
 
 var box = Hive.box("online");
 
+
 class _EnterFirst0State extends State<EnterFirst0> {
+
+
+  openNextWindow(){
+
+    if(widget.windowId =="0"){
+      Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) =>
+                RootPage(homeIdMainpage: "0"),
+          ));
+    } else if(widget.windowId == "1"){
+      Navigator.pushAndRemoveUntil(
+          context,
+          CupertinoPageRoute(
+            builder: (context) =>
+                RootPage(homeIdMainpage: "0"),
+          ), (route) => false,);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,12 +105,7 @@ class _EnterFirst0State extends State<EnterFirst0> {
                           box.put("language", "1");
                           context.setLocale(const Locale('uz', 'UZ'));
                           // context.locale = const Locale("uz", "UZ");
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    RootPage(homeIdMainpage: "0"),
-                              ));
+                          openNextWindow();
                         },
                       ),
                     ),
@@ -109,12 +128,7 @@ class _EnterFirst0State extends State<EnterFirst0> {
                           box.put("language", "2");
                           context.setLocale(const Locale('en', 'EN'));
                           // context.locale = const Locale("kk", "KK");
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    RootPage(homeIdMainpage: "0"),
-                              ));
+                          openNextWindow();
                         },
                       ),
                     ),
@@ -137,12 +151,7 @@ class _EnterFirst0State extends State<EnterFirst0> {
                           box.put("language", "3");
                           context.setLocale(const Locale('ru', 'RU'));
                           // context.locale = const Locale("ru", "RU");
-                          Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) =>
-                                    RootPage(homeIdMainpage: "0"),
-                              ));
+                         openNextWindow();
                         },
                       ),
                     ),

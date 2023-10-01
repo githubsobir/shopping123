@@ -96,7 +96,7 @@ class MyApp extends StatelessWidget {
                   box.get("language") == "3"
               ? //MainPages()//
         RootPage(homeIdMainpage: "1")
-              : const EnterFirst0()),
+              :  EnterFirst0(windowId: "0",)),
     );
   }
 }

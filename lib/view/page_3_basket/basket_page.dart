@@ -59,9 +59,9 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                             color: Colors.white,
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.grey.shade400,
+                                  color: Colors.grey.shade300,
                                   spreadRadius: 0.41,
-                                  blurRadius: 2)
+                                  blurRadius: 1)
                             ]),
                         child: GestureDetector(
                           onTap: () {
@@ -305,8 +305,8 @@ class _BasketPageState extends ConsumerState<BasketPage> {
 
   String getCostAll({required String count, required String cost}) {
     double allCost = double.parse(count) * double.parse(cost);
-    return "\$ ${allCost.toStringAsFixed(2)} =${cost.substring(0, cost.indexOf(
+    return "$count  X  ${cost.substring(0, cost.indexOf(
           ".",
-        ))} x $count";
+        ))}  = ${allCost.toStringAsFixed(2)} \$";
   }
 }

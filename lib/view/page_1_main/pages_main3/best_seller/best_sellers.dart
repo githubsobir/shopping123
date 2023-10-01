@@ -52,7 +52,7 @@ class _BestSellersState extends ConsumerState<BestSellers> {
   Widget build(BuildContext context) {
     return Scaffold(body: Consumer(builder: (context, ref, child) {
       final getList = ref.watch(setFavourite2);
-      return Text(getList.results[3].name);
+      return Center(child: Text("Yangi to'plam tovarlari"));
     }));
   }
 }

@@ -37,7 +37,7 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
           margin: const EdgeInsets.only(top: 1),
           child: CarouselSlider(
               options: CarouselOptions(
-                height: 320,
+                height: 300,
                 aspectRatio: 16 / 9,
                 viewportFraction: 1,
                 initialPage: 0,
