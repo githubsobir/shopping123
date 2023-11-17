@@ -3,7 +3,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
@@ -25,8 +24,7 @@ class SimilarItems extends ConsumerStatefulWidget {
 class _SimilarItemsState extends ConsumerState<SimilarItems> {
   @override
   Widget build(BuildContext context) {
-    final getDataSearch = ref
-        .watch(getSimilarItem(widget.idDetail));
+    final getDataSearch = ref.watch(getSimilarItem(widget.idDetail));
     return Scaffold(
       body: SafeArea(
           child: ListView.builder(
@@ -35,10 +33,11 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
         itemBuilder: (context, index) => index < getDataSearch.results.length
             ? GestureDetector(
                 onTap: () {
-                  ref.read(boolIsFavourite.notifier).state =  getDataSearch.results[index]
-                      .isFavorite;
+                  ref.read(boolIsFavourite.notifier).state =
+                      getDataSearch.results[index].isFavorite;
                   pushNewScreen(context,
                       screen: DetailsPage(
+                        boolShowStore: true,
                         idProduct: getDataSearch.results[index].id.toString(),
                         idProduct2: "",
                         isFavourite: getDataSearch.results[index].isFavorite,
@@ -63,7 +62,7 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 5),
                         SizedBox(
@@ -75,7 +74,8 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                                 child: Image.network(
                                   getDataSearch.results[index].photo ??
                                       "https://salon.fgl.su/image/icons/delivery-6.png",
-                                  height: 150,
+                                  height: 200,
+
                                   width:
                                       MediaQuery.of(context).size.width * 0.4,
                                   fit: BoxFit.cover,
@@ -130,87 +130,78 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                               softWrap: true),
                         ),
                         const SizedBox(height: 8),
-                        SizedBox(
-                          height: 30,
-                          child: RatingBar.builder(
-                            initialRating: double.parse(
-                                getDataSearch.results[index].rating.toString()),
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            wrapAlignment: WrapAlignment.start,
-                            itemPadding:
-                                const EdgeInsets.symmetric(horizontal: 1.0),
-                            itemSize: 16,
-                            itemBuilder: (context, _) => const Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: 10,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text("4"),
+                         SizedBox(
+                            height: 30,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                              const  Icon(
+                                  Icons.star,
+                                  size: 18,
+                                  color: Colors.amber,
+                                ),
+                               const SizedBox(width: 10),
+                                 Text(getDataSearch.results[index].rating??"-", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                              ],
+                            )),
+
+
                         Padding(
                           padding: const EdgeInsets.only(left: 8, right: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                  "${getDataSearch.results[index].price} so'm"),
-                              Container(
-                                  // margin: EdgeInsets.all(3),
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color:
-                                            getDataSearch.results[index].slug ==
-                                                    "987654321"
-                                                ? Colors.red
-                                                : Colors.grey.shade400,
-                                      )),
-                                  child: Center(
-                                      child: GestureDetector(
-                                    onTap: () {
-                                      ref.read(setFavourite2.notifier).setOrder(
-                                          idOrder: getDataSearch
-                                              .results[index].id
-                                              .toString(),
-                                      count: "-1",
-                                          sizeProduct: ref.read(sizeSelectProduct).toString(),
-                                          colorProduct: ref.read(colorSelectProduct).toString()
-
-                                      );
-                                      ref.read(cont.notifier).setOrders(
-                                          idOrder: getDataSearch
-                                              .results[index].id
-                                              .toString());
-                                    },
-                                    child: Icon(
-                                      Icons.add_shopping_cart,
-                                      color:
-                                          getDataSearch.results[index].slug ==
-                                                  "987654321"
-                                              ? Colors.red
-                                              : Colors.grey.shade800,
-                                      size: 20,
-                                    ),
-                                  ))),
-                            ],
+                          child: SizedBox(
+                          width:  MediaQuery.of(context).size.width * 0.4,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("${getDataSearch.results[index].price} \$"),
+                                Container(
+                                    // margin: EdgeInsets.all(3),
+                                    padding: const EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color:
+                                              getDataSearch.results[index].isCart
+                                                  ? Colors.red
+                                                  : Colors.grey.shade400,
+                                        )),
+                                    child: Center(
+                                        child: GestureDetector(
+                                      onTap: () {
+                                        ref.read(setFavourite2.notifier).setOrder(
+                                            idOrder: getDataSearch
+                                                .results[index].id
+                                                .toString(),
+                                            count: "-1",
+                                            sizeProduct: ref
+                                                .read(sizeSelectProduct)
+                                                .toString(),
+                                            colorProduct: ref
+                                                .read(colorSelectProduct)
+                                                .toString());
+                                        ref.read(cont.notifier).setOrders(
+                                            idOrder: getDataSearch
+                                                .results[index].id
+                                                .toString());
+                                      },
+                                      child: Icon(
+                                        Icons.add_shopping_cart,
+                                        color: getDataSearch.results[index].isCart
+                                            ? Colors.red
+                                            : Colors.grey.shade800,
+                                        size: 20,
+                                      ),
+                                    ))),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                // Center(
-                //     child: Card(
-                //         color: Colors.blue, child: Text(data[index].fanName)))
               )
             : const LoadingShimmer(),
       )),

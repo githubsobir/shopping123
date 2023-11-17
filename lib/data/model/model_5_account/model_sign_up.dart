@@ -1,73 +1,87 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModelSignUp {
+/// Model ro'yxatdan o'tishdagi holatni belgilash uchun
+class ModelForSignUp {
+  bool boolLoading;
+  bool boolSuccess;
+  bool boolError;
+
+  ModelForSignUp({
+    required this.boolLoading,
+    required this.boolSuccess,
+    required this.boolError,
+  });
+
+  ModelForSignUp copyWith(
+      dynamic boolLoading, dynamic boolSuccess, dynamic boolError) {
+    return ModelForSignUp(
+        boolLoading: boolLoading,
+        boolSuccess: boolSuccess,
+        boolError: boolError);
+  }
+
+  factory ModelForSignUp.fromJson(Map<String, dynamic> json) => ModelForSignUp(
+    boolLoading: json["boolLoading"],
+    boolSuccess: json["boolSuccess"],
+    boolError: json["boolError"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "boolLoading": boolLoading,
+    "boolSuccess": boolSuccess,
+    "boolError": boolError
+  };
+}
+
+/// Model serverga ma'lumot yurilayotgan user malumotlari
+class ModelSignUpServer {
   String fullName;
-  String phoneNumber;
+  String phone;
   String password;
   String isActive;
   String fileImage;
 
-  ModelSignUp({
+  ModelSignUpServer({
     required this.fullName,
-    required this.phoneNumber,
+    required this.phone,
     required this.password,
     required this.isActive,
     required this.fileImage,
   });
 
-  ModelSignUp copyWith({
-    dynamic fullName,
-    dynamic phoneNumber,
-    dynamic password,
-    dynamic isActive,
-    dynamic fileImage,
-  }) {
-    return ModelSignUp(
-        fullName: fullName ?? this.fullName,
-        phoneNumber: phoneNumber ?? this.phoneNumber,
-        password: password ?? this.password,
-        isActive: isActive ?? this.isActive,
-        fileImage: fileImage ?? this.fileImage);
-  }
-
-  factory ModelSignUp.fromJson(Map<String, dynamic> json) => ModelSignUp(
+  factory ModelSignUpServer.fromJson(Map<String, dynamic> json) =>
+      ModelSignUpServer(
         fullName: json["fullName"],
-        phoneNumber: json["phoneNumber"],
+        phone: json["phone"],
         password: json["password"],
         isActive: json["isActive"],
         fileImage: json["fileImage"],
       );
 
   Map<String, dynamic> toJson() => {
-        "fullName": fullName,
-        "phoneNumber": phoneNumber,
-        "password": password,
-        "isActive": isActive,
-        "fileImage": fileImage,
-      };
+    "fullName": fullName,
+    "phone": phone,
+    "password": password,
+    "isActive": isActive,
+    "fileImage": fileImage,
+  };
 }
 
-class StateNotifierSignUp extends StateNotifier<ModelSignUp> {
-  StateNotifierSignUp(super.state);
-}
-
-
-///
-///
-class ModelSignUpResponse {
+/// resgitratsiya qilingan foydalanuvchi modeli
+class ModelResponseSignUp {
   int id;
   String fullName;
   dynamic avatar;
   String phone;
 
-  ModelSignUpResponse({
+  ModelResponseSignUp({
     required this.id,
     required this.fullName,
     required this.avatar,
     required this.phone,
   });
 
-  factory ModelSignUpResponse.fromJson(Map<String, dynamic> json) => ModelSignUpResponse(
+  factory ModelResponseSignUp.fromJson(Map<String, dynamic> json) => ModelResponseSignUp(
     id: json["id"],
     fullName: json["full_name"],
     avatar: json["avatar"],

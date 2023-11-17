@@ -10,7 +10,7 @@ class InternetMainCarousel {
   Future<ModelMainPageCarusel> getCarouselData() async {
     var dio = Dio();
     Response response;
-    response = await dio.get("${BaseClass.url}/api/v1/web/banners/");
+    response = await dio.get("${BaseClass.url}api/v1/web/banners/");
     // log("web/banners");
     // log(jsonEncode(response.data).toString());
     return ModelMainPageCarusel.fromJson(response.data);

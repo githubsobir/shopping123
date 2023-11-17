@@ -42,7 +42,7 @@
   "passwordLength": "Parol uzunligi 8 birlikdan ko‘p bo‘lishi kerak",
   "fillAllRows": "Barcha qatorlarni to‘ldiring",
   "personalInfo": "Shaxsiy ma’lumotlar",
-  "logUot": "Tizimdan chiqmoqchimisiz",
+  "logUot": "Tizimdan chiqmoqchimisiz ?",
   "yes": "Ha",
   "no": "Yoq",
   "languageApp": "Interfeys tili",
@@ -84,5 +84,6 @@
   "callNow": "Telefon qilish",
   "description": "Maxsulot haqida",
   "rating": "Baho bering:",
-  "send": "Yuborish"
+  "send": "Yuborish",
+  "ok": "Tushunarli"
 }

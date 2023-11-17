@@ -1,4 +1,6 @@
 
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -28,14 +30,14 @@ class _EnterFirst0State extends State<EnterFirst0> {
           context,
           CupertinoPageRoute(
             builder: (context) =>
-                RootPage(homeIdMainpage: "0"),
+                RootPage(homeIdMainpage: 0),
           ));
     } else if(widget.windowId == "1"){
       Navigator.pushAndRemoveUntil(
           context,
           CupertinoPageRoute(
             builder: (context) =>
-                RootPage(homeIdMainpage: "0"),
+                RootPage(homeIdMainpage: 0),
           ), (route) => false,);
     }
   }

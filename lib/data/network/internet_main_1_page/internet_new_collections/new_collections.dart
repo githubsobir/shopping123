@@ -12,8 +12,8 @@ class InternetMainNewCollectionsBody {
     var box = Hive.box("online");
     var dio = Dio();
     Response response;
-    response = await dio.get("${BaseClass.url}/api/v1/web/banners/",
-    options: Options(headers: {"X-CSRFToken":box.get("token")})
+    response = await dio.get("${BaseClass.url}api/v1/web/brands/",
+    // options: Options(headers: {"X-CSRFToken":box.get("token")})
     );
     return ModelBanners.fromJson(response.data);
   }

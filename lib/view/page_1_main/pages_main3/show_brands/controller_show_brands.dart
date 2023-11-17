@@ -43,7 +43,7 @@ var box = Hive.box("online");
         state = state.copyWith(results: []);
       }
       Response response = await dio.get(
-          "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
+          "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
           options: Options(
               headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
       log(jsonEncode(response.data).toString());
@@ -87,11 +87,11 @@ var box = Hive.box("online");
     log(updateOrder.toString());
     for (int i = 0; i < updateOrder.length; i++) {
       if (updateOrder[i].id.toString() == idOrder) {
-        if (updateOrder[i].slug != "987654321") {
+        if (!updateOrder[i].isCart) {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          updateOrder[i].slug = "987654321";
+          updateOrder[i].isCart = true;
         } else {
-          updateOrder[i].slug = "slug";
+          updateOrder[i].isCart = false;
         }
       }
     }

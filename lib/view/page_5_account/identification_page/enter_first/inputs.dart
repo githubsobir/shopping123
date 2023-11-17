@@ -9,21 +9,19 @@ import 'package:shopping/view/page_5_account/identification_page/sign_up/sign_up
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
-Widget enterFirstBodyInput({required BuildContext context,
-  }) {
-  TextEditingController textAuthLogin = TextEditingController(text:"991001001" );
-  TextEditingController textAuthPassword = TextEditingController(text:"string123" );
+Widget enterFirstBodyInput({
+  required BuildContext context,
+}) {
+  TextEditingController textAuthLogin =
+      TextEditingController();
+  TextEditingController textAuthPassword =
+      TextEditingController();
   bool myBoolWidget = false;
   bool boolButtonColor1 = false;
-   boolButtonCol1({required bool boolValue})  {
+  boolButtonCol1({required bool boolValue}) {
     boolButtonColor1 = boolValue;
   }
 
-  bool boolPasswordVisible = true;
-   boolPasswordVisibleMethod() async {
-
-    boolPasswordVisible = !boolPasswordVisible;
-  }
 
   return Column(
     // mainAxisAlignment: MainAxisAlignment.start,
@@ -41,10 +39,12 @@ Widget enterFirstBodyInput({required BuildContext context,
           ],
           decoration: InputDecoration(
             prefixText: "+998 ",
-            suffixIcon:
-            GestureDetector(child: const Icon(Icons.clear, size: 12), onTap: (){
-            textAuthLogin.clear();
-            },),
+            suffixIcon: GestureDetector(
+              child: const Icon(Icons.clear, size: 12),
+              onTap: () {
+                textAuthLogin.clear();
+              },
+            ),
             contentPadding: const EdgeInsets.all(8),
             fillColor: Colors.white,
             focusedBorder: OutlineInputBorder(
@@ -60,7 +60,7 @@ Widget enterFirstBodyInput({required BuildContext context,
                 width: 2.0,
               ),
             ),
-            focusedErrorBorder:  OutlineInputBorder(
+            focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: MyColors.appColorGrey100(),
@@ -72,7 +72,7 @@ Widget enterFirstBodyInput({required BuildContext context,
               color: MyColors.appColorRed(),
               fontWeight: FontWeight.w500,
             ),
-            errorBorder:  OutlineInputBorder(
+            errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: MyColors.appColorGrey100(),
@@ -82,7 +82,6 @@ Widget enterFirstBodyInput({required BuildContext context,
             // focusedBorder: UnderlineInputBorder(
             //   borderSide: BorderSide(color: MyColors.appColorBackC4()),
             // ),
-
           ),
           validator: (value) {
             if (value == null || value.toString().trim().length < 9) {
@@ -93,7 +92,7 @@ Widget enterFirstBodyInput({required BuildContext context,
                     myBoolWidget = true;
                     break;
                   } else {
-                   myBoolWidget = false;
+                    myBoolWidget = false;
                   }
                 }
                 if (!myBoolWidget && value.length < 3) {
@@ -108,118 +107,116 @@ Widget enterFirstBodyInput({required BuildContext context,
               String kod = value.substring(0, 2);
               for (var element in MyWidgets.checkTelephoneCompanyCode) {
                 if (element.contains(kod)) {
-                 myBoolWidget = true;
-                 boolButtonCol1(boolValue: true);
+                  myBoolWidget = true;
+                  boolButtonCol1(boolValue: true);
                   break;
                 } else {
                   boolButtonCol1(boolValue: false);
-                 myBoolWidget = false;
+                  myBoolWidget = false;
                 }
               }
               if (!myBoolWidget) {
-               boolButtonCol1(boolValue: false);
+                boolButtonCol1(boolValue: false);
                 return "kodError".tr();
               } else {
                 boolButtonCol1(boolValue: true);
               }
             }
             return null;
-          }
-      ),
+          }),
       const SizedBox(height: 10),
       MyWidgets.robotoFontText(text: "password".tr()),
-      TextFormField(
-          controller: textAuthPassword,
-          textAlignVertical: TextAlignVertical.center,
-          maxLines: 1,
-          maxLength: 20,
-          autofocus:false,
-          obscureText: boolPasswordVisible,
-          keyboardType:
-          TextInputType.visiblePassword,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.all(8),
-            suffixIcon: GestureDetector(
-              onTap: () {
-              boolPasswordVisibleMethod();
-              },
-              child: boolPasswordVisible
-                  ? Icon(
-                CupertinoIcons.eye_slash,
-                color: MyColors.appColorGrey600(),
-                size: 18,
-              )
-                  : Icon(
-                CupertinoIcons.eye,
-                color: MyColors.appColorBlue2(),
-                size: 18,
+      Consumer(
+        builder: (context, ref, child) => TextFormField(
+              controller: textAuthPassword,
+              textAlignVertical: TextAlignVertical.center,
+              maxLines: 1,
+              maxLength: 20,
+              autofocus: ref.watch(visiblePassword),
+              obscureText:  ref.watch(visiblePassword),
+              keyboardType: TextInputType.visiblePassword,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(8),
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    ref.read(visiblePassword.notifier).state = !ref.watch(visiblePassword);
+                  },
+                  child: ref.watch(visiblePassword)
+                      ? Icon(
+                          CupertinoIcons.eye_slash,
+                          color: MyColors.appColorGrey600(),
+                          size: 18,
+                        )
+                      : Icon(
+                          CupertinoIcons.eye,
+                          color: MyColors.appColorBlue2(),
+                          size: 18,
+                        ),
+                ),
+                fillColor: Colors.white,
+                errorMaxLines: 2,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: MyColors.appColorBlue2(),
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: MyColors.appColorGrey100(),
+                    width: 2.0,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: MyColors.appColorGrey100(),
+                    width: 2.0,
+                  ),
+                ),
+                errorStyle: TextStyle(
+                  color: MyColors.appColorRed(),
+                  fontWeight: FontWeight.w500,
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    color: MyColors.appColorGrey100(),
+                    width: 2.0,
+                  ),
+                ),
               ),
-            ),
-            fillColor: Colors.white,
-            errorMaxLines: 2,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: MyColors.appColorBlue2(),
-              ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: MyColors.appColorGrey100(),
-                width: 2.0,
-              ),
-            ),
-            focusedErrorBorder:  OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: MyColors.appColorGrey100(),
-                width: 2.0,
-              ),
-            ),
-            errorStyle: TextStyle(
-              color: MyColors.appColorRed(),
-              fontWeight: FontWeight.w500,
-            ),
-            errorBorder:  OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: MyColors.appColorGrey100(),
-                width: 2.0,
-              ),
-            ),
-          ),
-          validator: (value) {
-            if(value!.isEmpty || value.toString().trim().length < 8){
-              return "passwordLength".tr();
-            }
-            return null;
-          }
+              validator: (value) {
+                if (value!.isEmpty || value.toString().trim().length < 8) {
+                  return "passwordLength".tr();
+                }
+                return null;
+              })
       ),
       Consumer(
-        builder: (context, ref, child) =>
-            MaterialButton(
-                height: 50,
-                minWidth: double.infinity,
-                color: MyColors.appColorUzBazar(),
-                textColor: MyColors.appColorWhite(),
-                shape:
+        builder: (context2, ref, child) => MaterialButton(
+            height: 50,
+            minWidth: double.infinity,
+            color: MyColors.appColorUzBazar(),
+            textColor: MyColors.appColorWhite(),
+            shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                onPressed: () {
-                  ref.read(checkSignIn .notifier).getDataSignIn(userName: textAuthLogin.text.trim(), password: textAuthPassword.text.trim());
-
-
-                },
-                child: MyWidgets.robotoFontText(
-                    text: "enterSystem".tr(), textColor: MyColors.appColorWhite())),
+            onPressed: () {
+              ref.read(checkSignIn.notifier).getDataSignIn(
+                  userName: textAuthLogin.text.trim(),
+                  password: textAuthPassword.text.trim(),
+                  context: context);
+            },
+            child: MyWidgets.robotoFontText(
+                text: "enterSystem".tr(), textColor: MyColors.appColorWhite())),
       ),
       const SizedBox(height: 10),
-
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Stack(
           children: [
-            const  Divider(),
+            const Divider(),
             Align(
                 alignment: Alignment.center,
                 child: Container(
@@ -228,7 +225,9 @@ Widget enterFirstBodyInput({required BuildContext context,
                   // margin: const EdgeInsets.only(left: 10, right: 10),
                   child: Text(
                     "or".tr(),
-                    style: TextStyle(backgroundColor: MyColors.appColorWhite(), fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        backgroundColor: MyColors.appColorWhite(),
+                        fontWeight: FontWeight.bold),
                   ),
                 ))
           ],

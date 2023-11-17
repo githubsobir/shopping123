@@ -20,7 +20,7 @@ import 'package:shopping/view/page_5_account/account_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 
 class RootPage extends ConsumerStatefulWidget {
-  String homeIdMainpage;
+  int homeIdMainpage;
 
   RootPage({Key? key, required this.homeIdMainpage}) : super(key: key);
 
@@ -29,10 +29,7 @@ class RootPage extends ConsumerStatefulWidget {
 }
 
 class _RootPageState extends ConsumerState<RootPage> {
-  Future getBoshFunc() async {
-    // await widget.providerCheckInformation.getQaydVaraqa2();
-    setState(() {});
-  }
+
 
   List<Widget> myPages() => [
         const MainPage(),
@@ -42,10 +39,7 @@ class _RootPageState extends ConsumerState<RootPage> {
         const AccountPage()
       ];
   int index = 0;
-  PersistentTabController controller = PersistentTabController(initialIndex: 0);
-
-
-
+  late PersistentTabController controller;
 
   var box = Hive.box("online");
 
@@ -73,7 +67,10 @@ class _RootPageState extends ConsumerState<RootPage> {
   @override
   initState() {
     super.initState();
+    controller =
+        PersistentTabController(initialIndex: widget.homeIdMainpage);
     getFirstAction();
+
   }
 
   @override

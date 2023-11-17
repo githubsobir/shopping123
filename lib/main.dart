@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/view/page_0_root/lang_choose.dart';
 import 'package:shopping/view/page_0_root/root_page.dart';
@@ -21,7 +22,7 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 Future initialization(BuildContext? context) async {
-  await Future.delayed(const Duration(milliseconds: 1900));
+  await Future.delayed(const Duration(milliseconds: 100));
 }
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -95,7 +96,7 @@ class MyApp extends StatelessWidget {
                   box.get("language") == "2" ||
                   box.get("language") == "3"
               ? //MainPages()//
-        RootPage(homeIdMainpage: "1")
+        RootPage(homeIdMainpage: 0)
               :  EnterFirst0(windowId: "0",)),
     );
   }

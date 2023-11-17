@@ -21,31 +21,28 @@ class ModelProductList {
         count: count ?? this.count,
         next: next ?? this.next,
         previous: previous ?? this.previous,
-        results: results ?? this.results);
+        results: results );
   }
 
-  factory ModelProductList.fromJson(Map<String, dynamic> json) =>
-      ModelProductList(
-        count: json["count"]??"",
-        next: json["next"]??"",
-        previous: json["previous"]??"",
-        results: List<ResultProductList>.from(
-            json["results"].map((x) => ResultProductList.fromJson(x))),
-      );
+
+  factory ModelProductList.fromJson(Map<String, dynamic> json) => ModelProductList(
+    count: json["count"],
+    next: json["next"],
+    previous: json["previous"],
+    results: List<ResultProductList>.from(json["results"].map((x) => ResultProductList.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "count": count,
-        "next": next,
-        "previous": previous,
-        "results": List<dynamic>.from(results.map((x) => x.toJson())),
-      };
+    "count": count,
+    "next": next,
+    "previous": previous,
+    "results": List<dynamic>.from(results.map((x) => x.toJson())),
+  };
 }
 
 class ResultProductList {
   dynamic id;
-  dynamic count;
   dynamic name;
-  dynamic slug;
   dynamic price;
   dynamic discount;
   dynamic newPrice;
@@ -53,19 +50,17 @@ class ResultProductList {
   dynamic type;
   dynamic season;
   dynamic material;
+  List<int> size;
   dynamic brand;
   dynamic category;
   dynamic isFavorite;
+  dynamic isCart;
   dynamic photo;
   dynamic rating;
-  dynamic colorProduct;
-  dynamic sizeProduct;
 
   ResultProductList({
      this.id,
-    this.count,
      this.name,
-     this.slug,
      this.price,
      this.discount,
      this.newPrice,
@@ -73,60 +68,71 @@ class ResultProductList {
      this.type,
      this.season,
      this.material,
+   required  this.size,
      this.brand,
      this.category,
      this.isFavorite,
+     this.isCart,
      this.photo,
      this.rating,
-     this.colorProduct,
-     this.sizeProduct,
-
   });
 
-
-
-  factory ResultProductList.fromJson(Map<String, dynamic> json) =>
-      ResultProductList(
-        id: json["id"]??"",
-        count: json["count"]??0,
-        name: json["name"]??"",
-        slug: json["slug"]??"",
-        price: json["price"]??0??"",
-        discount: json["discount"]??0??"",
-        newPrice: json["new_price"]??-1.00,
-        gender: json["gender"]??"",
-        type: json["type"]??"",
-        season: json["season"]??"",
-        material: json["material"]??"",
-        brand: json["brand"]??"",
-        category: json["category"]??"",
-        isFavorite: json["is_favorite"] ?? false,
-        photo: json["photo"] ?? "https://uzb.technostudio.uz/media/Banner/bann.jpg",
-        rating: json["rating"]??-1,
-        colorProduct: json["colorProduct"]??-1,
-        sizeProduct: json["sizeProduct"]??-1,
-      );
+  factory ResultProductList.fromJson(Map<String, dynamic> json) => ResultProductList(
+    id: json["id"],
+    name: json["name"],
+    price: json["price"],
+    discount: json["discount"],
+    newPrice: json["new_price"]?.toDouble(),
+    gender: json["gender"],
+    type: json["type"],
+    season: json["season"],
+    material: json["material"],
+    size: List<int>.from(json["size"].map((x) => x)),
+    brand: json["brand"],
+    category: json["category"],
+    isFavorite: json["is_favorite"],
+    isCart: json["is_cart"],
+    photo: json["photo"],
+    rating: json["rating"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "count": count,
-        "name": name,
-        "slug": slug,
-        "price": price,
-        "discount": discount,
-        "new_price": newPrice,
-        "gender": gender,
-        "type": type,
-        "season": season,
-        "material": material,
-        "brand": brand,
-        "category": category,
-        "is_favorite": isFavorite,
-        "photo": photo,
-        "rating": rating,
-        "colorProduct": colorProduct,
-        "sizeProduct": sizeProduct,
-      };
+    "id": id,
+    "name": name,
+    "price": price,
+    "discount": discount,
+    "new_price": newPrice,
+    "gender": gender,
+    "type": type,
+    "season": season,
+    "material": material,
+    "size": List<dynamic>.from(size.map((x) => x)),
+    "brand": brand,
+    "category": category,
+    "is_favorite": isFavorite,
+    "is_cart": isCart,
+    "photo": photo,
+    "rating": rating,
+  };
 }
 
+class Material {
+  dynamic id;
+  dynamic name;
+
+  Material({
+     this.id,
+     this.name,
+  });
+
+  factory Material.fromJson(Map<String, dynamic> json) => Material(
+    id: json["id"]??"",
+    name: json["name"]??"",
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+  };
+}
 

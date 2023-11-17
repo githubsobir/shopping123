@@ -21,8 +21,8 @@ final getDataNewCollection = FutureProvider<ModelBanners>((ref) {
 final apiProviderInfiniteList =
     Provider<InternetInfiniteList>((ref) => InternetInfiniteList());
 
-final setFavourite2 =
-    StateNotifierProvider<ModelProductListNotifier, ModelProductList>((ref) {
+final setFavourite2 = StateNotifierProvider.autoDispose<
+    ModelProductListNotifier, ModelProductList>((ref) {
   return ModelProductListNotifier();
 });
 
@@ -41,34 +41,38 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   var dio = Dio();
   var box = Hive.box("online");
 
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
   Future<ModelProductList> getData({required ModelSearch modelSearch}) async {
     if (modelSearch.page.toString() == "1" ||
         modelSearch.page.toString() == "null") {
       state = state.copyWith(results: []);
     }
-
+    Response response;
     try {
-      Response response = await dio.get(
-          "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
-        options: Options(headers: {"Authorization":"Bearer ${box.get("token")}" }),
+      response = await dio.get(
+        "https://uzbazar.husanibragimov.uz/api/v1/web/products/",
+        options: Options(headers: {"Authorization": getIpOrToken()}),
       );
-      log(response.data.toString());
       modelProductList = ModelProductList.fromJson(response.data);
-
-      // if (modelSearch.page.toString() == "1" ||
-      //     modelSearch.page.toString() == "null"
-      // ) {
-      //   listProduct2.clear();
-      //   listProduct2 = modelProductList.results;
-      //   state = state.copyWith(results: listProduct2);
-      //   return state;
-      // } else {
       listProduct2.addAll(modelProductList.results);
       state = state.copyWith(results: listProduct2);
       return state;
-      // }
     } catch (e) {
-      log(e.toString());
       return ModelProductList(count: "", next: "", previous: "", results: []);
     }
   }
@@ -79,6 +83,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
 
   updateFavorite(String id) {
     List<ResultProductList> updateFav = [...state.results];
+
     setFavoritesServer(idProduct: id);
     for (int i = 0; i < updateFav.length; i++) {
       if (updateFav[i].id.toString() == id.toString()) {
@@ -87,7 +92,6 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
         state = state.copyWith(results: updateFav);
 
         // state.results = updateFav;
-        log(state.results[i].isFavorite.toString());
       }
     }
   }
@@ -104,20 +108,21 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     return state;
   }
 
-  setOrder({required String idOrder, required String count, required String colorProduct, required sizeProduct}) {
+  setOrder(
+      {required String idOrder,
+      required String count,
+      required String colorProduct,
+      required sizeProduct}) {
     List<ResultProductList> updateOrder = [...state.results];
     for (int i = 0; i < updateOrder.length; i++) {
       if (updateOrder[i].id.toString() == idOrder.toString()) {
-        if (updateOrder[i].slug != "987654321") {
+        if (updateOrder[i].isCart) {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          updateOrder[i].slug = "987654321";
-          updateOrder[i].count = count;
-          updateOrder[i].colorProduct = colorProduct;
-          updateOrder[i].sizeProduct = sizeProduct;
+          updateOrder[i].isCart = false;
+          // updateOrder[i]. = colorProduct;
+          // updateOrder[i].size = sizeProduct;
         } else {
-
-          updateOrder[i].slug = "slug";
-          updateOrder[i].count = "0";
+          updateOrder[i].isCart = true;
         }
       }
     }
@@ -129,7 +134,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     List<ResultProductList> list = [];
     list.addAll(state.results);
     for (int i = 0; i < list.length; i++) {
-      if (list[i].slug.toString() == "987654321") {
+      if (list[i].isCart) {
         // list.add(state.results[i]);
         // state = state.copyWith(results: )
       }
@@ -137,20 +142,42 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     return state.results;
   }
 
+  /// layklarni serverga yuborish qo'shish
   Future setFavoritesServer({required String idProduct}) async {
     try {
       var dio = Dio();
-        log(idProduct);
-        log(box.get("token").toString());
-      Response response = await dio
-          .post("https://uzb.technostudio.uz/api/v1/web/favorites/",
-          options: Options(headers: {"Authorization":"Bearer ${box.get("token")}" }),
+      Response response = await dio.post(
+          "${BaseClass.url}api/v1/web/favorites/",
+          options: Options(headers: {"Authorization": getIpOrToken()}),
           data: {
-            "session_id": box.get("token"),
-        "product": idProduct,
-      });
-      log(jsonEncode(response.data).toString());
+            "session_id": getIpOrTokenWithOutBearer(),
+            "product": idProduct,
+          });
+    } catch (e) {
+      log(e.toString());
+      return "";
+    }
+  }
 
+  /// karzinkaga maxsulot qo'shish
+  Future setCartServer(
+      {required String idProduct,
+      required String colorId,
+      required String sizeId,
+      required String materialId}) async {
+    try {
+      var dio = Dio();
+
+      Response response = await dio.post(
+          "https://uzb.technostudio.uz/api/v1/web/carts/",
+          options: Options(headers: {"Authorization": getIpOrToken()}),
+          data: {
+            "session_id": getIpOrTokenWithOutBearer(),
+            "product": idProduct,
+            "product_variable": colorId,
+            "size": sizeId,
+            "material": sizeId,
+          });
     } catch (e) {
       log(e.toString());
       return "";

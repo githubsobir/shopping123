@@ -16,9 +16,12 @@ class RatingPage extends StatefulWidget {
 class _RatingPageState extends State<RatingPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: Container(
       margin: const EdgeInsets.all(10),
-      child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -74,19 +77,21 @@ class _RatingPageState extends State<RatingPage> {
               ),
             ),
             const SizedBox(height: 20,),
-            MaterialButton(onPressed: (){},
-            minWidth: double.infinity,
-              height: 50,
-              color: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              child: Text("send".tr()),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: MaterialButton(onPressed: (){},
+              minWidth: double.infinity,
+                height: 50,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                child: Text("send".tr()),
+              ),
             ),
-            const SizedBox(height: 10,),
+
 
 
           ],
         ),
-      ),
-    );
+    ));
   }
 }

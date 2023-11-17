@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,7 +107,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  padding: EdgeInsets.all(4),
+                  padding:const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: ref.watch(noSelectColorMiniDetails) == 0
@@ -120,10 +122,8 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                           style: const TextStyle(fontWeight: FontWeight.bold)),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Container(
+                        child: SizedBox(
                           height: 45,
-                          // width: MediaQuery.of(context).size.width,
-
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: ref.read(getListDetails).length,
@@ -224,18 +224,16 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                         height: 45,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: ref.read(getListDetails).length,
+                          itemCount: data.size.length,
                           itemBuilder: (context, index) => Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.all(2.0),
                               child: Padding(
-                                padding: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.only(right: 4),
                                 child: GestureDetector(
                                   onTap: () {
                                     /// size
                                     ref.read(sizeSelectProduct.notifier).state =
-                                        ref
-                                            .read(getListDetails)[index]
-                                            .size
+                                        data.size[index].id
                                             .toString();
 
                                     /// select size
@@ -264,15 +262,13 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
+                                      padding: const EdgeInsets.all(1.0),
                                       child: SizedBox(
                                         height: 40,
                                         width: 40,
                                         child: Center(
                                             child: Text(
-                                          ref
-                                              .read(getListDetails)[index]
-                                              .size
+                                          data.size[index].name
                                               .toString(),
                                           textAlign: TextAlign.center,
                                         )),
@@ -286,50 +282,52 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 10),
                 Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(1),
                   decoration: BoxDecoration(
                       color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                if (ref.watch(countMiniDetails.notifier).state >
-                                    1) {
-                                  ref.watch(countMiniDetails.notifier).state--;
-                                }
-                              },
-                              icon: const Icon(Icons.remove)),
-                          const SizedBox(width: 10),
-                          Text(ref.watch(countMiniDetails).toString(),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                          const SizedBox(width: 10),
-                          IconButton(
-                              onPressed: () {
-                                ref.watch(countMiniDetails.notifier).state++;
-                              },
-                              icon: const Icon(Icons.add)),
-                        ],
-                      ),
+                  child:
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                      // Row(
+                      //   crossAxisAlignment: CrossAxisAlignment.center,
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     IconButton(
+                      //         onPressed: () {
+                      //           if (ref.watch(countMiniDetails.notifier).state >
+                      //               1) {
+                      //             ref.watch(countMiniDetails.notifier).state--;
+                      //           }
+                      //         },
+                      //         icon: const Icon(Icons.remove)),
+                      //     const SizedBox(width: 10),
+                      //     Text(ref.watch(countMiniDetails).toString(),
+                      //         style:
+                      //             const TextStyle(fontWeight: FontWeight.bold)),
+                      //     const SizedBox(width: 10),
+                      //     IconButton(
+                      //         onPressed: () {
+                      //           ref.watch(countMiniDetails.notifier).state++;
+                      //         },
+                      //         icon: const Icon(Icons.add)),
+                      //   ],
+                      // ),
                       MaterialButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)),
                         color: Colors.red,
                         onPressed: getActionCheck,
                         height: 40,
+                        minWidth: double.infinity,
                         textColor: Colors.white,
                         child: Text("addCart".tr()),
                       )
-                    ],
-                  ),
+                    // ],
+                  // ),
                 )
               ],
             ),

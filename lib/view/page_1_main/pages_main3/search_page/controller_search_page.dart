@@ -99,7 +99,6 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
     List<ResultProductList> updateFav = [...state.results];
     for (int i = 0; i < updateFav.length; i++) {
       if (updateFav[i].id.toString() == id.toString()) {
-        log(updateFav[i].isFavorite.toString());
         updateFav[i].isFavorite = !updateFav[i].isFavorite;
 
         state = state.copyWith(results: updateFav);
@@ -117,27 +116,19 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
     log(updateOrder.toString());
     for (int i = 0; i < updateOrder.length; i++) {
       if (updateOrder[i].id.toString() == idOrder) {
-        if (updateOrder[i].slug != "987654321") {
+        if (updateOrder[i].isCart) {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          updateOrder[i].slug = "987654321";
+          updateOrder[i].isCart = false;
         } else {
-          updateOrder[i].slug = "slug";
+          updateOrder[i].isCart = true;
         }
       }
     }
     state = state.copyWith(results: updateOrder);
     return state;
   }
-
   clearData(){
     state.results.clear();
     state = state.copyWith(results: [],previous: "", count: "", next: "");
   }
-//
-// @override
-// void dispose() {
-//   state = state.copyWith(results: [], next: "", count: "", previous: "");
-//   state.results.clear();
-//   super.dispose();
-// }
 }

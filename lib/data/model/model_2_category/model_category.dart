@@ -95,13 +95,29 @@ class CategoryNotifier extends StateNotifier<ModelProductList> {
         modelSearch: ModelSearch(category: box.get("categoryId")));
   }
 
+
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
   ModelProductList modelProductListForCategory =
       ModelProductList(count: "", next: "", previous: "", results: []);
 
   Future<ModelProductList> getDataCategoryPage(
       {required ModelSearch modelSearch}) async {
 
-    log("get Data Category page");
     var dio = Dio();
     List<ResultProductList> listProduct2 = [];
     if (modelSearch.page.toString() == "1" ||
@@ -110,11 +126,9 @@ class CategoryNotifier extends StateNotifier<ModelProductList> {
       state = state.copyWith(results: []);
     }
     Response response = await dio.get(
-        "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
+        "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
         options: Options(
-            headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
-    log(modelSearch.page.toString());
-    log(jsonEncode(response.data).toString());
+            headers: {"X-Access-Token": getIpOrToken()}));
     try {
       modelProductListForCategory = ModelProductList.fromJson(response.data);
 
@@ -156,11 +170,11 @@ class CategoryNotifier extends StateNotifier<ModelProductList> {
     log(updateOrder.toString());
     for (int i = 0; i < updateOrder.length; i++) {
       if (updateOrder[i].id.toString() == idOrder) {
-        if (updateOrder[i].slug != "987654321") {
+        if (!updateOrder[i].isCart) {
           /// order uchun parametr yoqligi uchun slug bilan ishlandi. orderga qiymat kelsa shuni olish kerak
-          updateOrder[i].slug = "987654321";
+          updateOrder[i].isCart = false;
         } else {
-          updateOrder[i].slug = "slug";
+          updateOrder[i].isCart = true;
         }
       }
     }

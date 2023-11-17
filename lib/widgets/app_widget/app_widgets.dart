@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_0_root/controller_root_page.dart';
@@ -5,6 +6,7 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/contr
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/mini_details.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class MyWidgets {
   static Text robotoFontText(
@@ -22,7 +24,60 @@ class MyWidgets {
     );
   }
 
- static bottomSheetDetails(
+  /// xatoliklarni chiqarish
+  static bottomSheetUniversal(
+ {required String text,
+      required BuildContext context,
+      } ) {
+    AwesomeDialog(context: context,
+
+    title: "UZBEK BAZAR",
+      desc: text,
+      dialogType: DialogType.noHeader,
+      btnOkOnPress: (){},
+      btnOkColor: Colors.red,
+      btnOkText: "ok".tr(),
+      buttonsBorderRadius: BorderRadius.circular(10)
+    ).show();
+
+    // showModalBottomSheet(
+    //   context: context,
+    //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+    //   backgroundColor: Colors.white,
+    //   builder: (context) {
+    //     return Container(
+    //         height: MediaQuery.of(context).size.height * 0.2,
+    //         margin: const EdgeInsets.all(10),
+    //         decoration: BoxDecoration(
+    //             color: Colors.white, borderRadius: BorderRadius.circular(10)),
+    //         child: Padding(
+    //             padding: const EdgeInsets.all(8.0),
+    //             child: Column(
+    //               mainAxisAlignment: MainAxisAlignment.start,
+    //               crossAxisAlignment: CrossAxisAlignment.center,
+    //
+    //               children: [
+    //                 Row(
+    //                   crossAxisAlignment: CrossAxisAlignment.center,
+    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                   children: [
+    //                     const Text("", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+    //                     const Text("UZEKBAZAR", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+    //                      IconButton(icon: const Icon( Icons.cancel), onPressed: (){
+    //                      Navigator.of(context).pop();
+    //                     },)
+    //                   ],
+    //                 ),
+    //                 const SizedBox(height: 20),
+    //                 Text(text, style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 18 ), textAlign: TextAlign.center),
+    //               ],
+    //             )));
+    //   },
+    // ).then((value) {});
+  }
+
+  /// productni karzinkaga saqlash
+  static bottomSheetDetails(
       {required String idProduct,
       required bool isFavourite,
       required BuildContext context,
@@ -31,9 +86,7 @@ class MyWidgets {
       context: context,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       backgroundColor: Colors.white,
-      builder: (
-        context,
-      ) {
+      builder: (context) {
         return Container(
             height: MediaQuery.of(context).size.height * 0.5,
             margin: const EdgeInsets.all(10),
@@ -59,7 +112,7 @@ class MyWidgets {
 
   /// default qiymar details page
 
-  static getDefaultStateDetailPage ({required WidgetRef ref}){
+  static getDefaultStateDetailPage({required WidgetRef ref}) {
     ref.read(countMiniDetailsPage.notifier).state = 1;
     ref.read(selectColorMiniDetailsPage.notifier).state = -1;
     ref.read(selectSizeMiniDetailsPage.notifier).state = -1;

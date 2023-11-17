@@ -22,7 +22,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
   List<ResultProductList> getList({required List<ResultProductList> l}) {
     List<ResultProductList> listReturn = [];
     for (int i = 0; i < l.length; i++) {
-      if (l[i].slug.toString() == "987654321") {
+      if (l[i].isCart) {
         listReturn.add(l[i]);
       }
     }
@@ -71,6 +71,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                             pushNewScreen(context,
                                 withNavBar: false,
                                 screen: DetailsPage(
+                                  boolShowStore: true,
                                     idProduct:
                                         getList(l: listOrder.results)[index]
                                             .id
@@ -154,9 +155,9 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                           ),
                                         )),
                                     Text(
-                                        "${getList(l: listOrder.results)[index].newPrice.toString().substring(  0,
-                                            getList(l: listOrder.results)[index].newPrice.toString().indexOf(".")
-                                        ) } \$",
+                                        "${getList(l: listOrder.results)[index].price.toString()
+                                            // .substring(  0, getList(l: listOrder.results)[index].price)
+                                        } \$",
                                         style: const TextStyle()),
                                     const SizedBox(height: 4),
                                     Row(
@@ -178,14 +179,15 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                               height: 25,
                                               width: 25,
                                               decoration: BoxDecoration(
-                                                color: Color(int.parse(
-                                                        ref
-                                                            .read(getListDetails)[
-                                                                index]
-                                                            .color
-                                                            .substring(1, 7),
-                                                        radix: 16) +
-                                                    0xFF000000),
+                                                color: Colors.red,
+                                                // Color(int.parse(
+                                                //         ref
+                                                //             .read(getListDetails)[
+                                                //                 index]
+                                                //             .color
+                                                //             .substring(1, 7),
+                                                //         radix: 16) +
+                                                //     0xFF000000),
                                                 borderRadius:
                                                     BorderRadius.circular(100),
                                               ),
@@ -199,7 +201,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               width: 1,
-                                              color: const Color(0xffCBCBCB),
+                                              color:  Colors.white,
                                             ),
                                             borderRadius:
                                                 BorderRadius.circular(10),
@@ -213,7 +215,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                                   child: Text(
                                                 ref
                                                     .read(getListDetails)[index]
-                                                    .size
+                                                    .id
                                                     .toString(),
                                                 maxLines: 1,
                                                 softWrap: true,
@@ -226,15 +228,15 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 10),
-                                    Text(getCostAll(
-                                        count:
-                                            getList(l: listOrder.results)[index]
-                                                .count
-                                                .toString(),
-                                        cost:
-                                            getList(l: listOrder.results)[index]
-                                                .newPrice
-                                                .toString()))
+                                    // Text(getCostAll(
+                                    //     count:
+                                    //         getList(l: listOrder.results)[index]
+                                    //             .id
+                                    //             .toString(),
+                                    //     cost:
+                                    //         getList(l: listOrder.results)[index]
+                                    //             .price
+                                    //             .toString()))
                                   ],
                                 ),
                               ),
@@ -285,7 +287,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
             dialogType: DialogType.noHeader,
             btnCancelText: "yes".tr(),
             btnOkText: "no".tr(),
-            barrierColor: Colors.white24,
+            barrierColor: Colors.black.withOpacity(0.5),
             buttonsTextStyle: const TextStyle(  color:  Colors.black),
             // btnCancelIcon: Icons.delete_forever_rounded,
             btnCancelColor: Colors.grey[400],

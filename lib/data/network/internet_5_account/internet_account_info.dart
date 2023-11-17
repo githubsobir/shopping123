@@ -10,7 +10,7 @@ class InternetAccountInformation {
   Future<ModelAccountInformation> getInformation() async {
     var dio = Dio();
     Response response;
-    response = await dio.get("${BaseClass.url}/api/v1/web/questions/");
+    response = await dio.get("${BaseClass.url}api/v1/web/questions/", options: Options(receiveTimeout:const Duration(seconds: 6)));
     log(jsonEncode(response.data).toString());
     return ModelAccountInformation.fromJson(response.data);
   }

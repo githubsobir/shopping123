@@ -161,6 +161,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                 MyWidgets.getDefaultStateDetailPage(ref: ref);
                                 pushNewScreen(context,
                                     screen: DetailsPage(
+                                      boolShowStore: true,
                                       idProduct: getDataSearch.results[index].id.toString(),
                                       idProduct2: "",
                                       isFavourite: getDataSearch.results[index].isFavorite,
@@ -301,7 +302,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                       decoration:
                                                       TextDecoration.lineThrough,
                                                       fontSize: 12)),
-                                              Text( "${getDataSearch.results[index].newPrice.toStringAsFixed(2)} \$",
+                                              Text( "${getDataSearch.results[index].price.toStringAsFixed(2)} \$",
                                                   style:
                                                   const TextStyle(fontSize: 12)),
                                             ],
@@ -312,16 +313,14 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                   shape: BoxShape.circle,
                                                   border: Border.all(
                                                     color:
-                                                    getDataSearch.results[index].slug ==
-                                                        "987654321"
+                                                    getDataSearch.results[index].isCart
                                                         ? Colors.red
                                                         : Colors.grey.shade400,
                                                   )),
                                               child: Center(
                                                   child: GestureDetector(
                                                     onTap: () {
-                                                      if(getDataSearch.results[index].slug ==
-                                                          "987654321"){
+                                                      if(getDataSearch.results[index].isCart){
                                                         ref
                                                             .read(
                                                             setFavourite2.notifier)
@@ -360,8 +359,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                       child: Icon(
                                                         Icons.add_shopping_cart,
                                                         color:
-                                                        getDataSearch.results[index].slug ==
-                                                            "987654321"
+                                                        getDataSearch.results[index].isCart
                                                             ? Colors.red
                                                             : Colors.grey.shade800,
                                                         size: 20,

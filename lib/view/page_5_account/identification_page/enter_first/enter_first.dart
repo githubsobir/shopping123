@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/app_bar.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/controller_login.dart';
-import 'package:shopping/view/page_5_account/identification_page/enter_first/enter_button.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/forgot_pasword.dart';
 import 'package:shopping/view/page_5_account/identification_page/enter_first/inputs.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
@@ -28,6 +27,7 @@ class _EnterFirstState extends ConsumerState<EnterFirst> {
   bool boolButtonColor1 = false;
   TextEditingController textAuthLogin = TextEditingController();
   TextEditingController textAuthPassword = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class _EnterFirstState extends ConsumerState<EnterFirst> {
             ),
           ),
         ))
-    :const Center(child: CupertinoActivityIndicator(),)
+        :const Center(child: CupertinoActivityIndicator(),)
     );
   }
 }

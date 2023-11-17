@@ -47,7 +47,9 @@ class _InformationPagesState extends State<InformationPages> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: data.results.length,
                               itemBuilder: (context, index) {
-                                return Column(children: <Widget>[
+                                return
+                                  data.results.isNotEmpty?
+                                  Column(children:[
                                   const Divider(
                                     height: 17.0,
                                     color: Colors.white,
@@ -141,7 +143,8 @@ class _InformationPagesState extends State<InformationPages> {
                                             fontSize: 17.0,
                                             fontWeight: FontWeight.bold)),
                                   ),
-                                ]);
+                                ]):
+                               const Center(child: Text("Ma'lumot topilmadi"),);
                               },
                             )
                           ])));

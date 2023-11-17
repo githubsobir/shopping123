@@ -5,9 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'package:shopping/view/page_1_main/pages_main3/best_seller/best_sellers.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/new_collections.dart';
-import 'package:shopping/view/page_1_main/pages_main3/sale/sales.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/search_page.dart';
 import 'package:shopping/view/page_1_main/widgets_main/main_header.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
@@ -71,16 +69,22 @@ class _MainPageState extends ConsumerState<MainPage> {
         ),
         body: SafeArea(
           child: NestedScrollView(
-            floatHeaderSlivers: true,
+            floatHeaderSlivers: false,
+
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
-              return [const HeaderMain()];
+              return [
+                const SliverToBoxAdapter(
+                  child: HeaderMain(),
+                )
+              ];
             },
             // body: mainBody(context: context, ref: ref)),
             body: ContainedTabBarView(
               tabBarProperties: TabBarProperties(
                 // padding: const EdgeInsets.symmetric(horizontal: 1),
-                margin: const EdgeInsets.only(bottom: 5, top: 5, right: 1, left: 1),
+                margin:
+                    const EdgeInsets.only(bottom: 5, top: 5, right: 1, left: 1),
                 isScrollable: false,
                 indicator: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -94,14 +98,18 @@ class _MainPageState extends ConsumerState<MainPage> {
                 labelColor: Colors.black,
                 indicatorColor: Colors.red,
 
-                height: 35,
+                height: 0,
               ),
               tabs: [
                 Text('bestSeller'.tr()),
-                Text('newArrivals'.tr()),
-                Text('sale'.tr()),
+                //  SizedBox.shrink()
+                // Text('newArrivals'.tr()),
+                // Text('sale'.tr()),
               ],
-              views: const [NewCollection(), BestSellers(), Sales()],
+              views: const [
+                NewCollection(),
+              ],
+              // views: const [NewCollection(), BestSellers(), Sales()],
               // views: const [NewCollection(), NewCollection(), NewCollection()],
             ),
           ),

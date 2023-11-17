@@ -8,6 +8,7 @@ import 'package:shopping/data/model/model_details/model_details.dart';
 import 'package:shopping/data/network/base_url.dart';
 
 /// mini details uchun
+final getListSize = StateProvider<List<Size>>((ref) => []);
 final getListDetails = StateProvider<List<Variable>>((ref) => []);
 final countMiniDetails = StateProvider<int>((ref) => 1);
 final selectColorMiniDetails = StateProvider<int>((ref) => -1);

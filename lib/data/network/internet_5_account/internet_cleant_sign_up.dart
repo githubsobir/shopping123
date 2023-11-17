@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:shopping/data/network/base_url.dart';
 
 class InternetClientSignUp {
-
   Future<String> getISignUp(
       {required fullName,
       required phoneNumber,
@@ -13,15 +13,27 @@ class InternetClientSignUp {
       required fileImage}) async {
     var dio = Dio();
     Response response;
-    FormData formData = FormData.fromMap({
+    final formData = FormData.fromMap({
       "full_name": fullName,
       "phone": phoneNumber,
       "password": password,
-      "is_active": "1",
+      "is_active": isActive,
     });
-    response =
-        await dio.post("${BaseClass.url}/api/v1/web/clients/", data: formData);
-    log(jsonEncode(response.data).toString());
-    return jsonEncode(response.data).toString();
+    log("${BaseClass.url}api/v1/web/clients/");
+    try {
+      response = await dio.post(
+        "${BaseClass.url}api/v1/web/clients/",
+        data: formData,
+      );
+      return jsonEncode(response.data).toString();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return "404";
+      } else if (e.response?.statusCode == 400) {
+        return "400";
+      } else {
+        return "";
+      }
+    }
   }
 }

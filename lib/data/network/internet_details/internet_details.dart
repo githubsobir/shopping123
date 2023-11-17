@@ -10,9 +10,19 @@ class InternetDetailsInformation {
   Future<ModelDetails> getDetailsInformation({required String id}) async {
     var dio = Dio();
     Response response;
-    log(id.toString());
-    response = await dio.get("${BaseClass.url}/api/v1/web/products/$id");
-    log(jsonEncode(response.data).toString());
-    return ModelDetails.fromJson(response.data);
+    log("network");
+    // response = await dio.get("${BaseClass.url}/api/v1/web/products/$id/");
+    response = await dio.get("https://uzbazar.husanibragimov.uz/api/v1/web/products/$id/");
+    log("network123");
+    // log(jsonEncode(response.data).toString());
+   try {
+      log("network");
+
+      return ModelDetails.fromJson(response.data);
+    }catch(e){
+
+     log(e.toString());
+     return ModelDetails.fromJson(response.data);
+   }
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,35 +9,35 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shopping/data/model/model_details/model_details.dart';
-import 'package:shopping/data/network/base_url.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/full_screen_view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/open_store_products/open_store_all_product.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/rating_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/review_last.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/similar_items.dart';
-import 'package:shopping/view/page_2_category/category_page_open.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ItemDetailsScreen extends StatefulWidget {
-  static String routeName = "/item_detail";
-
   ModelDetails modelDetails;
   bool isFavourite;
   String index;
+  bool boolShowStore;
 
   ItemDetailsScreen(
       {super.key,
       required this.index,
       required this.modelDetails,
-      required this.isFavourite});
+      required this.isFavourite,
+      required this.boolShowStore});
 
   @override
   State<ItemDetailsScreen> createState() => _ItemDetailsScreenState();
@@ -57,17 +58,26 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   /// The alignment to be used next time the user scrolls or jumps to an item.
   double alignment = 0;
 
-  List<String> imageAllUrl = [];
+  List<ModelSelectItem> imageAllUrl = [];
   List<String> colorAll = [];
   bool isFavourites = false;
+
+  var box = Hive.box("online");
+
+  Map<int, int> mapImage = {};
 
   @override
   void initState() {
     for (int i = 0; i < widget.modelDetails.variables.length; i++) {
       for (int j = 0; j < widget.modelDetails.variables[i].media.length; j++) {
-        imageAllUrl.add(widget.modelDetails.variables[i].media[j].file);
+        imageAllUrl.add(ModelSelectItem(
+            image: widget.modelDetails.variables[i].media[j].file,
+            color: widget.modelDetails.variables[i].color ?? "",
+            isActive: widget.modelDetails.variables[i].isActive,
+            quantity: widget.modelDetails.variables[i].quantity.toString()));
       }
     }
+    log(jsonEncode(imageAllUrl).toString());
     isFavourites = widget.isFavourite;
 
     super.initState();
@@ -88,20 +98,24 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 10),
-                    Text(
-                      widget.modelDetails.name.toString(),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.black,
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: Text(
+                        widget.modelDetails.name.toString(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        /// rating
                         Row(
                           children: [
                             GestureDetector(
@@ -127,9 +141,11 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 onRatingUpdate: (rating) {},
                               ),
                             ),
-                            const Text("4.5"),
+                            Text(widget.index.toString()),
                           ],
                         ),
+
+                        /// like
                         Consumer(
                           builder: (context, ref, child) => GestureDetector(
                             onTap: () {
@@ -188,8 +204,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     const Divider(color: Color(0xffbbbaba), thickness: 1),
                     const SizedBox(height: 10),
 
-                    const SizedBox(height: 10),
-
                     /// color list
                     Consumer(
                       builder: (context, ref, child) => Container(
@@ -216,77 +230,100 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: widget.modelDetails.variables.length,
                                 itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        log("index colors");
-                                        log(widget.modelDetails.variables[index]
-                                            .media.length
-                                            .toString());
-                                        ref
-                                                .read(colorSelectProductPage
-                                                    .notifier)
-                                                .state =
-                                            widget.modelDetails.variables[index]
-                                                .id
-                                                .toString();
-                                        ref
-                                            .read(selectColorMiniDetailsPage
-                                                .notifier)
-                                            .state = index;
-                                        ref
-                                            .read(noSelectColorMiniDetailsPage
-                                                .notifier)
-                                            .state = -1;
-
-                                        // setState(() {
-                                        //   itemScrollController.jumpTo(
-                                        //       index: widget.modelDetails
-                                        //           .variables[index].media.length);
-                                        //   selectColorIndex = index;
-                                        // });
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: 40,
-                                        decoration: BoxDecoration(
-                                          border: ref.watch(
-                                                      selectColorMiniDetailsPage) ==
-                                                  index
-                                              ? Border.all(
-                                                  width: 3,
-                                                  color: Colors.red,
-                                                )
-                                              : Border.all(
-                                                  width: 1,
-                                                  color: Colors.grey,
-                                                ),
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(1.0),
-                                          child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              color: Color(int.parse(
+                                  return widget.modelDetails.variables[index]
+                                              .color !=
+                                          null
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 10),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              ref
+                                                      .read(
+                                                          colorSelectProductPage
+                                                              .notifier)
+                                                      .state =
+                                                  widget.modelDetails
+                                                      .variables[index].id
+                                                      .toString();
+                                              ref
+                                                  .read(
+                                                      selectColorMiniDetailsPage
+                                                          .notifier)
+                                                  .state = index;
+                                              ref
+                                                  .read(
+                                                      noSelectColorMiniDetailsPage
+                                                          .notifier)
+                                                  .state = -1;
+                                              log(imageAllUrl
+                                                  .indexWhere((item) =>
+                                                      item.color ==
                                                       widget
                                                           .modelDetails
                                                           .variables[index]
-                                                          .color
-                                                          .substring(1, 7),
-                                                      radix: 16) +
-                                                  0xFF000000),
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
+                                                          .color)
+                                                  .toString());
+
+                                              ///
+                                              setState(() {
+                                                itemScrollController.jumpTo(
+                                                    index: imageAllUrl
+                                                        .indexWhere((item) =>
+                                                            item.color ==
+                                                            widget
+                                                                .modelDetails
+                                                                .variables[
+                                                                    index]
+                                                                .color));
+                                                selectColorIndex = index;
+                                              });
+                                            },
+                                            child: Container(
+                                              height: 50,
+                                              width: 40,
+                                              decoration: BoxDecoration(
+                                                border: ref.watch(
+                                                            selectColorMiniDetailsPage) ==
+                                                        index
+                                                    ? Border.all(
+                                                        width: 3,
+                                                        color: Colors.red,
+                                                      )
+                                                    : Border.all(
+                                                        width: 1,
+                                                        color: Colors.grey,
+                                                      ),
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(1.0),
+                                                child: Container(
+                                                  height: 40,
+                                                  width: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(int.parse(
+                                                            widget
+                                                                .modelDetails
+                                                                .variables[
+                                                                    index]
+                                                                .color
+                                                                .substring(
+                                                                    1, 7),
+                                                            radix: 16) +
+                                                        0xFF000000),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                  ),
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                        )
+                                      : const SizedBox.shrink();
                                 },
                               ),
                             ),
@@ -294,219 +331,240 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 10),
 
                     /// size list
-                    Consumer(
-                      builder: (context, ref, child) => Container(
-                        height: 80,
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                            color: ref.watch(noSelectSizeMiniDetailsPage) == -1
-                                ? Colors.white
-                                : Colors.red.shade100,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "chooseSize".tr(),
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 15),
-                            ),
-                            const SizedBox(height: 5),
-                            SizedBox(
-                              height: 40,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.modelDetails.variables.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        ref
-                                            .read(selectSizeMiniDetailsPage
-                                                .notifier)
-                                            .state = index;
-                                        ref
-                                            .read(noSelectSizeMiniDetailsPage
-                                                .notifier)
-                                            .state = -1;
-                                        // setState(() {
-                                        //   itemScrollController.jumpTo(
-                                        //       index: widget.modelDetails
-                                        //           .variables[index].media.length);
-                                        //   selectSizeIndex = index;
-                                        // });
-                                      },
-                                      child: Container(
-                                        height: 30,
-                                        width: 45,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          border: ref.watch(
-                                                      selectSizeMiniDetailsPage) ==
-                                                  index
-                                              ? Border.all(
-                                                  width: 2,
-                                                  color: Colors.red,
-                                                )
-                                              : Border.all(
-                                                  width: 1,
-                                                  color: Colors.grey,
+                    ///
+                    widget.modelDetails.size.isNotEmpty
+                        ? Consumer(
+                            builder: (context, ref, child) => Container(
+                              height: 80,
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  color:
+                                      ref.watch(noSelectSizeMiniDetailsPage) ==
+                                              -1
+                                          ? Colors.white
+                                          : Colors.red.shade100,
+                                  borderRadius: BorderRadius.circular(8)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "chooseSize".tr(),
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 15),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  widget.modelDetails.size.isNotEmpty
+                                      ? SizedBox(
+                                          height: 40,
+                                          child: ListView.builder(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount:
+                                                widget.modelDetails.size.length,
+                                            itemBuilder: (context, index) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    ref
+                                                        .read(
+                                                            selectSizeMiniDetailsPage
+                                                                .notifier)
+                                                        .state = index;
+                                                    ref
+                                                        .read(
+                                                            noSelectSizeMiniDetailsPage
+                                                                .notifier)
+                                                        .state = -1;
+                                                  },
+                                                  child: Container(
+                                                    height: 30,
+                                                    width: 45,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      border: ref.watch(
+                                                                  selectSizeMiniDetailsPage) ==
+                                                              index
+                                                          ? Border.all(
+                                                              width: 2,
+                                                              color: Colors.red,
+                                                            )
+                                                          : Border.all(
+                                                              width: 1,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                      // borderRadius: BorderRadius.circular(100),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              3.0),
+                                                      child: SizedBox(
+                                                        height: 30,
+                                                        width: 40,
+                                                        child: Center(
+                                                            child: Text(
+                                                          widget.modelDetails
+                                                              .size[index].name
+                                                              .toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        )),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                          // borderRadius: BorderRadius.circular(100),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: SizedBox(
-                                            height: 30,
-                                            width: 40,
-                                            child: Center(
-                                                child: Text(
-                                              widget.modelDetails
-                                                  .variables[index].size
-                                                  .toString(),
-                                              textAlign: TextAlign.center,
-                                            )),
+                                              );
+                                            },
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
+                                        )
+                                      : const SizedBox.shrink(),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-
-                    /// seller
+                          )
+                        : const SizedBox.shrink(),
                     const SizedBox(height: 10),
 
                     /// store
-                    SizedBox(
-                      height: 100,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Container(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("seller".tr()),
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration:
-                                    BoxDecoration(color: Colors.grey.shade50),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        const Icon(
-                                          Icons.person_outline,
-                                          size: 24,
-                                          color: Colors.black,
-                                        ),
-                                        // Text(
-                                        //   "seller".tr(),
-                                        //   style:const TextStyle(
-                                        //       color: Colors.black,
-                                        //       fontSize: 18,
-                                        //       fontWeight: FontWeight.w500),
-                                        // ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.3,
-                                          child: Text(
-                                            widget.modelDetails.organization
-                                                .toString(),
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: const TextStyle(
-                                              fontSize: 12,
+
+                    Visibility(
+                      visible: widget.boolShowStore,
+                      child: SizedBox(
+                        height: 100,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          child: Container(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("seller".tr()),
+                                Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration:
+                                      BoxDecoration(color: Colors.grey.shade50),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          const Icon(
+                                            Icons.person_outline,
+                                            size: 24,
+                                            color: Colors.black,
+                                          ),
+                                          // Text(
+                                          //   "seller".tr(),
+                                          //   style:const TextStyle(
+                                          //       color: Colors.black,
+                                          //       fontSize: 18,
+                                          //       fontWeight: FontWeight.w500),
+                                          // ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.3,
+                                            child: Text(
+                                              widget.modelDetails.organization
+                                                  .toString(),
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 45,
-                                      child: MaterialButton(
-                                        padding: const EdgeInsets.only(left: 0),
-                                        onPressed: () {
-                                          pushNewScreen(context,
-                                              screen: CategoryPageOpen(
-                                                  categoryId: widget.modelDetails.category.toString(),
-                                                  parentId:  widget.modelDetails.id.toString()  ,
-                                                  categoryName: widget.modelDetails.name));
-                                        },
-                                        child: Column(
-                                          children: [
-                                            const Icon(
-                                                LineIcons.alternateStore),
-                                            Text(
-                                              "store".tr(),
-                                              style:
-                                                  const TextStyle(fontSize: 12),
-                                            )
-                                          ],
-                                        ),
+                                        ],
                                       ),
-                                    ),
-                                    const SizedBox(width: 1),
-                                    const SizedBox(width: 1),
-                                    Container(
-                                      height: 40,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: InkWell(
-                                        onTap: () {
-                                          launchUrl(Uri(
-                                              scheme: "tel",
-                                              path: "+998901234567"));
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            const Icon(
-                                              LineIcons.alternatePhone,
-                                              color: Colors.white,
-                                            ),
-                                            Text(
-                                              "callNow".tr(),
-                                              style: const TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ],
+                                      SizedBox(
+                                        width: 45,
+                                        child: MaterialButton(
+                                          padding:
+                                              const EdgeInsets.only(left: 0),
+                                          onPressed: () {
+                                            pushNewScreen(context,
+                                                screen: OpenStoreAllProduct(
+                                                  categoryId: widget
+                                                      .modelDetails.category
+                                                      .toString(),
+                                                  parentId: widget
+                                                      .modelDetails.id
+                                                      .toString(),
+                                                  categoryName:
+                                                      widget.modelDetails.name,
+                                                  organization: widget
+                                                      .modelDetails.organization
+                                                      .toString(),
+                                                ));
+                                          },
+                                          child: Column(
+                                            children: [
+                                              const Icon(
+                                                  LineIcons.alternateStore),
+                                              Text(
+                                                "store".tr(),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 1),
+                                      const SizedBox(width: 1),
+                                      Container(
+                                        height: 40,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            launchUrl(Uri(
+                                                scheme: "tel",
+                                                path: "+998901234567"));
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              const Icon(
+                                                LineIcons.alternatePhone,
+                                                color: Colors.white,
+                                              ),
+                                              Text(
+                                                "callNow".tr(),
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -517,7 +575,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     ExpandableText(
                         label: "description".tr(),
                         text: widget.modelDetails.desc.toString()),
-
                     const SizedBox(height: 10),
                     const Text(
                       "Similar Items",
@@ -526,19 +583,20 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
-                    // buildSimilarItems(),
+
                     SizedBox(
                       height: 330,
                       child: SimilarItems(
-                          idDetail: widget.modelDetails.name.toString()),
+                          idDetail: widget.modelDetails.type.toString()),
                     ),
-
                     const SizedBox(height: 20),
-                    const Text("oxorgi ko'rilganlar",
-                        style: TextStyle(fontSize: 20)),
-                    const SizedBox(
+                    const Text("Oxorgi ko'rilganlar",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold)),
+                    SizedBox(
                       height: 330,
-                      child: ReviewItems(),
+                      child: ReviewItems(
+                          type: widget.modelDetails.type.toString()),
                     ),
                   ],
                 ),
@@ -552,45 +610,46 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        if (ref.watch(countMiniDetailsPage.notifier).state >
-                            1) {
-                          ref.watch(countMiniDetailsPage.notifier).state--;
-                        }
-                      },
-                      icon: const Icon(Icons.remove)),
-                  const SizedBox(width: 12),
-                  Text(ref.watch(countMiniDetailsPage).toString(),
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(width: 12),
-                  IconButton(
-                      onPressed: () {
-                        ref.watch(countMiniDetailsPage.notifier).state++;
-                      },
-                      icon: const Icon(Icons.add)),
-                ],
-              ),
+          child:
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              // Row(
+              //   crossAxisAlignment: CrossAxisAlignment.center,
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     IconButton(
+              //         onPressed: () {
+              //           if (ref.watch(countMiniDetailsPage.notifier).state >
+              //               1) {
+              //             ref.watch(countMiniDetailsPage.notifier).state--;
+              //           }
+              //         },
+              //         icon: const Icon(Icons.remove)),
+              //     const SizedBox(width: 12),
+              //     Text(ref.watch(countMiniDetailsPage).toString(),
+              //         style: const TextStyle(fontWeight: FontWeight.bold)),
+              //     const SizedBox(width: 12),
+              //     IconButton(
+              //         onPressed: () {
+              //           ref.watch(countMiniDetailsPage.notifier).state++;
+              //         },
+              //         icon: const Icon(Icons.add)),
+              //   ],
+              // ),
               MaterialButton(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4)),
-                color: Colors.red,
-                onPressed: () {
-                  getActionCheck(
-                      ref: ref, idProduct: widget.modelDetails.id.toString());
-                },
-                height: 40,
-                textColor: Colors.white,
-                child: Text("addCart".tr()),
-              )
-            ],
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            color: Colors.red,
+            onPressed: () {
+              getActionCheck(
+                  ref: ref, idProduct: widget.modelDetails.id.toString());
+            },
+            height: 50,
+            textColor: Colors.white,
+            child: Text("addCart".tr()),
+            // )
+            // ],
           ),
         ),
       ),
@@ -599,20 +658,33 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
   }
 
   showBottomSheetForRating({required String productName}) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      builder: (context) {
-        return Container(
-            // margin:const EdgeInsets.only(top: 10),
-            height: MediaQuery.of(context).size.height * 0.5,
-            color: Colors.white,
-            child: RatingPage(productName: productName));
-      },
-    );
+    box.get("token").toString().length > 30
+        ? showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
+            backgroundColor: Colors.white,
+            enableDrag: true,
+            isDismissible: false,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            builder: (context) {
+              return Container(
+                  // margin:const EdgeInsets.only(top: 10),
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  color: Colors.white,
+                  child: RatingPage(productName: productName));
+            },
+          )
+        : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            backgroundColor: Colors.white,
+            duration: Duration(milliseconds: 1500),
+            content: Text(
+              "Ro'yxatdan o'tgan foydalanuvchilar izox qoldira oladi. ",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+          ));
   }
 
   getActionCheck({required WidgetRef ref, required String idProduct}) {
@@ -642,7 +714,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
     }
   }
 
-  SliverAppBar appbar(BuildContext context, List<String> images) {
+  SliverAppBar appbar(BuildContext context, List<ModelSelectItem> images) {
     return SliverAppBar(
       iconTheme: const IconThemeData(color: Colors.black),
       flexibleSpace: FlexibleSpaceBar(
@@ -651,33 +723,66 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           child: GestureDetector(
               onTap: () {
                 pushNewScreen(context,
-                    screen: FullScreenView(imagesList: images),
+                    screen: FullScreenView(imagesList: images, pructName: widget.modelDetails.name),
                     withNavBar: false);
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) =>
-                //             FullScreenView(imagesList: images)));
               },
               child: ScrollablePositionedList.builder(
                 itemCount: images.length,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => SingleChildScrollView(
-                  child: CachedNetworkImage(
-                      filterQuality: FilterQuality.high,
-                      width: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
-                      imageUrl: BaseClass.url + images[index],
-                      errorWidget: (context, url, text) {
-                        return Image.asset(
-                          "assets/images/image_for_error.png",
-                          fit: BoxFit.cover,
-                        );
-                      },
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              const LoadingShimmer()),
-                ),
+                itemBuilder: (context, index) {
+                  log(index.toString());
+                  return Stack(
+                    children: [
+                      index.toString() != "-1"
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: CachedNetworkImage(
+                                  filterQuality: FilterQuality.high,
+                                  width: MediaQuery.of(context).size.width,
+                                  fit: BoxFit.fitWidth,
+                                  alignment: Alignment.topCenter,
+                                  imageUrl: images[index].image,
+                                  errorWidget: (context, url, text) {
+                                    return Center(
+                                      child: Image.asset(
+                                        "assets/images/image_for_error.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    );
+                                  },
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          const LoadingShimmer()),
+                            )
+                          : Align(
+                        alignment: Alignment.topCenter,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    "assets/images/shopping1.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                ],
+                              ),
+                            ),
+                      index.toString() != "-1"
+                          ? Align(
+                              alignment: Alignment.bottomRight,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  images[index].quantity.toString(),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ))
+                          : const SizedBox.shrink()
+                    ],
+                  );
+                },
                 itemScrollController: itemScrollController,
                 scrollOffsetController: scrollOffsetController,
                 itemPositionsListener: itemPositionsListener,
@@ -687,36 +792,6 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       ),
       expandedHeight: MediaQuery.of(context).size.height * 0.38,
       backgroundColor: Colors.white,
-      // const Color.fromARGB(255, 238, 238, 238),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(10),
-        child: Container(
-          height: 20,
-          width: double.infinity,
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(250, 250, 250, 3),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(70),
-              topRight: Radius.circular(70),
-            ),
-          ),
-          child: Column(
-            children: [
-              Container(
-                height: 4,
-                width: 100,
-                decoration: const BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(70),
-                    topRight: Radius.circular(70),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
       automaticallyImplyLeading: false,
       actions: [
         Padding(
@@ -835,4 +910,38 @@ class ProDetailHeader extends StatelessWidget {
       ),
     );
   }
+}
+
+///
+class ModelSelectItem {
+  String image;
+  String color;
+  dynamic size;
+  String quantity;
+  bool isActive;
+
+  ModelSelectItem({
+    required this.image,
+    required this.color,
+    this.size,
+    required this.quantity,
+    required this.isActive,
+  });
+
+  factory ModelSelectItem.fromJson(Map<String, dynamic> json) =>
+      ModelSelectItem(
+        image: json["image"],
+        color: json["color"],
+        size: json["size"],
+        isActive: json["isActive"],
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "image": image,
+        "color": color,
+        "size": size,
+        "quantity": quantity,
+        "isActive": isActive,
+      };
 }

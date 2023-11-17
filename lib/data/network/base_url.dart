@@ -1,11 +1,21 @@
 import 'dart:developer';
 
+import 'package:hive/hive.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 
 class BaseClass {
-  static String url = "https://uzb.technostudio.uz";
+  static String url = "https://uzbazar.husanibragimov.uz/";
   // static String url = "https://api.uzbekbazar.exadot.io";
   // static String url = "https://diyorbek23.pythonanywhere.com";
+
+  var box = Hive.box("online");
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token").toString();
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
 
  static String getLinkSearch({required ModelSearch m}) {
     String data = "";
