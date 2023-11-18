@@ -102,7 +102,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
       ),
       body: SafeArea(
           child: listFavouriteList.boolDownloadCheck1
-              ? AnimationLimiter(
+              ? listFavouriteList.results.isNotEmpty? AnimationLimiter(
                 child:StaggeredGridView.countBuilder(
                   crossAxisCount: 2,
                   mainAxisSpacing: 4.0,
@@ -123,7 +123,6 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
                                 child:
                                GestureDetector(
                                 onTap: () {
-
                                   ref.read(boolIsFavourite.notifier).state =
                                       listFavouriteList.results [index].isActive;
                                   MyWidgets.getDefaultStateDetailPage(ref: ref);
@@ -147,7 +146,7 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
                             : const LoadingShimmer(), staggeredTileBuilder: (int index) { return StaggeredTile.fit(1); },
                   ),
               )
-              : favouriteEmpty(context: context)),
+              : favouriteEmpty(context: context) :Center(child: Text("Favourite bo'sh"),)),
     );
   }
 }

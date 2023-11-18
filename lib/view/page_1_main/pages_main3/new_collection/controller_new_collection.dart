@@ -71,6 +71,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
       modelProductList = ModelProductList.fromJson(response.data);
       listProduct2.addAll(modelProductList.results);
       state = state.copyWith(results: listProduct2);
+      log(jsonEncode(response.data).toString());
       return state;
     } catch (e) {
       return ModelProductList(count: "", next: "", previous: "", results: []);
@@ -83,7 +84,6 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
 
   updateFavorite(String id) {
     List<ResultProductList> updateFav = [...state.results];
-
     setFavoritesServer(idProduct: id);
     for (int i = 0; i < updateFav.length; i++) {
       if (updateFav[i].id.toString() == id.toString()) {
@@ -146,6 +146,8 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   Future setFavoritesServer({required String idProduct}) async {
     try {
       var dio = Dio();
+      log(getIpOrToken().toString());
+      log(idProduct.toString());
       Response response = await dio.post(
           "${BaseClass.url}api/v1/web/favorites/",
           options: Options(headers: {"Authorization": getIpOrToken()}),
@@ -153,6 +155,8 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
             "session_id": getIpOrTokenWithOutBearer(),
             "product": idProduct,
           });
+
+      log(response.data.toString());
     } catch (e) {
       log(e.toString());
       return "";

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -74,10 +75,23 @@ class _CategoryPageState extends State<CategoryPage> {
                               ? ExpansionTile(
                                   key: Key(index.toString()),
                                   initiallyExpanded: index == selected,
-                                  leading: const Icon(
-                                    Icons.shopping_basket,
-                                    size: 32.0,
-                                    color: Colors.blueAccent,
+
+                                  leading: CachedNetworkImage(
+                                    // filterQuality: FilterQuality.medium,
+                                    width: 30,
+                                    height: 30,
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                    imageUrl: data.results[index].icon??"",
+                                    errorWidget: (context, url, text) {
+                                      return Image.asset(
+                                        "assets/images/shopping1.png",
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                    const LoadingShimmer(),
                                   ),
                                   title: Text(data.results[index].name,
                                       style: const TextStyle(

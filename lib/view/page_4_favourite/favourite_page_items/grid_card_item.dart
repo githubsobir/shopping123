@@ -39,7 +39,7 @@ class _GridCartItemState extends State<GridCartItem> {
                       boxShadow: [
                         BoxShadow(
                             blurRadius: 1,
-                            color: Colors.grey.shade100,
+                            color: Colors.grey.shade50,
                             offset: const Offset(1, 0),
                             spreadRadius: 10)
                       ]),
@@ -55,6 +55,7 @@ class _GridCartItemState extends State<GridCartItem> {
                             width: MediaQuery.of(context).size.width * 0.44,
                             widget.resultModelNotifier.product.photo.toString(),
                             fit: BoxFit.cover,
+                            alignment: Alignment.topCenter,
                             errorBuilder: (context, error, stackTrace) =>
                                 SizedBox(
                               height: 160,

@@ -124,6 +124,10 @@ class _FullScreenViewState extends State<FullScreenView> {
             },
             child: Container(
               margin: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+
+                      image: AssetImage("assets/images/gerb.jpg"))),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: InteractiveViewer(
@@ -149,39 +153,37 @@ class _FullScreenViewState extends State<FullScreenView> {
     showDialog(
       context: context,
       useSafeArea: true,
-
-      builder: (context) =>  Container(
+      builder: (context) => Container(
         margin: const EdgeInsets.all(1),
         child: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
           child: Column(
             children: [
               Row(
-                 crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).pop();
                     },
                     child: Container(
-                      padding: const EdgeInsets.all( 2),
-                      margin:const EdgeInsets.only(right: 12),
+                      padding: const EdgeInsets.all(2),
+                      margin: const EdgeInsets.only(right: 12),
                       decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white),
-
+                          shape: BoxShape.circle, color: Colors.white),
                       child: const Icon(Icons.cancel, color: Colors.red),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.9,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.9,
                 width: MediaQuery.of(context).size.width,
                 child: InteractiveViewer(
                   transformationController: TransformationController(),
                   panEnabled: true,
-                  boundaryMargin:const EdgeInsets.all(1),
+                  boundaryMargin: const EdgeInsets.all(1),
                   minScale: 0.5,
                   maxScale: 4,
                   child: ClipRRect(
