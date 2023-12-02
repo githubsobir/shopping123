@@ -22,20 +22,23 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
   getActionCheck() {
     if (ref.read(selectSizeMiniDetails) > -1 &&
         ref.read(selectColorMiniDetails) > -1) {
-
       ref.read(setFavourite2.notifier).setOrder(
           idOrder: widget.idProduct.toString(),
           count: ref.read(countMiniDetails).toString(),
           sizeProduct: ref.read(sizeSelectProduct).toString(),
-          colorProduct: ref.read(colorSelectProduct).toString()
-      );
+          colorProduct: ref.read(colorSelectProduct).toString());
 
       ref.read(sendServer.notifier).setCartWithProductId(
-          idProduct: widget.idProduct,
-          colorProduct: ref.read(colorSelectProduct),
-          countProduct: ref.read(countMiniDetails).toString(),
-          sizeProduct: ref.read(sizeSelectProduct));
-      ref.read(getCategoryPage.notifier).setOrdersBrand(idOrder: widget.idProduct);
+            idProduct: widget.idProduct,
+            colorId: ref.read(colorId),
+            sizeId: ref.read(sizeId),
+            colorProduct: ref.read(colorSelectProduct),
+            countProduct: ref.read(countMiniDetails).toString(),
+            sizeProduct: ref.read(sizeSelectProduct),
+          );
+      ref
+          .read(getCategoryPage.notifier)
+          .setOrdersBrand(idOrder: widget.idProduct);
 
       Navigator.of(context).pop();
     } else {
@@ -107,7 +110,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  padding:const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     color: ref.watch(noSelectColorMiniDetails) == 0
@@ -155,6 +158,9 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                               .read(noSelectColorMiniDetails
                                                   .notifier)
                                               .state = 0;
+                                          ref.read(colorId.notifier).state =
+                                              data.variables[index].id
+                                                  .toString();
                                         },
                                         child: Container(
                                           height: 45,
@@ -192,9 +198,8 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                                     BorderRadius.circular(100),
                                               ),
                                             ),
-
-                  ),
-                  ),
+                                          ),
+                                        ),
                                       ),
                                     )
                                   : const SizedBox.shrink();
@@ -233,8 +238,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                   onTap: () {
                                     /// size
                                     ref.read(sizeSelectProduct.notifier).state =
-                                        data.size[index].id
-                                            .toString();
+                                        data.size[index].id.toString();
 
                                     /// select size
                                     ref
@@ -243,6 +247,8 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                     ref
                                         .read(noSelectSizeMiniDetails.notifier)
                                         .state = 0;
+                                    ref.read(sizeId.notifier).state =
+                                        data.size[index].id.toString();
                                   },
                                   child: Container(
                                     height: 45,
@@ -268,8 +274,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                         width: 40,
                                         child: Center(
                                             child: Text(
-                                          data.size[index].name
-                                              .toString(),
+                                          data.size[index].name.toString(),
                                           textAlign: TextAlign.center,
                                         )),
                                       ),
@@ -284,51 +289,51 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  padding: const EdgeInsets.all(1),
-                  decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(10)),
-                  child:
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                      // Row(
-                      //   crossAxisAlignment: CrossAxisAlignment.center,
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     IconButton(
-                      //         onPressed: () {
-                      //           if (ref.watch(countMiniDetails.notifier).state >
-                      //               1) {
-                      //             ref.watch(countMiniDetails.notifier).state--;
-                      //           }
-                      //         },
-                      //         icon: const Icon(Icons.remove)),
-                      //     const SizedBox(width: 10),
-                      //     Text(ref.watch(countMiniDetails).toString(),
-                      //         style:
-                      //             const TextStyle(fontWeight: FontWeight.bold)),
-                      //     const SizedBox(width: 10),
-                      //     IconButton(
-                      //         onPressed: () {
-                      //           ref.watch(countMiniDetails.notifier).state++;
-                      //         },
-                      //         icon: const Icon(Icons.add)),
-                      //   ],
-                      // ),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                        color: Colors.red,
-                        onPressed: getActionCheck,
-                        height: 40,
-                        minWidth: double.infinity,
-                        textColor: Colors.white,
-                        child: Text("addCart".tr()),
-                      )
+                    padding: const EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(10)),
+                    child:
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        // Row(
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     IconButton(
+                        //         onPressed: () {
+                        //           if (ref.watch(countMiniDetails.notifier).state >
+                        //               1) {
+                        //             ref.watch(countMiniDetails.notifier).state--;
+                        //           }
+                        //         },
+                        //         icon: const Icon(Icons.remove)),
+                        //     const SizedBox(width: 10),
+                        //     Text(ref.watch(countMiniDetails).toString(),
+                        //         style:
+                        //             const TextStyle(fontWeight: FontWeight.bold)),
+                        //     const SizedBox(width: 10),
+                        //     IconButton(
+                        //         onPressed: () {
+                        //           ref.watch(countMiniDetails.notifier).state++;
+                        //         },
+                        //         icon: const Icon(Icons.add)),
+                        //   ],
+                        // ),
+                        MaterialButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                      color: Colors.red,
+                      onPressed: getActionCheck,
+                      height: 40,
+                      minWidth: double.infinity,
+                      textColor: Colors.white,
+                      child: Text("addCart".tr()),
+                    )
                     // ],
-                  // ),
-                )
+                    // ),
+                    )
               ],
             ),
           );

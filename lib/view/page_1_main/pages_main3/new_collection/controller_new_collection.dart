@@ -33,6 +33,13 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
             ModelProductList(count: "1", next: "", previous: "", results: [])) {
     getData(modelSearch: ModelSearch());
   }
+  ModelProductListNotifier copyWith(dynamic count,
+      ModelProductList modelProductList) {
+    return ModelProductListNotifier(
+       );
+  }
+
+
 
   late ModelProductList modelProductList =
       ModelProductList(count: "1", next: "", previous: "", results: []);
@@ -173,7 +180,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
       var dio = Dio();
 
       Response response = await dio.post(
-          "https://uzb.technostudio.uz/api/v1/web/carts/",
+          "${BaseClass.url}api/v1/web/carts/",
           options: Options(headers: {"Authorization": getIpOrToken()}),
           data: {
             "session_id": getIpOrTokenWithOutBearer(),
@@ -182,6 +189,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
             "size": sizeId,
             "material": sizeId,
           });
+      log(jsonEncode(response.data).toString());
     } catch (e) {
       log(e.toString());
       return "";

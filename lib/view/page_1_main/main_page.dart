@@ -23,7 +23,9 @@ class _MainPageState extends ConsumerState<MainPage> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("UzBazar", style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text("UzBazar",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 15.0),
@@ -33,11 +35,11 @@ class _MainPageState extends ConsumerState<MainPage> {
                       screen: MainSearchPage(), withNavBar: false);
                 },
                 child: Container(
-                    padding: EdgeInsets.all(2),
+                    padding: const EdgeInsets.all(2),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.grey.shade200)),
-                    child: Icon(Icons.search, color: Colors.white)),
+                    child: const Icon(Icons.search, color: Colors.white)),
               ),
             ),
 

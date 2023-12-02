@@ -36,18 +36,22 @@ final getDetails =
   ModelDetails modelDetails =
       await ref.read(apiProviderDetails).getDetailsInformation(id: id);
 
-  ref.read(getListDetails.notifier).state = modelDetails.variables;
-
-  try{
+  try {
+    log("## 1");
+    ref.read(getListDetails.notifier).state = modelDetails.variables;
+    log("## 2");
     List<ModelDetails> listModelDetails =
         box.get("listLastView").toString().length > 4
             ? (jsonDecode(box.get("listLastView")) as List)
                 .map((e) => ModelDetails.fromJson(e))
                 .toList()
             : [];
+    log("## 3");
     listModelDetails.add(modelDetails);
+    log("## 4");
     box.put("listLastView", jsonEncode(listModelDetails).toString());
-  }catch(e){
+    log("## 5");
+  } catch (e) {
     log(e.toString());
   }
   return modelDetails;
@@ -58,8 +62,7 @@ final getSimilarItem = StateNotifierProvider.family
         (ref, id) => SimilarItemPage(data: id));
 
 final getLastViews = StateProvider<List<ModelDetails>>((ref) {
-  try{
-
+  try {
     List<ModelDetails> listModelDetails =
         box.get("listLastView").toString().length > 4
             ? (jsonDecode(box.get("listLastView")) as List)
@@ -69,12 +72,11 @@ final getLastViews = StateProvider<List<ModelDetails>>((ref) {
     log("listModelDetails.length.toString()");
     log(listModelDetails.length.toString());
     return listModelDetails;
-  }catch(e){
+  } catch (e) {
     log(e.toString());
-    List<ModelDetails> listModelDetails =[];
+    List<ModelDetails> listModelDetails = [];
     return listModelDetails;
   }
-
 });
 
 class SimilarItemPage extends StateNotifier<ModelProductList> {

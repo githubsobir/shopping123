@@ -107,6 +107,9 @@ class MyWidgets {
       ref.read(noSelectColorMiniDetails.notifier).state = 0;
       ref.read(sizeSelectProduct.notifier).state = "";
       ref.read(colorSelectProduct.notifier).state = "";
+      ref.read(productId.notifier).state = "";
+      ref.read(colorId.notifier).state = "";
+      ref.read(sizeId.notifier).state = "";
     });
   }
 

@@ -68,6 +68,7 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
   late ModelProductList modelSavedQuestion;
   List<ResultProductList> listData = [];
 
+
   Future<List<ResultProductList>> getListFromInternet({required ModelSearch modelSearch}) async {
     Response response = await dio.get(
         "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",

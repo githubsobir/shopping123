@@ -1,5 +1,4 @@
 // ignore_for_file: library_private_types_in_public_api
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -33,7 +32,6 @@ class _NewCollectionState extends ConsumerState<NewCollection>
 
   //
   late Animation<double> _heightFactorAnimation;
-  final GlobalKey<AnimatedGridState> _gridKey = GlobalKey<AnimatedGridState>();
 
   @override
   initState() {
@@ -296,6 +294,7 @@ class _NewCollectionState extends ConsumerState<NewCollection>
                                                   .read(boolHideNavBar.notifier)
                                                   .state = true;
                                               MyWidgets.bottomSheetDetails(
+
                                                   idProduct: getData
                                                       .results[index].id
                                                       .toString(),

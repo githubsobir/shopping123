@@ -218,12 +218,10 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "chooseColor".tr(),
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 15),
-                            ),
-                            const SizedBox(height: 5),
+                            Text("chooseColor".tr(),
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 15)),
+                            const SizedBox(height: 4),
                             SizedBox(
                               height: 40,
                               child: ListView.builder(
@@ -280,7 +278,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                               });
                                             },
                                             child: Container(
-                                              height: 50,
+                                              height: 40,
                                               width: 40,
                                               decoration: BoxDecoration(
                                                 border: ref.watch(
@@ -698,6 +696,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
 
       ref.read(sendServer.notifier).setCartWithProductId(
           idProduct: idProduct,
+          sizeId: ref.read(sizeId),
+
+          colorId:ref.read(colorId) ,
           colorProduct: ref.read(colorSelectProductPage),
           countProduct: ref.read(countMiniDetailsPage).toString(),
           sizeProduct: ref.read(sizeSelectProductPage));
@@ -723,7 +724,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           child: GestureDetector(
               onTap: () {
                 pushNewScreen(context,
-                    screen: FullScreenView(imagesList: images, pructName: widget.modelDetails.name),
+                    screen: FullScreenView(
+                        imagesList: images,
+                        pructName: widget.modelDetails.name),
                     withNavBar: false);
               },
               child: ScrollablePositionedList.builder(
@@ -755,7 +758,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                           const LoadingShimmer()),
                             )
                           : Align(
-                        alignment: Alignment.topCenter,
+                              alignment: Alignment.topCenter,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,

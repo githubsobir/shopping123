@@ -17,6 +17,9 @@ final noSelectColorMiniDetails = StateProvider<int>((ref) => 0);
 final noSelectSizeMiniDetails = StateProvider<int>((ref) => 0);
 final sizeSelectProduct = StateProvider<String>((ref) => "");
 final colorSelectProduct = StateProvider<String>((ref) => "");
+final productId = StateProvider<String>((ref) => "");
+final sizeId = StateProvider<String>((ref) => "");
+final colorId = StateProvider<String>((ref) => "");
 
 final sendServer =
     StateNotifierProvider<MiniDetailsWorkNetwork, ModelMiniDetails>(
@@ -41,25 +44,38 @@ class MiniDetailsWorkNetwork extends StateNotifier<ModelMiniDetails> {
 
   var box = Hive.box("online");
 
-  Future setCartWithProductId(
-      {required String idProduct,
+  Future setCartWithProductId({
+      required String idProduct,
       required String countProduct,
+      required String sizeId,
       required String sizeProduct,
-      required String colorProduct}) async {
+      required String colorProduct,
+      required String colorId,
+      }) async {
     try {
       log("##1");
       log( idProduct.toString());
-      log( box.get("token"));
+      log( box.get("token").toString());
+
+      log("log: ${"${BaseClass.url}api/v1/web/carts"}");
+      log("getIpOrToken: : ${getIpOrToken()}");
+      log("idProduct: : $idProduct");
+      log("countProduct: : $countProduct");
+      log("sizeId: : $sizeId");
+      log("sizeProduct: : $sizeProduct");
+      log("colorProduct: : $colorProduct");
+      log("colorId: : $colorId");
       var dio = Dio();
-      Response response = await dio.post("${BaseClass.url}/api/v1/web/carts/",
-          options: Options(headers: {"Authorization":"Bearer ${box.get("token")}" }),
+      Response response = await dio.post("${BaseClass.url}api/v1/web/carts/",
+
+          options: Options(headers: {"Authorization":getIpOrToken()}),
           data: {
-        "session_id": box.get("token").toString(),
+        "session_id":  box.get("ipAddressPhone").toString(),
         // "quantity": countProduct.toString(),
         "product": idProduct.toString(),
-        // "product_variable": colorProduct.toString(),
-        // "size": sizeProduct.toString(),
-        //"user": box.get("userId")
+        "product_variable": colorId.toString(),
+        "size": sizeId.toString(),
+        "user": box.get("userId")
       });
       log("##2");
       log(jsonEncode(response.data).toString());
@@ -68,6 +84,21 @@ class MiniDetailsWorkNetwork extends StateNotifier<ModelMiniDetails> {
       }
     } catch (e) {
       log(e.toString());
+    }
+  }
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
     }
   }
 }

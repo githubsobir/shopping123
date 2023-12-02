@@ -1,13 +1,10 @@
   // ignore_for_file: must_be_immutable
 
 import 'dart:io';
-import 'package:connection_notifier/connection_notifier.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get_ip_address/get_ip_address.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:shopping/view/page_0_root/lang_choose.dart';
 import 'package:shopping/view/page_0_root/root_page.dart';
@@ -65,28 +62,31 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ConnectionNotifier(
-      disconnectedContent: const Center(
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(Icons.signal_wifi_connected_no_internet_4),
-          SizedBox(width: 10),
-          Text("Internet", style: TextStyle(fontWeight: FontWeight.w600)),
-        ],
-      )),
-      connectedContent: const Center(
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(CupertinoIcons.check_mark_circled_solid),
-          SizedBox(width: 10),
-          Text("Internet", style: TextStyle(fontWeight: FontWeight.w600)),
-        ],
-      )),
-      child: MaterialApp(
+    return
+      // ConnectionNotifier(
+      // connectionNotificationOptions: ConnectionNotificationOptions(),
+      // disconnectedContent: const Center(
+      //     child: Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Icon(Icons.signal_wifi_connected_no_internet_4),
+      //     SizedBox(width: 10),
+      //     Text("Internet", style: TextStyle(fontWeight: FontWeight.w600)),
+      //   ],
+      // )),
+      // connectedContent: const Center(
+      //     child: Row(
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Icon(CupertinoIcons.check_mark_circled_solid),
+      //     SizedBox(width: 10),
+      //     Text("Internet", style: TextStyle(fontWeight: FontWeight.w600)),
+      //   ],
+      // )),
+      // child:
+      MaterialApp(
           navigatorKey: navigatorKey,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
@@ -97,7 +97,8 @@ class MyApp extends StatelessWidget {
                   box.get("language") == "3"
               ? //MainPages()//
         RootPage(homeIdMainpage: 0)
-              :  EnterFirst0(windowId: "0",)),
+              :  EnterFirst0(windowId: "0",)
+      // ),
     );
   }
 }
