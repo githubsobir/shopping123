@@ -8,25 +8,33 @@ import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
 import 'package:shopping/data/network/base_url.dart';
 
-final showBrands = StateNotifierProvider<
-    ShowBrandsNotifier,
-    ModelProductList>((ref) => ShowBrandsNotifier());
-
+final showBrands =
+    StateNotifierProvider.autoDispose<ShowBrandsNotifier, ModelProductList>(
+        (ref) => ShowBrandsNotifier());
 
 class ShowBrandsNotifier extends StateNotifier<ModelProductList> {
-var box = Hive.box("online");
+  var box = Hive.box("online");
+
   ShowBrandsNotifier()
       : super(
-            ModelProductList(count: "", next: "", previous: "", results: []))
-  {
-    // log(jsonEncode(modelSearch).toString());
-    // if(modelSearch.brand == "-1") { //box.get("brand")
-        log("^^^log^^^");
-        log(box.get("brand").toString());
-        log("^^^log^^^");
+            ModelProductList(count: "", next: "", previous: "", results: [])) {
+    getDataBrand(modelSearch: ModelSearch(brand: box.get("brand")));
+  }
 
-      getDataBrand(modelSearch:ModelSearch(brand: box.get("brand")) );
-    // }
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
   }
 
   ModelProductList modelProductList =
@@ -45,7 +53,7 @@ var box = Hive.box("online");
       Response response = await dio.get(
           "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
           options: Options(
-              headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
+              headers: {"Authorization": getIpOrToken()}));
       log(jsonEncode(response.data).toString());
       modelProductList = ModelProductList.fromJson(response.data);
       // log(jsonEncode(modelProductList).toString());
@@ -78,7 +86,7 @@ var box = Hive.box("online");
       }
     }
 
-  state = state.copyWith(results: listUpFavBrand);
+    state = state.copyWith(results: listUpFavBrand);
   }
 
   setOrdersBrand({required String idOrder}) {
@@ -98,4 +106,3 @@ var box = Hive.box("online");
     state = state.copyWith(results: updateOrder);
   }
 }
-

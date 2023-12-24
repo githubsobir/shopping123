@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,11 +24,16 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
   getActionCheck() {
     if (ref.read(selectSizeMiniDetails) > -1 &&
         ref.read(selectColorMiniDetails) > -1) {
-      ref.read(setFavourite2.notifier).setOrder(
-          idOrder: widget.idProduct.toString(),
-          count: ref.read(countMiniDetails).toString(),
-          sizeProduct: ref.read(sizeSelectProduct).toString(),
-          colorProduct: ref.read(colorSelectProduct).toString());
+      try{
+        ref.read(setFavourite2.notifier).setOrder(
+            idOrder: widget.idProduct.toString(),
+            count: ref.read(countMiniDetails).toString(),
+            sizeProduct: ref.read(sizeSelectProduct).toString(),
+            colorProduct: ref.read(colorSelectProduct).toString());
+      }catch(e){
+        log("@@@");
+        log("setOrder");
+      }
 
       ref.read(sendServer.notifier).setCartWithProductId(
             idProduct: widget.idProduct,
@@ -147,7 +154,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
                                                   .state =
                                               ref
                                                   .read(getListDetails)[index]
-                                                  .color
+                                                  .id
                                                   .toString();
 
                                           ref

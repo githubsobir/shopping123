@@ -15,6 +15,7 @@ import 'package:shopping/view/page_0_root/controller_root_page.dart';
 import 'package:shopping/view/page_1_main/main_page.dart';
 import 'package:shopping/view/page_2_category/category_page.dart';
 import 'package:shopping/view/page_3_basket/basket_page.dart';
+import 'package:shopping/view/page_3_basket/controller_basket.dart';
 import 'package:shopping/view/page_4_favourite/favourite_page.dart';
 import 'package:shopping/view/page_5_account/account_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
@@ -57,7 +58,7 @@ class _RootPageState extends ConsumerState<RootPage> {
         log(box.get("ipAddressPhone"));
       } on IpAddressException catch (exception) {
         /// Handle the exception.
-        // print(exception.message);
+        log(exception.message.toString());
       }
     } catch (e) {
       throw Exception("Error update");
@@ -95,7 +96,15 @@ class _RootPageState extends ConsumerState<RootPage> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       navBarStyle: NavBarStyle.style3,
-      // selectedTabScreenContext: (p0) {},
+       onItemSelected: (val){
+         val == 2 ?
+         {
+
+           ref.read(getOrder.notifier).getBasketList()} :{};
+       },
+      selectedTabScreenContext: (p0) {
+
+      },
       screenTransitionAnimation:
           const ScreenTransitionAnimation(curve: Curves.bounceIn),
     );

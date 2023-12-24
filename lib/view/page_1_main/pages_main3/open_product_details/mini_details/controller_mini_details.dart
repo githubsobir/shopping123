@@ -44,6 +44,23 @@ class MiniDetailsWorkNetwork extends StateNotifier<ModelMiniDetails> {
 
   var box = Hive.box("online");
 
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
+
+
   Future setCartWithProductId({
       required String idProduct,
       required String countProduct,
@@ -66,41 +83,36 @@ class MiniDetailsWorkNetwork extends StateNotifier<ModelMiniDetails> {
       log("colorProduct: : $colorProduct");
       log("colorId: : $colorId");
       var dio = Dio();
-      Response response = await dio.post("${BaseClass.url}api/v1/web/carts/",
 
-          options: Options(headers: {"Authorization":getIpOrToken()}),
-          data: {
-        "session_id":  box.get("ipAddressPhone").toString(),
-        // "quantity": countProduct.toString(),
+
+      Map<String, dynamic> mapServer = {
+
+        "session_id":  getIpOrTokenWithOutBearer(),
         "product": idProduct.toString(),
         "product_variable": colorId.toString(),
         "size": sizeId.toString(),
-        "user": box.get("userId")
-      });
+        "quantity":"1"
+
+        // "user": box.get("userId"
+        // )
+      };
+      log("@@@@");
+      log(jsonEncode(mapServer).toString());
+
+      Response response = await dio.post("${BaseClass.url}api/v1/web/carts/",
+
+          options: Options(headers: {"Authorization":getIpOrToken()}),
+          data: mapServer);
       log("##2");
       log(jsonEncode(response.data).toString());
-      if(response.statusCode == 500){
-        log("500 777");
-      }
-    } catch (e) {
+
+    } on DioException catch (e) {
+      log("@@@@");
+      log(e.response!.statusCode.toString());
       log(e.toString());
     }
   }
-  String getIpOrToken() {
-    if (box.get("token").toString().length > 20) {
-      return "Bearer ${box.get("token")}";
-    } else {
-      return box.get("ipAddressPhone").toString();
-    }
-  }
 
-  String getIpOrTokenWithOutBearer() {
-    if (box.get("token").toString().length > 20) {
-      return box.get("token");
-    } else {
-      return box.get("ipAddressPhone").toString();
-    }
-  }
 }
 
 class ModelMiniDetails {

@@ -20,6 +20,6 @@ final getCategoryOpenPage = FutureProvider.family<
 });
 
 
-final getCategoryPage = StateNotifierProvider<
+final getCategoryPage = StateNotifierProvider.autoDispose<
     CategoryNotifier,
     ModelProductList>((ref) => CategoryNotifier());

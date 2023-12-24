@@ -10,6 +10,7 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/contr
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_controller.dart';
+import 'package:shopping/view/page_4_favourite/controller_favourite.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -60,13 +61,6 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
   int skip = 0;
   bool shouldLoadMore = true;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-@override
-  void dispose() {
-
-    ref.invalidate(cont);
-    super.dispose();
-  }
 
 
   @override
@@ -204,6 +198,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                 getDataSearch.results[index].photo
                                                     .toString(),
                                                 fit: BoxFit.cover,
+                                                alignment: Alignment.topCenter,
                                                 errorBuilder:
                                                     (context, error, stackTrace) =>
                                                     SizedBox(
@@ -235,6 +230,30 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                                       .updateFavorite(getDataSearch
                                                       .results[index].id
                                                       .toString());
+
+                                                  ref
+                                                      .read(getFavouriteList.notifier)
+                                                      .setFavouriteList(
+                                                      resultModelNotifier:
+                                                      ResultModelNotifier(
+                                                          isActive: getDataSearch
+                                                              .results[index]
+                                                              .isFavorite,
+                                                          id: getDataSearch
+                                                              .results[index].id,
+                                                          product: Product(
+                                                              id: getDataSearch
+                                                                  .results[index]
+                                                                  .id,
+                                                              name: getDataSearch
+                                                                  .results[index]
+                                                                  .name,
+                                                              price: getDataSearch
+                                                                  .results[index]
+                                                                  .price,
+                                                              photo: getDataSearch
+                                                                  .results[index]
+                                                                  .photo)));
 
                                                   // setState(() {});
                                                 },

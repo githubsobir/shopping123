@@ -75,7 +75,6 @@ class _CategoryPageState extends State<CategoryPage> {
                               ? ExpansionTile(
                                   key: Key(index.toString()),
                                   initiallyExpanded: index == selected,
-
                                   leading: CachedNetworkImage(
                                     // filterQuality: FilterQuality.medium,
                                     width: 30,

@@ -22,8 +22,11 @@ class InternetClientSignUp {
     log("${BaseClass.url}api/v1/web/clients/");
     try {
       response = await dio.post(
+
         "${BaseClass.url}api/v1/web/clients/",
         data: formData,
+        options: Options()
+
       );
       return jsonEncode(response.data).toString();
     } on DioException catch (e) {

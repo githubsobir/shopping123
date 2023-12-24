@@ -1,7 +1,5 @@
 library main_page.dart;
 
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
@@ -20,6 +18,9 @@ class MainPage extends ConsumerStatefulWidget {
 class _MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
+    double h = MediaQuery.of(context).size.height;
+
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -70,51 +71,74 @@ class _MainPageState extends ConsumerState<MainPage> {
           //       child: TextFormField()),
         ),
         body: SafeArea(
-          child: NestedScrollView(
-            floatHeaderSlivers: false,
+          child:SizedBox(
+            height: h,
+            child: ListView(
+                children:
+              [
 
-            headerSliverBuilder:
-                (BuildContext context, bool innerBoxIsScrolled) {
-              return [
-                const SliverToBoxAdapter(
-                  child: HeaderMain(),
-                )
-              ];
-            },
-            // body: mainBody(context: context, ref: ref)),
-            body: ContainedTabBarView(
-              tabBarProperties: TabBarProperties(
-                // padding: const EdgeInsets.symmetric(horizontal: 1),
-                margin:
-                    const EdgeInsets.only(bottom: 5, top: 5, right: 1, left: 1),
-                isScrollable: false,
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xff121212)),
-                ),
-                indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
-                labelStyle: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold),
-                labelColor: Colors.black,
-                indicatorColor: Colors.red,
+          HeaderMain(),
 
-                height: 0,
-              ),
-              tabs: [
-                Text('bestSeller'.tr()),
-                //  SizedBox.shrink()
-                // Text('newArrivals'.tr()),
-                // Text('sale'.tr()),
-              ],
-              views: const [
-                NewCollection(),
-              ],
-              // views: const [NewCollection(), BestSellers(), Sales()],
-              // views: const [NewCollection(), NewCollection(), NewCollection()],
+              ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minHeight: 400,
+                    maxHeight: double.infinity,
+                  ),
+                child:
+                           NewCollection()
+              )
+              ]
             ),
-          ),
+          )
         ));
   }
 }
+// NestedScrollView(
+//
+// floatHeaderSlivers: false,
+// scrollDirection: Axis.vertical,
+//
+// headerSliverBuilder:
+// (BuildContext context, bool innerBoxIsScrolled) {
+// return [
+// const SliverToBoxAdapter(
+// child: HeaderMain(),
+// )
+// ];
+// },
+// // body: mainBody(context: context, ref: ref)),
+// body: NewCollection(),
+
+// ContainedTabBarView(
+//   tabBarProperties: TabBarProperties(
+//     // padding: const EdgeInsets.symmetric(horizontal: 1),
+//     margin:
+//         const EdgeInsets.only(bottom: 5, top: 5, right: 1, left: 1),
+//     isScrollable: true,
+//     indicator: BoxDecoration(
+//       borderRadius: BorderRadius.circular(10),
+//       border: Border.all(color: const Color(0xff121212)),
+//     ),
+//     indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
+//     labelStyle: const TextStyle(
+//         color: Colors.black,
+//         fontSize: 14,
+//         fontWeight: FontWeight.bold),
+//     labelColor: Colors.black,
+//     indicatorColor: Colors.red,
+//
+//     height: 0,
+//   ),
+//   tabs: [
+//     Text('bestSeller'.tr()),
+//     //  SizedBox.shrink()
+//     // Text('newArrivals'.tr()),
+//     // Text('sale'.tr()),
+//   ],
+//   views: const [
+//
+//   ],
+//   // views: const [NewCollection(), BestSellers(), Sales()],
+//   // views: const [NewCollection(), NewCollection(), NewCollection()],
+// ),
+// ),

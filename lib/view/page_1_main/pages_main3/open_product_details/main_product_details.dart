@@ -805,7 +805,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             child: IconButton(
               padding: const EdgeInsets.all(0),
               onPressed: () {
-                Share.share('UzbekBazar https://uzbekbazar.uz');
+                Share.share('https://uzbek-bazar.vercel.app/product/details/${widget.modelDetails.id}');
               },
               icon: const Icon(
                 Icons.share,

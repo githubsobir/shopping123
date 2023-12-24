@@ -10,6 +10,7 @@ import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_2_category/page_2_controller.dart';
+import 'package:shopping/view/page_4_favourite/controller_favourite.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -85,11 +86,7 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
     }
   }
 
-  @override
-  void dispose() {
-    ref.invalidate(getCategoryPage);
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -201,12 +198,6 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
                                           children: [
                                             GestureDetector(
                                               onTap: () {
-                                                ref
-                                                    .read(
-                                                        setFavourite2.notifier)
-                                                    .updateFavorite(getData
-                                                        .results[index].id
-                                                        .toString());
 
                                                 ref
                                                     .read(getCategoryPage
@@ -214,6 +205,38 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
                                                     .updateFavoriteBrand(getData
                                                         .results[index].id
                                                         .toString());
+                                                ref
+                                                    .read(
+                                                    setFavourite2.notifier)
+                                                    .updateFavorite(getData
+                                                    .results[index].id
+                                                    .toString());
+
+
+                                                ref
+                                                    .read(getFavouriteList.notifier)
+                                                    .setFavouriteList(
+                                                    resultModelNotifier:
+                                                    ResultModelNotifier(
+                                                        isActive: getData
+                                                            .results[index]
+                                                            .isFavorite,
+                                                        id: getData
+                                                            .results[index].id,
+                                                        product: Product(
+                                                            id: getData
+                                                                .results[index]
+                                                                .id,
+                                                            name: getData
+                                                                .results[index]
+                                                                .name,
+                                                            price: getData
+                                                                .results[index]
+                                                                .price,
+                                                            photo: getData
+                                                                .results[index]
+                                                                .photo)));
+
 
                                                 // setState(() {});
                                               },

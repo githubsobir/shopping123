@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:list_picker_dialog_plus/list_picker_dialog_plus.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_page.dart';
 
 class Filter extends ConsumerStatefulWidget {
@@ -187,16 +186,16 @@ Container selectRegion(BuildContext context) {
         ],
       ),
       onPressed: () async {
-        var item = await showTextListPicker(
-            context: context,
-
-            selectedItem: ref.watch(selectRegionProvider,
-
-            ),
-            findFn: (str) async => regions);
-        if (item != null) {
-          ref.read(selectRegionProvider.notifier).state = item;
-        }
+        // var item = await showTextListPicker(
+        //     context: context,
+        //
+        //     selectedItem: ref.watch(selectRegionProvider,
+        //
+        //     ),
+        //     findFn: (str) async => regions);
+        // if (item != null) {
+        //   ref.read(selectRegionProvider.notifier).state = item;
+        // }
       },
     ),
   );

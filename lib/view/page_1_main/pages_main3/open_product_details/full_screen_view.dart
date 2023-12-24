@@ -129,16 +129,22 @@ class _FullScreenViewState extends State<FullScreenView> {
 
                       image: AssetImage("assets/images/gerb.jpg"))),
               child: ClipRRect(
+
                 borderRadius: BorderRadius.circular(20),
                 child: InteractiveViewer(
                   panEnabled: false,
+
                   // Set it to false
                   boundaryMargin: EdgeInsets.all(20),
                   minScale: 0.5,
                   maxScale: 4,
                   child: Image.network(
+
                     fit: BoxFit.cover,
+                    // align:Alignmet.topCenter,
+
                     widget.imagesList[index].image,
+
                   ),
                 ),
               ),

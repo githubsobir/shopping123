@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:shopping/data/model/model_main_1_page/model_main_search.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/data/model/model_main_1_page/test_model_infinite_lIst.dart';
@@ -52,7 +53,7 @@ final getDataSearch = FutureProvider.family
 });
 
 final cont =
-    StateNotifierProvider<ModelSearchListNotifier, ModelProductList>((
+    StateNotifierProvider.autoDispose<ModelSearchListNotifier, ModelProductList>((
   ref,
 ) {
       return ModelSearchListNotifier();
@@ -67,13 +68,35 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
   var dio = Dio();
   late ModelProductList modelSavedQuestion;
   List<ResultProductList> listData = [];
+  var box = Hive.box("online");
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
 
-
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
   Future<List<ResultProductList>> getListFromInternet({required ModelSearch modelSearch}) async {
+
+
+
+    log("${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}");
+    log(BaseClass.getLinkSearch(m: modelSearch));
     Response response = await dio.get(
-        "${BaseClass.url}/api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
-        options: Options(
-            headers: {"X-Access-Token": "82f8ad497b5b70cfed09a68e522a3e94"}));
+
+        "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
+        // options: Options(
+        //     headers: {"Authorization": getIpOrToken()})
+    );
+    log("@34");
     log(jsonEncode(response.data).toString());
     try {
       modelSavedQuestion = ModelProductList.fromJson(response.data);

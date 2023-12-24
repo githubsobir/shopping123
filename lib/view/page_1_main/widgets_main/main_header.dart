@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
-import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/controller_main_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
@@ -27,7 +26,7 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
   Widget build(BuildContext context) {
     final carouselData = ref.watch(getDataCarousel);
     final getDataBanner = ref.watch(getDataNewCollection);
-    ModelSearch modelSearch;
+
     return Column(
       children: [
         Container(
@@ -128,13 +127,15 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                           child: Column(
                             children: [
                               Container(
+                                color: Colors.white,
+                                margin: const EdgeInsets.all(3),
                                 child: CachedNetworkImage(
                                   // filterQuality: FilterQuality.medium,
                                   width: 40,
                                   height: 40,
                                   alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                  imageUrl: data.results[index].icon ?? "",
+                                  fit: BoxFit.fill,
+                                  imageUrl: data.results[index].icon,
                                   errorWidget: (context, url, text) {
                                     return Image.asset(
                                       "assets/images/shopping1.png",
@@ -145,8 +146,6 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                                       (context, url, downloadProgress) =>
                                           const LoadingShimmer(),
                                 ),
-                                color: Colors.white,
-                                margin: EdgeInsets.all(5),
                               ),
                               // SizedBox(
                               //     width: 40,
