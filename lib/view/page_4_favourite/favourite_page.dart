@@ -32,11 +32,11 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
 
   late Animation<double> _heightFactorAnimation;
   final GlobalKey<AnimatedGridState> _gridKey = GlobalKey<AnimatedGridState>();
+
   @override
   initState() {
     _slideAnimationController = AnimationController(
       vsync: this,
-      //whatever duration you want
       duration: const Duration(milliseconds: 800),
     );
     _heightFactorAnimation = CurvedAnimation(
@@ -86,67 +86,105 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
     return listReturn;
   }
 
+  Widget bodyBuild() {
+    final listFavouriteList = ref.watch(getFavouriteList);
+    if (listFavouriteList.boolDownloadCheck1.toString() == "0") {
+      /// loading
+      return const LoadingGridView();
+    } else if (listFavouriteList.boolDownloadCheck1.toString() == "1") {
+      /// success
+      return listFavouriteList.results.isEmpty
+          ? favouriteEmpty(context: context)
+          : AnimationLimiter(
+              child: StaggeredGridView.countBuilder(
+                crossAxisCount: 2,
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+                controller: _scrollController,
+                itemCount: listFavouriteList.results.length,
+                itemBuilder: (
+                  context,
+                  index,
+                ) =>
+                    index < listFavouriteList.results.length
+                        ? AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 400),
+                            columnCount: 2,
+                            child: SlideAnimation(
+                                delay: const Duration(milliseconds: 240),
+                                child: FlipAnimation(
+                                    delay: const Duration(milliseconds: 240),
+                                    child: GestureDetector(
+                                        onTap: () {
+                                          ref
+                                                  .read(boolIsFavourite.notifier)
+                                                  .state =
+                                              listFavouriteList
+                                                  .results[index].isActive;
+                                          MyWidgets.getDefaultStateDetailPage(
+                                              ref: ref);
+                                          pushNewScreen(context,
+                                              screen: DetailsPage(
+                                                boolShowStore: true,
+                                                idProduct: listFavouriteList
+                                                    .results[index].id
+                                                    .toString(),
+                                                isFavourite: listFavouriteList
+                                                    .results[index].isActive,
+                                                idProduct2: "",
+                                              ),
+                                              withNavBar: false);
+                                          log(index.toString());
+                                        },
+                                        child: GridCartItem(
+                                          resultModelNotifier:
+                                              listFavouriteList.results[index],
+                                        )))))
+                        : const LoadingShimmer(),
+                staggeredTileBuilder: (int index) {
+                  return const StaggeredTile.fit(1);
+                },
+              ),
+            );
+    } else {
+      /// error
+      return Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(listFavouriteList.errorText.toString()),
+              Text("error".tr(),),
+            MaterialButton(
+              onPressed: () {
+                ref.read(getFavouriteList.notifier).getFavouriteListFirst();
+              },
+              color: Colors.blue.shade800,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child:
+                  Text("tryAgain".tr(), style: TextStyle(color: Colors.white)),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final list = ref.watch(setFavourite2);
-    final listFavouriteList = ref.watch(getFavouriteList);
-
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("favourite".tr(),
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, color: Colors.black)),
-        elevation: 0,
         backgroundColor: Colors.white,
-      ),
-      body: SafeArea(
-          child: listFavouriteList.boolDownloadCheck1
-              ? listFavouriteList.results.isNotEmpty? AnimationLimiter(
-                child:StaggeredGridView.countBuilder(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                    controller: _scrollController,
-                    itemCount: listFavouriteList.results.length,
-                    itemBuilder: (context, index,) =>
-                        index < listFavouriteList.results.length
-                            ?
-                        AnimationConfiguration.staggeredGrid(
-                          position:index,
-                          duration: const Duration(milliseconds: 400),
-                          columnCount: 2,
-                          child: SlideAnimation(
-                            delay:const Duration(milliseconds: 240),
-                            child: FlipAnimation(
-                                delay:const Duration(milliseconds: 240),
-                                child:
-                               GestureDetector(
-                                onTap: () {
-                                  ref.read(boolIsFavourite.notifier).state =
-                                      listFavouriteList.results [index].isActive;
-                                  MyWidgets.getDefaultStateDetailPage(ref: ref);
-                                  pushNewScreen(context,
-                                      screen: DetailsPage(
-                                        boolShowStore: true,
-                                        idProduct:   listFavouriteList.results[index]
-                                            .id
-                                            .toString(),
-                                        isFavourite:
-                                        listFavouriteList.results[index]
-                                                .isActive,
-                                        idProduct2: "",
-                                      ),
-                                      withNavBar: false);
-                                  log(index.toString());
-                                },
-                                child: GridCartItem(
-                                  resultModelNotifier: listFavouriteList.results[index],
-                                )))))
-                            : const LoadingShimmer(), staggeredTileBuilder: (int index) { return StaggeredTile.fit(1); },
-                  ),
-              )
-              : favouriteEmpty(context: context) :Center(child: Text("Favourite bo'sh"),)),
-    );
+        appBar: AppBar(
+          title: Text("favourite".tr(),
+
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black)),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.white,
+        ),
+        body: SafeArea(child: bodyBuild()));
   }
 }

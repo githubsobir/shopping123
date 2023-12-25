@@ -96,5 +96,7 @@
   "description": "Maxsulot haqida ru",
   "rating": "Baho bering: ru",
   "send": "Yuborish ru",
-  "ok": "Tushunarli ru"
+  "ok": "Tushunarli ru",
+  "error": "Xatolik",
+  "tryAgain": "Qayta urining"
 }

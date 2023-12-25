@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/data/model/model_4_favourite/model_favourite.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';

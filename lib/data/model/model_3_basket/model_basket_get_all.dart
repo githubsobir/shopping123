@@ -3,12 +3,16 @@ class ModelBasketList {
   dynamic count;
   dynamic next;
   dynamic previous;
+  dynamic errorText;
+  dynamic internetStatePosition;
   List<ResultBasketList> results;
 
   ModelBasketList({
     this.count,
     this.next,
     this.previous,
+    this.errorText,
+    this.internetStatePosition,
     required this.results,
   });
 
@@ -16,12 +20,16 @@ class ModelBasketList {
       dynamic count1,
       dynamic next1,
       dynamic previous1,
+      dynamic errorText1,
+      dynamic internetStatePosition1,
       List<ResultBasketList> results1,
       ) {
     return ModelBasketList(
       count: count1 ?? count,
       next: next1 ?? next,
       previous: previous1 ?? previous,
+      errorText: errorText1 ?? errorText,
+      internetStatePosition: internetStatePosition1 ?? internetStatePosition,
       results: results1,
     );
   }
@@ -31,6 +39,7 @@ class ModelBasketList {
         count: json["count"],
         next: json["next"],
         previous: json["previous"],
+        errorText: json["errorText"],
         results:
         List<ResultBasketList>.from(json["results"].map((x) => ResultBasketList.fromJson(x))),
       );
@@ -38,6 +47,7 @@ class ModelBasketList {
   Map<String, dynamic> toJson() => {
     "count": count,
     "next": next,
+    "errorText": errorText,
     "previous": previous,
     "results": List<dynamic>.from(results.map((x) => x.toJson())),
   };

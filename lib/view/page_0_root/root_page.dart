@@ -16,6 +16,7 @@ import 'package:shopping/view/page_1_main/main_page.dart';
 import 'package:shopping/view/page_2_category/category_page.dart';
 import 'package:shopping/view/page_3_basket/basket_page.dart';
 import 'package:shopping/view/page_3_basket/controller_basket.dart';
+import 'package:shopping/view/page_4_favourite/controller_favourite.dart';
 import 'package:shopping/view/page_4_favourite/favourite_page.dart';
 import 'package:shopping/view/page_5_account/account_page.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
@@ -97,10 +98,15 @@ class _RootPageState extends ConsumerState<RootPage> {
       popActionScreens: PopActionScreensType.all,
       navBarStyle: NavBarStyle.style3,
        onItemSelected: (val){
-         val == 2 ?
+         if(val == 2)
          {
 
-           ref.read(getOrder.notifier).getBasketList()} :{};
+           ref.read(getOrder.notifier).getBasketList();}
+         else if (val == 3) {
+           ref.read(  getFavouriteList.notifier).getFavouriteListFirst();
+
+         }
+
        },
       selectedTabScreenContext: (p0) {
 

@@ -17,23 +17,28 @@ Widget userWithTokenUI() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            height: 180,
-            width: 180,
-            // padding: const EdgeInsets.all(10),
+
+
+            padding: const EdgeInsets.all(50),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
               border: Border.all(color: Colors.grey, width: 2),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: CachedNetworkImage(
-                  height: 160,
-                  width: 160,
-                  fit: BoxFit.cover,
-
-                  imageUrl: box.get("userAvatar").toString()),
+            child: Text(box.get("userName").toString().substring(0,1),
+            style: const TextStyle(fontSize: 45,
+            color: Colors.black
             ),
+            )
+
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(100),
+            //   child: CachedNetworkImage(
+            //       height: 160,
+            //       width: 160,
+            //       fit: BoxFit.cover,
+            //       imageUrl: box.get("userAvatar").toString()),
+            // ),
           ),
         ],
       ),
@@ -44,7 +49,7 @@ Widget userWithTokenUI() {
         style: const TextStyle(fontWeight: FontWeight.w600),
       ),
       const SizedBox(height: 20),
-      Divider(),
+     const Divider(),
 
     ],
   );

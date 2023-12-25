@@ -54,14 +54,14 @@ class _InformationPagesState extends State<InformationPages> {
                                     height: 17.0,
                                     color: Colors.white,
                                   ),
-                                  data.results[index].answer.isNotEmpty
+                                  data.results[index].question.isNotEmpty
                                       ? ExpansionTile(
                                     key: Key(index.toString()),
                                     //attention
-                                    trailing:index == selected ? Icon(Icons.remove):Icon(Icons.add),
+                                    trailing:index == selected ? const Icon(Icons.remove):Icon(Icons.add),
                                     initiallyExpanded: index == selected,
 
-                                    title: Text(data.results[index].answer.toString(),
+                                    title: Text(data.results[index].question.toString(),
                                         style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 17.0,
@@ -91,7 +91,7 @@ class _InformationPagesState extends State<InformationPages> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 15, left: 15, top: 8, bottom: 5),
                                   child: Text(
-                                           data.results[index].question.toString(),
+                                           data.results[index].answer.toString(),
                                            style:  TextStyle(
                                                color: Colors.blue.shade800,
                                                fontSize: 17.0,
@@ -149,9 +149,9 @@ class _InformationPagesState extends State<InformationPages> {
                             )
                           ])));
                 }, error: (error, errorText) {
-                  return const LoadingShimmerList();
+                  return  LoadingShimmerList(h: 70,);
                 }, loading: () {
-                  return const LoadingShimmerList();
+                  return  LoadingShimmerList(h: 70,);
                 }));
           },
         ));

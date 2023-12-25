@@ -68,11 +68,10 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     final getDataChatUi = ref.watch(controllerChatList);
     log(getDataChatUi.listGetDataServer.length.toString());
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+        backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black),
-
           titleTextStyle: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.w600, fontSize: 20),
           title: const Text("Biz bilan aloqa",
@@ -135,13 +134,13 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       }),
                 ),
                 Container(
-                  height: 55,
-                  margin: EdgeInsets.only(
+
+                  margin: const EdgeInsets.only(
                     right: 10,
                     left: 10,
                     bottom: 4,
                   ),
-                  padding: EdgeInsets.only(
+                  padding: const EdgeInsets.only(
                     right: 1,
                     left: 4,
                     bottom: 0,
@@ -164,10 +163,12 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                         padding: const EdgeInsets.only(left: 5),
                         child: TextFormField(
                           controller: textEditingController,
-                          maxLines: null,
                           keyboardType: TextInputType.text,
+                          expands: false,
+                          maxLines: null,
                           maxLength: 140,
                           decoration: const InputDecoration(
+
                               // filled: true,
                               //
                               // fillColor: Colors.transparent,

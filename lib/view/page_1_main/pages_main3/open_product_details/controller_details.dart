@@ -69,8 +69,6 @@ final getLastViews = StateProvider<List<ModelDetails>>((ref) {
                 .map((e) => ModelDetails.fromJson(e))
                 .toList()
             : [];
-    log("listModelDetails.length.toString()");
-    log(listModelDetails.length.toString());
     return listModelDetails;
   } catch (e) {
     log(e.toString());
@@ -115,5 +113,12 @@ class SimilarItemPage extends StateNotifier<ModelProductList> {
       log(e.toString());
       return [];
     }
+  }
+
+  updateFavourite(int index) {
+    List<ResultProductList> list = [];
+    list = [...state.results];
+    list[index].isFavorite = !list[index].isFavorite;
+    state = state.copyWith(results: list);
   }
 }

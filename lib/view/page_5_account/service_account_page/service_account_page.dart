@@ -5,6 +5,7 @@ import 'package:shopping/view/page_0_root/lang_choose.dart';
 import 'package:shopping/view/page_5_account/chat_page/chat_pages.dart';
 import 'package:shopping/view/page_5_account/information_page/information_pages.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Widget serviceAccountPage({required BuildContext context}){
   return Column(
@@ -31,12 +32,19 @@ Widget serviceAccountPage({required BuildContext context}){
           "telephone".tr(),
           style: const TextStyle(fontWeight: FontWeight.w500),
         ),
-        subtitle: Text(
+        subtitle:const Text(
           "+998 99 123 45 67",
-          style: const TextStyle(fontWeight: FontWeight.w500),
+          style:  TextStyle(fontWeight: FontWeight.w500),
         ),
         trailing: const Icon(Icons.arrow_forward_ios,
             color: Colors.black, size: 20),
+        onTap: ()async{
+          final Uri launchUri = Uri(
+            scheme: 'tel',
+            path: "+998 99 123 45 67",
+          );
+          await launchUrl(launchUri);
+        },
       ),
       ListTile(
         onTap: () {

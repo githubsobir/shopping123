@@ -26,9 +26,10 @@ class _AccountPageState extends State<AccountPage> {
       appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
+          centerTitle: true,
           title: Text(
             "personalCabinet".tr(),
-            style: const TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           )),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -52,7 +53,6 @@ class _AccountPageState extends State<AccountPage> {
                             color: Colors.grey.shade50,
                             height: 50,
                             minWidth: double.infinity,
-                            //MediaQuery.of(context).size.width * 0.5,
                             onPressed: () {
                               /// chiqish action
                               showModelDialog();
@@ -63,8 +63,6 @@ class _AccountPageState extends State<AccountPage> {
                         child: MaterialButton(
                             color: Colors.grey.shade50,
                             height: 50,
-                            // minWidth: double.infinity,
-                            //MediaQuery.of(context).size.width * 0.5,
                             onPressed: () {
                               pushNewScreen(context,
                                   screen: EnterFirst(windowIdEnterFirst: "0"),

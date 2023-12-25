@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/data/model/model_4_favourite/model_favourite.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
@@ -34,19 +35,9 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
   int pageCount = 0;
   ScrollController _scrollController = ScrollController();
 
-  //
-  // getData({required ModelSearch modelSearch, required WidgetRef ref}) async {
-  // data = await ref.read(setFavourite2.notifier).getData(modelSearch: modelSearch);
-  //  // await ref.watch(setFavourite2.notifier).getdata.results(modelSearch: modelSearch);
-  //  //  setState(() {
-  //  //
-  //  //  });
-  // }
 
   @override
   initState() {
-    log("init state open page ---");
-    // _
     super.initState();
     try {
       _scrollController = ScrollController(initialScrollOffset: 5.0)
@@ -92,9 +83,10 @@ class _CategoryPageOpenState extends ConsumerState<CategoryPageOpen> {
   Widget build(BuildContext context) {
     final getData = ref.watch(getCategoryPage);
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text(widget.categoryName,
-              style: const TextStyle(color: Colors.black)),
+              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
           backgroundColor: Colors.white,
           elevation: 0,
           iconTheme: const IconThemeData(color: Colors.black),

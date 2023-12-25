@@ -1,8 +1,15 @@
 library main_page.dart;
 
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
+import 'package:shopping/data/model/model_main_1_page/model_search.dart';
+import 'package:shopping/data/network/base_url.dart';
+import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/new_collections.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/search_page.dart';
 import 'package:shopping/view/page_1_main/widgets_main/main_header.dart';
@@ -16,15 +23,53 @@ class MainPage extends ConsumerStatefulWidget {
 }
 
 class _MainPageState extends ConsumerState<MainPage> {
+  ScrollController _scrollController = ScrollController();
+
+  //
+
+  @override
+  initState() {
+    _scrollController = ScrollController(initialScrollOffset: 5.0)
+      ..addListener(_scrollListener);
+    super.initState();
+  }
+
+  late ModelSearch modelSearch;
+  var pageCount = 1;
+
+  _scrollListener() async {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      try {
+        modelSearch = ModelSearch(page: pageCount + 1);
+        log("model: ${jsonEncode(BaseClass.getLinkSearch(m: modelSearch))}");
+        log("pageCount: $pageCount");
+        log("count : ${ref.watch(setFavourite2).count}");
+        log("next Page: ${ref.watch(setFavourite2).next}");
+        log("previous Page: ${ref.watch(setFavourite2).previous}");
+
+        await ref
+            .read(setFavourite2.notifier)
+            .getData(modelSearch: modelSearch);
+        pageCount = pageCount + 1;
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double h = MediaQuery.of(context).size.height;
-
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text("UzBazar",
+          title: const Text("UzBazar",
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
           actions: [
@@ -33,7 +78,7 @@ class _MainPageState extends ConsumerState<MainPage> {
               child: GestureDetector(
                 onTap: () {
                   pushNewScreen(context,
-                      screen: MainSearchPage(), withNavBar: false);
+                      screen: const MainSearchPage(), withNavBar: false);
                 },
                 child: Container(
                     padding: const EdgeInsets.all(2),
@@ -43,102 +88,44 @@ class _MainPageState extends ConsumerState<MainPage> {
                     child: const Icon(Icons.search, color: Colors.white)),
               ),
             ),
-
-            /// title o'riniga qo'yish mumkin
-            // Container(
-            //   height: 45,
-            //   decoration: BoxDecoration(
-            //       color: Colors.white, borderRadius: BorderRadius.circular(8)),
-            //   child: Padding(
-            //       padding: EdgeInsets.only(left: 10),
-            //       child: Row(
-            //         children: [
-            //           Icon(Icons.search, color: Colors.grey),
-            //           SizedBox(width: 10),
-            //           Text(
-            //             "search".tr(),
-            //             style: TextStyle(color: Colors.grey),
-            //           )
-            //         ],
-            //       ))),
           ],
           elevation: 0,
           backgroundColor: MyColors.appColorUzBazar(),
-          // leading:
-          //   Container(
-          //     height: 45,
-          //       color: Colors.white,
-          //       child: TextFormField()),
         ),
         body: SafeArea(
-          child:SizedBox(
-            height: h,
-            child: ListView(
-                children:
-              [
+            child: ListView(controller: _scrollController, children: [
+          const HeaderMain(),
+          ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: 400,
+                maxHeight: double.infinity,
+              ),
+              child: const NewCollection()),
+          ref.watch(setFavourite2).next.toString() != "999"
+              ? const SizedBox(
+                  height: 80,
+                  child: Center(child: CupertinoActivityIndicator()),
+                )
+              :  SizedBox(
+                  height: 60,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: IconButton(
+                      onPressed: (){
 
-          HeaderMain(),
-
-              ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minHeight: 400,
-                    maxHeight: double.infinity,
+                        _scrollController.animateTo(
+                          0.0,
+                          curve: Curves.easeOut,
+                          duration: const Duration(milliseconds: 500),
+                        );
+                      },
+                      icon:const Icon(
+                      Icons.keyboard_double_arrow_up_rounded,
+                      size: 28,
+                      color: Colors.red,)
+                    ),
                   ),
-                child:
-                           NewCollection()
-              )
-              ]
-            ),
-          )
-        ));
+                )
+        ])));
   }
 }
-// NestedScrollView(
-//
-// floatHeaderSlivers: false,
-// scrollDirection: Axis.vertical,
-//
-// headerSliverBuilder:
-// (BuildContext context, bool innerBoxIsScrolled) {
-// return [
-// const SliverToBoxAdapter(
-// child: HeaderMain(),
-// )
-// ];
-// },
-// // body: mainBody(context: context, ref: ref)),
-// body: NewCollection(),
-
-// ContainedTabBarView(
-//   tabBarProperties: TabBarProperties(
-//     // padding: const EdgeInsets.symmetric(horizontal: 1),
-//     margin:
-//         const EdgeInsets.only(bottom: 5, top: 5, right: 1, left: 1),
-//     isScrollable: true,
-//     indicator: BoxDecoration(
-//       borderRadius: BorderRadius.circular(10),
-//       border: Border.all(color: const Color(0xff121212)),
-//     ),
-//     indicatorPadding: const EdgeInsets.symmetric(horizontal: 6),
-//     labelStyle: const TextStyle(
-//         color: Colors.black,
-//         fontSize: 14,
-//         fontWeight: FontWeight.bold),
-//     labelColor: Colors.black,
-//     indicatorColor: Colors.red,
-//
-//     height: 0,
-//   ),
-//   tabs: [
-//     Text('bestSeller'.tr()),
-//     //  SizedBox.shrink()
-//     // Text('newArrivals'.tr()),
-//     // Text('sale'.tr()),
-//   ],
-//   views: const [
-//
-//   ],
-//   // views: const [NewCollection(), BestSellers(), Sales()],
-//   // views: const [NewCollection(), NewCollection(), NewCollection()],
-// ),
-// ),

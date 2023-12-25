@@ -30,7 +30,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   ModelProductListNotifier()
       : super(
             ModelProductList(count: "1", next: "", previous: "", results: [])) {
-    getData(modelSearch: ModelSearch());
+    getData(modelSearch: ModelSearch(page: "1"));
   }
 
   late ModelProductList modelProductList =
@@ -59,24 +59,68 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   Future<ModelProductList> getData({required ModelSearch modelSearch}) async {
     if (modelSearch.page.toString() == "1" ||
         modelSearch.page.toString() == "null") {
-      state = state.copyWith(results: []);
+      state = state.copyWith(
+          count: "0",
+          next: "0",
+          previous: "0",
+          results: [], boolGetData: "0", errorText: "");
     }
-    Response response;
-    try {
-      response = await dio.get(
-        "https://uzbazar.husanibragimov.uz/api/v1/web/products/",
-        options: Options(headers: {"Authorization": getIpOrToken()}),
-      );
-      modelProductList = ModelProductList.fromJson(response.data);
-      listProduct2.addAll(modelProductList.results);
-      state = state.copyWith(results: listProduct2);
-      return state;
 
-    } catch (e) {
-      return ModelProductList(count: "", next: "", previous: "", results: []);
+    try {
+
+      if(state.next.toString() != "null") {
+        log("modelProductList.next");
+        log(modelProductList.next.toString());
+        var response = await dio.get(
+          "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
+          options: Options(headers: {"Authorization": getIpOrToken()}),
+        );
+        modelProductList = ModelProductList.fromJson(response.data);
+
+
+        listProduct2.addAll(modelProductList.results);
+        state = state.copyWith(
+            results: listProduct2,
+            next: modelProductList.next,
+            count: modelProductList.count,
+            previous: modelProductList.previous,
+            errorText: "",
+            boolGetData: "1");
+      }
+
+      return state;
+    } on DioException catch (e) {
+      log(e.toString());
+
+
+      if (e.response!.statusCode.toString() == "404" && int.parse(modelSearch.page.toString()) > 1 ) {
+        state = state.copyWith(
+            previous: "999",
+            next: "999",
+            count: "9999",
+            results: listProduct2,
+            errorText: e.response!.statusCode.toString(),
+            boolGetData: "1");
+      }  else{
+
+        state = state.copyWith(
+            previous: "999",
+            next: "999",
+            count: "9999",
+            results: listProduct2,
+            errorText: e.response!.statusCode.toString(),
+            boolGetData: "2");
+      }
+
+      return ModelProductList(
+          count: "",
+          next: "",
+          previous: "",
+          boolGetData: "2",
+          errorText: e.response!.statusCode.toString(),
+          results: []);
     }
   }
-
 
   updateFavorite(String id) {
     List<ResultProductList> updateFav = [...state.results];
@@ -84,7 +128,9 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
     for (int i = 0; i < updateFav.length; i++) {
       if (updateFav[i].id.toString() == id.toString()) {
         updateFav[i].isFavorite = !updateFav[i].isFavorite;
-        state = state.copyWith(results: updateFav);
+        state = state.copyWith(
+          results: updateFav,
+        );
       }
     }
   }
@@ -111,8 +157,6 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
   /// layklarni serverga yuborish qo'shish
   Future setFavoritesServer({required String idProduct}) async {
     try {
-
-      log("setFavoritesServer");
       Response response = await dio.post(
           "${BaseClass.url}api/v1/web/favorites/",
           options: Options(headers: {"Authorization": getIpOrToken()}),
@@ -120,7 +164,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
             "session_id": getIpOrTokenWithOutBearer(),
             "product": idProduct,
           });
-
+      log("serverga yuborildi !!!");
       log(response.data.toString());
     } catch (e) {
       log(e.toString());

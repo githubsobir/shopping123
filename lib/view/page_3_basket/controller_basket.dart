@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:shopping/data/model/model_3_basket/model_basket_get_all.dart';
-import 'package:shopping/data/network/base_url.dart';
+import 'package:shopping/data/network/internet_3_basket/get_basket_list.dart';
 
 final getOrder =
     StateNotifierProvider<BasketNotifierState, ModelBasketList>((ref) {
@@ -18,34 +18,25 @@ class BasketNotifierState extends StateNotifier<ModelBasketList> {
   }
 
   var box = Hive.box("online");
-
-  String getIpOrToken() {
-    if (box.get("token").toString().length > 20) {
-      return "Bearer ${box.get("token")}";
-    } else {
-      return box.get("ipAddressPhone").toString();
-    }
-  }
-
-  String getIpOrTokenWithOutBearer() {
-    if (box.get("token").toString().length > 20) {
-      return box.get("token");
-    } else {
-      return box.get("ipAddressPhone").toString();
-    }
-  }
-
   var dio = Dio();
+
+  InternetGetBasketList internetGetBasketList = InternetGetBasketList();
 
   Future getBasketList() async {
     try {
-      log("https://uzbazar.husanibragimov.uz/api/v1/web/carts/?session_id=${getIpOrTokenWithOutBearer()}");
-      Response response = await dio.get(
-          "${BaseClass.url}api/v1/web/carts/?session_id=${getIpOrTokenWithOutBearer()}");
-      ModelBasketList modelBasketList = ModelBasketList.fromJson(response.data);
+      state = state.copyWith("0", "0", "0", "0", "0", []);
+
+      var modelBasketList = await internetGetBasketList.getDataBasketList();
+
       state = state.copyWith(modelBasketList.count, modelBasketList.next,
-          modelBasketList.previous, modelBasketList.results);
-    } catch (e) {
+          modelBasketList.previous, "", "1", modelBasketList.results);
+    } on DioException catch (e) {
+      try {
+        state = state.copyWith(
+            "0", "0", "0", e.response!.statusCode.toString(), "2", []);
+      } catch (e) {
+        state = state.copyWith("0", "0", "0", "error", "2", []);
+      }
       log(e.toString());
     }
   }
@@ -54,8 +45,12 @@ class BasketNotifierState extends StateNotifier<ModelBasketList> {
     try {
       List<ResultBasketList> results = [...state.results];
       results.removeWhere((element) => element.product.id.toString() == id);
-      state = state.copyWith(state.count, state.next, state.previous, results);
-    } catch (e) {}
+      state =
+          state.copyWith(state.count, state.next, state.previous, "","1", results);
+    } catch (e) {
+      // state =
+      //     state.copyWith(state.count, state.next, state.previous, "","3", results);
+    }
   }
 
   orderRequest() async {

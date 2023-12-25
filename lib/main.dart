@@ -1,6 +1,8 @@
-  // ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable
 
 import 'dart:io';
+
+import 'package:connection_notifier/connection_notifier.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,20 +38,18 @@ Future main() async {
   ]).then(
     (_) => runApp(
       EasyLocalization(
-        supportedLocales: const [
-          Locale('en', 'EN'),
-          Locale('ru', 'RU'),
-          Locale('uz', 'UZ'),
-        ],
-        path: 'assets/lang',
-        fallbackLocale: const Locale('uz', 'UZ'),
-        child:
-        ProviderScope(child: MyApp(),)
-
-      ),
+          supportedLocales: const [
+            Locale('en', 'EN'),
+            Locale('ru', 'RU'),
+            Locale('uz', 'UZ'),
+          ],
+          path: 'assets/lang',
+          fallbackLocale: const Locale('uz', 'UZ'),
+          child: ProviderScope(
+            child: MyApp(),
+          )),
     ),
   );
-
 }
 
 class MyApp extends StatelessWidget {
@@ -62,31 +62,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return
-      // ConnectionNotifier(
-      // connectionNotificationOptions: ConnectionNotificationOptions(),
-      // disconnectedContent: const Center(
-      //     child: Row(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Icon(Icons.signal_wifi_connected_no_internet_4),
-      //     SizedBox(width: 10),
-      //     Text("Internet", style: TextStyle(fontWeight: FontWeight.w600)),
-      //   ],
-      // )),
-      // connectedContent: const Center(
-      //     child: Row(
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Icon(CupertinoIcons.check_mark_circled_solid),
-      //     SizedBox(width: 10),
-      //     Text("Internet", style: TextStyle(fontWeight: FontWeight.w600)),
-      //   ],
-      // )),
-      // child:
-      MaterialApp(
+    return ConnectionNotifier(
+      connectionNotificationOptions:
+          const ConnectionNotificationOptions(disconnectedText: "Internet",
+          connectedText: "Internet",
+            alignment: Alignment.bottomCenter
+          ),
+      child: MaterialApp(
           navigatorKey: navigatorKey,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
@@ -96,9 +78,10 @@ class MyApp extends StatelessWidget {
                   box.get("language") == "2" ||
                   box.get("language") == "3"
               ? //MainPages()//
-        RootPage(homeIdMainpage: 0)
-              :  EnterFirst0(windowId: "0",)
-      // ),
+              RootPage(homeIdMainpage: 0)
+              : EnterFirst0(
+                  windowId: "0",
+                )),
     );
   }
 }

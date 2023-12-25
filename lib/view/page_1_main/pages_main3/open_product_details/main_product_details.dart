@@ -436,7 +436,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     Visibility(
                       visible: widget.boolShowStore,
                       child: SizedBox(
-                        height: 100,
+                        height: 120,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: Container(
@@ -517,6 +517,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                                   LineIcons.alternateStore),
                                               Text(
                                                 "store".tr(),
+                                                maxLines: 2,
                                                 style: const TextStyle(
                                                     fontSize: 12),
                                               )
@@ -583,7 +584,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     ),
 
                     SizedBox(
-                      height: 330,
+                      height: 360,
                       child: SimilarItems(
                           idDetail: widget.modelDetails.type.toString()),
                     ),
@@ -592,7 +593,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     SizedBox(
-                      height: 330,
+                      height: 360,
                       child: ReviewItems(
                           type: widget.modelDetails.type.toString()),
                     ),
@@ -608,34 +609,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
               color: Colors.grey[50], borderRadius: BorderRadius.circular(10)),
-          child:
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              // Row(
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: [
-              //     IconButton(
-              //         onPressed: () {
-              //           if (ref.watch(countMiniDetailsPage.notifier).state >
-              //               1) {
-              //             ref.watch(countMiniDetailsPage.notifier).state--;
-              //           }
-              //         },
-              //         icon: const Icon(Icons.remove)),
-              //     const SizedBox(width: 12),
-              //     Text(ref.watch(countMiniDetailsPage).toString(),
-              //         style: const TextStyle(fontWeight: FontWeight.bold)),
-              //     const SizedBox(width: 12),
-              //     IconButton(
-              //         onPressed: () {
-              //           ref.watch(countMiniDetailsPage.notifier).state++;
-              //         },
-              //         icon: const Icon(Icons.add)),
-              //   ],
-              // ),
-              MaterialButton(
+          child: MaterialButton(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
             color: Colors.red,
@@ -697,8 +671,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
       ref.read(sendServer.notifier).setCartWithProductId(
           idProduct: idProduct,
           sizeId: ref.read(sizeId),
-
-          colorId:ref.read(colorId) ,
+          colorId: ref.read(colorId),
           colorProduct: ref.read(colorSelectProductPage),
           countProduct: ref.read(countMiniDetailsPage).toString(),
           sizeProduct: ref.read(sizeSelectProductPage));
@@ -805,7 +778,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
             child: IconButton(
               padding: const EdgeInsets.all(0),
               onPressed: () {
-                Share.share('https://uzbek-bazar.vercel.app/product/details/${widget.modelDetails.id}');
+                Share.share(
+                    'https://uzbek-bazar.vercel.app/product/details/${widget.modelDetails.id}');
               },
               icon: const Icon(
                 Icons.share,
@@ -861,7 +835,7 @@ class ExpandableText extends StatelessWidget {
       expanded: Text(
         text.toString(),
         softWrap: true,
-        style: TextStyle(color: Colors.black, fontSize: 16),
+        style: const TextStyle(color: Colors.black, fontSize: 16),
       ),
       theme: const ExpandableThemeData(
         iconSize: 30,

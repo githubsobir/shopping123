@@ -19,17 +19,38 @@ String modelCategoryGetToJson(ModelCategoryGet data) =>
     json.encode(data.toJson());
 
 class ModelCategoryGet {
-  int count;
+  dynamic count;
   dynamic next;
   dynamic previous;
+  dynamic boolDownload;
+  dynamic errorText;
   List<Result> results;
 
   ModelCategoryGet({
-    required this.count,
+    this.count,
     this.next,
     this.previous,
+    this.boolDownload,
+    this.errorText,
     required this.results,
   });
+
+  ModelCategoryGet copyWith(
+    dynamic count,
+    dynamic next,
+    dynamic previous,
+    dynamic boolDownload,
+    dynamic errorText,
+    List<Result> result,
+  ) {
+    return ModelCategoryGet(
+        boolDownload: boolDownload ?? this.boolDownload,
+        errorText: errorText ?? this.errorText,
+        count: count ?? this.count,
+        next: next ?? this.next,
+        previous: previous ?? this.previous,
+        results: result);
+  }
 
   factory ModelCategoryGet.fromJson(Map<String, dynamic> json) =>
       ModelCategoryGet(
@@ -85,16 +106,12 @@ class Result {
 class CategoryNotifier extends StateNotifier<ModelProductList> {
   var box = Hive.box("online");
 
-  // box.get("parentId");
-
   CategoryNotifier()
       : super(
             ModelProductList(count: "", next: "", previous: "", results: [])) {
-    log("Konstruktor open page ---");
     getDataCategoryPage(
         modelSearch: ModelSearch(category: box.get("categoryId")));
   }
-
 
   String getIpOrToken() {
     if (box.get("token").toString().length > 20) {
@@ -117,7 +134,6 @@ class CategoryNotifier extends StateNotifier<ModelProductList> {
 
   Future<ModelProductList> getDataCategoryPage(
       {required ModelSearch modelSearch}) async {
-
     var dio = Dio();
     List<ResultProductList> listProduct2 = [];
     if (modelSearch.page.toString() == "1" ||
@@ -127,8 +143,7 @@ class CategoryNotifier extends StateNotifier<ModelProductList> {
     }
     Response response = await dio.get(
         "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
-        options: Options(
-            headers: {"X-Access-Token": getIpOrToken()}));
+        options: Options(headers: {"X-Access-Token": getIpOrToken()}));
     try {
       modelProductListForCategory = ModelProductList.fromJson(response.data);
 
@@ -180,5 +195,4 @@ class CategoryNotifier extends StateNotifier<ModelProductList> {
     }
     state = state.copyWith(results: updateOrder);
   }
-
 }

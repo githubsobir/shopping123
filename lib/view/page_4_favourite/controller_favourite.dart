@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:shopping/data/model/model_4_favourite/model_favourite.dart';
+import 'package:shopping/data/network/base_url.dart';
 import 'package:shopping/data/network/internet_4_favourite/internet_favourite_list.dart';
 
 final getFavouriteList =
@@ -21,156 +25,81 @@ class FavoriteStateNotifier extends StateNotifier<ModelFavouriteStateNotifier> {
 
   Future getFavouriteListFirst() async {
     try {
-      log("123");
-      state = state.copyWith("", "", "", false, []);
+      state = state.copyWith("", "", "", "0", "", []);
       String dataFavourite = await getFavouriteList.getDataFavouriteList();
-
+      log("istaklar server murojaat");
+      log(dataFavourite);
       ModelFavouriteStateNotifier modelFavouriteStateNotifier =
           ModelFavouriteStateNotifier.fromJson(jsonDecode(dataFavourite));
       state = state.copyWith(
           modelFavouriteStateNotifier.count.toString(),
           modelFavouriteStateNotifier.next.toString(),
           modelFavouriteStateNotifier.previous.toString(),
-          true,
+          "1",
+          "",
           modelFavouriteStateNotifier.results);
-      log("@@@");
-      log(state.results.length.toString());
-      log(state.results[0].product.toString());
-      log("@@@");
-    } catch (e) {
-      log(e.toString());
+    } on DioException catch (e) {
+     try {
+        state = state
+            .copyWith("", "", "", "3", e.response!.statusCode.toString(), []);
+      }catch(e){
+       state = state
+           .copyWith("", "", "", "3", e.toString(), []);
+     }
+      log(e.response!.statusCode.toString());
     }
   }
 
   setFavouriteList({required ResultModelNotifier resultModelNotifier}) {
     List<ResultModelNotifier> listResult = [];
-    log(resultModelNotifier.isActive.toString());
     listResult = state.results;
-    log(resultModelNotifier.isActive.toString());
-    log("message controller favourite");
+
     if (!resultModelNotifier.isActive) {
       listResult.removeWhere((element) => element.id == resultModelNotifier.id);
     } else {
+
       listResult.add(resultModelNotifier);
     }
     state = state.copyWith(
-        state.count, state.next, state.previous, true, listResult);
-  }
-}
-
-class ModelFavouriteStateNotifier {
-  dynamic count;
-  dynamic next;
-  dynamic previous;
-  dynamic boolDownloadCheck1;
-
-  List<ResultModelNotifier> results;
-
-  ModelFavouriteStateNotifier({
-    this.count,
-    this.next,
-    this.previous,
-    required this.results,
-    this.boolDownloadCheck1,
-  });
-
-  ModelFavouriteStateNotifier copyWith(
-    dynamic count,
-    dynamic next,
-    dynamic previous,
-    dynamic boolDownloadCheck1,
-    List<ResultModelNotifier> results,
-  ) {
-    return ModelFavouriteStateNotifier(
-        count: count,
-        next: next,
-        previous: previous,
-        boolDownloadCheck1: boolDownloadCheck1,
-        results: results);
+        state.count, state.next, state.previous, true, "",listResult);
   }
 
-  factory ModelFavouriteStateNotifier.fromJson(Map<String, dynamic> json) =>
-      ModelFavouriteStateNotifier(
-        count: json["count"],
-        next: json["next"],
-        previous: json["previous"],
-        results: List<ResultModelNotifier>.from(
-            json["results"].map((x) => ResultModelNotifier.fromJson(x))),
-      );
+  /// layklarni serverga yuborish qo'shish
 
-  Map<String, dynamic> toJson() => {
-        "count": count,
-        "next": next,
-        "previous": previous,
-        "results": List<dynamic>.from(results.map((x) => x.toJson())),
-      };
-}
+  var dio = Dio();
+  Future setFavoritesServer({required String idProduct}) async {
+    try {
+      log("setFavoritesServer");
+      Response response = await dio.post(
+          "${BaseClass.url}api/v1/web/favorites/",
+          options: Options(headers: {"Authorization": getIpOrToken()}),
+          data: {
+            "session_id": getIpOrTokenWithOutBearer(),
+            "product": idProduct,
+          });
 
-class ResultModelNotifier {
-  dynamic id;
-  Product product;
-  dynamic updatedAt;
-  dynamic createdAt;
-  dynamic sessionId;
-  dynamic isActive;
-  dynamic user;
+      log(response.data.toString());
+    } catch (e) {
+      log(e.toString());
+      return "";
+    }
+  }
 
-  ResultModelNotifier({
-    this.id,
-    required this.product,
-    this.updatedAt,
-    this.createdAt,
-    this.sessionId,
-    this.isActive,
-    this.user,
-  });
+  var box = Hive.box("online");
 
-  factory ResultModelNotifier.fromJson(Map<String, dynamic> json) =>
-      ResultModelNotifier(
-        id: json["id"],
-        product: Product.fromJson(json["product"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        createdAt: DateTime.parse(json["created_at"]),
-        sessionId: json["session_id"],
-        isActive: json["is_active"],
-        user: json["user"],
-      );
+  String getIpOrToken() {
+    if (box.get("token").toString().length > 20) {
+      return "Bearer ${box.get("token")}";
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "product": product.toJson(),
-        "updated_at": updatedAt.toIso8601String(),
-        "created_at": createdAt.toIso8601String(),
-        "session_id": sessionId,
-        "is_active": isActive,
-        "user": user,
-      };
-}
-
-class Product {
-  dynamic id;
-  dynamic name;
-  dynamic price;
-  dynamic photo;
-
-  Product({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.photo,
-  });
-
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        name: json["name"],
-        price: json["price"],
-        photo: json["photo"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "price": price,
-        "photo": photo,
-      };
+  String getIpOrTokenWithOutBearer() {
+    if (box.get("token").toString().length > 20) {
+      return box.get("token");
+    } else {
+      return box.get("ipAddressPhone").toString();
+    }
+  }
 }

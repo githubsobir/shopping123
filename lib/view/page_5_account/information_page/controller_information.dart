@@ -5,7 +5,7 @@ import 'package:shopping/data/network/internet_5_account/internet_account_info.d
 final apiAccountInfo =
     Provider<InternetAccountInformation>((ref) => InternetAccountInformation());
 
-final getAccountInfo = FutureProvider<ModelAccountInformation>((ref) {
-  // log(ref.read(apiCategory).getCategory().toString());
+final getAccountInfo = FutureProvider.autoDispose<ModelAccountInformation>((ref) {
+
   return ref.read(apiAccountInfo).getInformation();
 });

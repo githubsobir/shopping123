@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping/data/model/model_4_favourite/model_favourite.dart';
 import 'package:shopping/view/page_0_root/controller_root_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_4_favourite/controller_favourite.dart';

@@ -1,11 +1,11 @@
 class ModelAccountInformation {
-  int count;
+  dynamic count;
   dynamic next;
   dynamic previous;
   List<Result> results;
 
   ModelAccountInformation({
-    required this.count,
+     this.count,
     this.next,
     this.previous,
     required this.results,
@@ -27,28 +27,28 @@ class ModelAccountInformation {
 }
 
 class Result {
-  int id;
-  DateTime updatedAt;
-  DateTime createdAt;
-  String question;
-  String answer;
-  int product;
-  int client;
+ dynamic id;
+ dynamic updatedAt;
+ dynamic createdAt;
+ dynamic question;
+ dynamic answer;
+ dynamic product;
+ dynamic client;
 
   Result({
-    required this.id,
-    required this.updatedAt,
-    required this.createdAt,
-    required this.question,
-    required this.answer,
-    required this.product,
-    required this.client,
+   this.id,
+   this.updatedAt,
+   this.createdAt,
+   this.question,
+   this.answer,
+   this.product,
+   this.client,
   });
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     id: json["id"],
-    updatedAt: DateTime.parse(json["updated_at"]),
-    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt:json["updated_at"],
+    createdAt: json["created_at"],
     question: json["question"],
     answer: json["answer"],
     product: json["product"],
