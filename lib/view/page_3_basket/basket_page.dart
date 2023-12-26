@@ -367,10 +367,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
                         productName: "Savatdagi barchasiga buyrutma berish",
                         id: "");
                   } else {
-                    dialogNoToken(
-                        noToken:
-                            "Xizmatdan foydalanish uchun ro'yxatdan o'ting yoki login / parol orqali kiring",
-                        id: "");
+             MyWidgets.dialogNoToken(context: context);
                   }
                 },
                 backgroundColor: Colors.red,
@@ -439,61 +436,7 @@ class _BasketPageState extends ConsumerState<BasketPage> {
         .show();
   }
 
-  dialogNoToken({required String noToken, required String id}) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        title: const Text("Uzbek Bazar",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-        actions: [
-          const Text(
-            "Xizmatdan foydalanish uchun ro'yxatdan o'ting yoki login / parol orqali kiring",
-            style: TextStyle(fontWeight: FontWeight.w600),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 30),
-          MaterialButton(
-            height: 50,
-          color: Colors.white,
-            elevation: 0.7,
-            minWidth: double.infinity,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => EnterFirst(windowIdEnterFirst: "1"),
-                  ));
-            },
-            child: const Text("Login / parol orqali kirish"),
-          ),
-          const SizedBox(height: 15),
-          const Align(
-              alignment: Alignment.center,
-              child: Text("- YOKI -", textAlign: TextAlign.center)),
-          const SizedBox(height: 15),
-          MaterialButton(
-            minWidth: double.infinity,
-            height: 50,
 
-            color: Colors.grey.shade200,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => SignUp(),
-                  ));
-            },
-            child: const Text(
-              "Ro'yxatdan o'tish",
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   String getCostAll({required String count, required String cost}) {
     double allCost = double.parse(count) * double.parse(cost);

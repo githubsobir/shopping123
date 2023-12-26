@@ -1,10 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_0_root/controller_root_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/mini_details.dart';
+import 'package:shopping/view/page_5_account/identification_page/enter_first/enter_first.dart';
+import 'package:shopping/view/page_5_account/identification_page/sign_up/sign_up.dart';
 import 'package:shopping/widgets/colors/app_colors.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -141,6 +144,62 @@ class MyWidgets {
     "98",
     "99"
   ];
+
+  static dialogNoToken({required BuildContext context}) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        title: const Text("Uzbek Bazar",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+        actions: [
+          const Text(
+            "Xizmatdan foydalanish uchun ro'yxatdan o'ting yoki login / parol orqali kiring",
+            style: TextStyle(fontWeight: FontWeight.w600),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 30),
+          MaterialButton(
+            height: 50,
+            color: Colors.white,
+            elevation: 0.7,
+            minWidth: double.infinity,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => EnterFirst(windowIdEnterFirst: "1"),
+                  ));
+            },
+            child: const Text("Login / parol orqali kirish"),
+          ),
+          const SizedBox(height: 15),
+          const Align(
+              alignment: Alignment.center,
+              child: Text("- YOKI -", textAlign: TextAlign.center)),
+          const SizedBox(height: 15),
+          MaterialButton(
+            minWidth: double.infinity,
+            height: 50,
+
+            color: Colors.grey.shade200,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => SignUp(),
+                  ));
+            },
+            child: const Text(
+              "Ro'yxatdan o'tish",
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   static String returnPhoneFormat({required String phoneNumber}) {
     String p = "(${phoneNumber.substring(0, 2)})-";

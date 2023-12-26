@@ -23,6 +23,7 @@ import 'package:shopping/view/page_1_main/pages_main3/open_product_details/open_
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/rating_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/review_last.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/similar_items.dart';
+import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -648,15 +649,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   child: RatingPage(productName: productName));
             },
           )
-        : ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            backgroundColor: Colors.white,
-            duration: Duration(milliseconds: 1500),
-            content: Text(
-              "Ro'yxatdan o'tgan foydalanuvchilar izox qoldira oladi. ",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-          ));
+        : MyWidgets.dialogNoToken(context: context);
   }
 
   getActionCheck({required WidgetRef ref, required String idProduct}) {
