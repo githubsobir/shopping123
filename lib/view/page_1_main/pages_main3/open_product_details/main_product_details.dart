@@ -174,30 +174,30 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
                             Text(
-                              widget.modelDetails.price.toString(),
+                              "${widget.modelDetails.price} \$",
                               style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            Text(
-                              widget.modelDetails.price.toString(),
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black,
-                                decoration: TextDecoration.lineThrough,
-                              ),
-                            ),
+                            // const SizedBox(width: 10),
+                            // Text(
+                            //   widget.modelDetails.price.toString(),
+                            //   style: const TextStyle(
+                            //     fontSize: 16,
+                            //     fontWeight: FontWeight.w300,
+                            //     color: Colors.black,
+                            //     decoration: TextDecoration.lineThrough,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],
@@ -208,7 +208,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                     /// color list
                     Consumer(
                       builder: (context, ref, child) => Container(
-                        height: 75,
+                        height: 135,
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             color: ref.watch(noSelectColorMiniDetailsPage) == -1
@@ -219,9 +219,19 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Text("Material",
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
+                            Text(widget.modelDetails.material.toString()),
+                            const SizedBox(height: 4),
+                            const SizedBox(height: 10),
                             Text("chooseColor".tr(),
                                 style: const TextStyle(
-                                    color: Colors.black, fontSize: 15)),
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
                             const SizedBox(height: 4),
                             SizedBox(
                               height: 40,
@@ -236,91 +246,123 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                           padding:
                                               const EdgeInsets.only(right: 10),
                                           child: GestureDetector(
-                                            onTap: () {
-                                              ref
-                                                      .read(
-                                                          colorSelectProductPage
-                                                              .notifier)
-                                                      .state =
-                                                  widget.modelDetails
-                                                      .variables[index].id
-                                                      .toString();
-                                              ref
-                                                  .read(
-                                                      selectColorMiniDetailsPage
-                                                          .notifier)
-                                                  .state = index;
-                                              ref
-                                                  .read(
-                                                      noSelectColorMiniDetailsPage
-                                                          .notifier)
-                                                  .state = -1;
-                                              log(imageAllUrl
-                                                  .indexWhere((item) =>
-                                                      item.color ==
-                                                      widget
-                                                          .modelDetails
-                                                          .variables[index]
-                                                          .color)
-                                                  .toString());
+                                              onTap: () {
+                                                ref
+                                                        .read(
+                                                            colorSelectProductPage
+                                                                .notifier)
+                                                        .state =
+                                                    widget.modelDetails
+                                                        .variables[index].id
+                                                        .toString();
+                                                ref
+                                                    .read(
+                                                        selectColorMiniDetailsPage
+                                                            .notifier)
+                                                    .state = index;
+                                                ref
+                                                    .read(
+                                                        noSelectColorMiniDetailsPage
+                                                            .notifier)
+                                                    .state = -1;
+                                                log(imageAllUrl
+                                                    .indexWhere((item) =>
+                                                        item.color ==
+                                                        widget
+                                                            .modelDetails
+                                                            .variables[index]
+                                                            .color)
+                                                    .toString());
 
-                                              ///
-                                              setState(() {
-                                                itemScrollController.jumpTo(
-                                                    index: imageAllUrl
-                                                        .indexWhere((item) =>
-                                                            item.color ==
-                                                            widget
-                                                                .modelDetails
-                                                                .variables[
-                                                                    index]
-                                                                .color));
-                                                selectColorIndex = index;
-                                              });
-                                            },
-                                            child: Container(
-                                              height: 40,
-                                              width: 40,
-                                              decoration: BoxDecoration(
-                                                border: ref.watch(
-                                                            selectColorMiniDetailsPage) ==
-                                                        index
-                                                    ? Border.all(
-                                                        width: 3,
-                                                        color: Colors.red,
-                                                      )
-                                                    : Border.all(
-                                                        width: 1,
-                                                        color: Colors.grey,
+                                                ///
+                                                setState(() {
+                                                  itemScrollController.jumpTo(
+                                                      index: imageAllUrl
+                                                          .indexWhere((item) =>
+                                                              item.color ==
+                                                              widget
+                                                                  .modelDetails
+                                                                  .variables[
+                                                                      index]
+                                                                  .color));
+                                                  selectColorIndex = index;
+                                                });
+                                              },
+                                              child: Stack(
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                      border: ref.watch(
+                                                                  selectColorMiniDetailsPage) ==
+                                                              index
+                                                          ? Border.all(
+                                                              width: 3,
+                                                              color: Colors.red,
+                                                            )
+                                                          : Border.all(
+                                                              width: 1,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                    ),
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              1.0),
+                                                      child: Container(
+                                                        height: 40,
+                                                        width: 40,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Color(int.parse(
+                                                                  widget
+                                                                      .modelDetails
+                                                                      .variables[
+                                                                          index]
+                                                                      .color
+                                                                      .substring(
+                                                                          1, 7),
+                                                                  radix: 16) +
+                                                              0xFF000000),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      100),
+                                                        ),
                                                       ),
-                                                borderRadius:
-                                                    BorderRadius.circular(100),
-                                              ),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(1.0),
-                                                child: Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: Color(int.parse(
-                                                            widget
-                                                                .modelDetails
-                                                                .variables[
-                                                                    index]
-                                                                .color
-                                                                .substring(
-                                                                    1, 7),
-                                                            radix: 16) +
-                                                        0xFF000000),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                                  widget
+                                                              .modelDetails
+                                                              .variables[index]
+                                                              .quantity
+                                                              .toString() ==
+                                                          "0"
+                                                      ? Container(
+                                                          height: 40,
+                                                          width: 40,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white
+                                                                .withOpacity(
+                                                                    0.5),
+                                                          ),
+                                                          child: Icon(
+                                                              Icons
+                                                                  .not_interested,
+                                                              color: Colors
+                                                                  .white
+                                                                  .withOpacity(
+                                                                      0.8)),
+                                                        )
+                                                      : SizedBox()
+                                                ],
+                                              )),
                                         )
                                       : const SizedBox.shrink();
                                 },
@@ -431,6 +473,75 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           )
                         : const SizedBox.shrink(),
                     const SizedBox(height: 10),
+                    Container(
+                      height: 40,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          Card(
+                            color: Colors.white,
+                            margin: const EdgeInsets.all(3),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("brand: "),
+                                  Text(widget.modelDetails.brand.toString()),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            margin: const EdgeInsets.all(3),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("gender: "),
+                                  Text(widget.modelDetails.gender.toString()),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            margin: const EdgeInsets.all(3),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("season: "),
+                                  Text(widget.modelDetails.season.toString()),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Card(
+                            color: Colors.white,
+                            margin: const EdgeInsets.all(3),
+                            child: Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("type: "),
+                                  Text(widget.modelDetails.type.toString()),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
 
                     /// store
 
@@ -703,25 +814,28 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   return Stack(
                     children: [
                       index.toString() != "-1"
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                  filterQuality: FilterQuality.high,
-                                  width: MediaQuery.of(context).size.width,
-                                  fit: BoxFit.fitWidth,
-                                  alignment: Alignment.topCenter,
-                                  imageUrl: images[index].image,
-                                  errorWidget: (context, url, text) {
-                                    return Center(
-                                      child: Image.asset(
-                                        "assets/images/image_for_error.png",
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  },
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          const LoadingShimmer()),
+                          ? Container(
+                              margin: const EdgeInsets.all(3),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: CachedNetworkImage(
+                                    filterQuality: FilterQuality.high,
+                                    width: MediaQuery.of(context).size.width,
+                                    fit: BoxFit.fitWidth,
+                                    alignment: Alignment.topCenter,
+                                    imageUrl: images[index].image,
+                                    errorWidget: (context, url, text) {
+                                      return Center(
+                                        child: Image.asset(
+                                          "assets/images/image_for_error.png",
+                                          fit: BoxFit.cover,
+                                        ),
+                                      );
+                                    },
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            const LoadingShimmer()),
+                              ),
                             )
                           : Align(
                               alignment: Alignment.topCenter,
@@ -739,16 +853,35 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       index.toString() != "-1"
                           ? Align(
                               alignment: Alignment.bottomRight,
-                              child: Padding(
+                              child: Container(
                                 padding: const EdgeInsets.all(8.0),
+                                margin: const EdgeInsets.all(2),
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle),
                                 child: Text(
-                                  images[index].quantity.toString(),
+                                  "${images[index].quantity}\nta bor",
+                                  textAlign: TextAlign.center,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ))
-                          : const SizedBox.shrink()
+                          : const SizedBox.shrink(),
+                      Container(
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.white.withOpacity(
+                              images[index].quantity.toString() == "0"
+                                  ? 0.3
+                                  : 0),
+                          child: Center(
+                              child: images[index].quantity.toString() == "0"
+                                  ? Icon(
+                                      Icons.not_interested,
+                                      size: 100,
+                                      color: Colors.white.withOpacity(0.4),
+                                    )
+                                  : const SizedBox.shrink())),
                     ],
                   );
                 },

@@ -8,9 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_details/model_details.dart';
-import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
-import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
 
@@ -64,16 +62,16 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
 
   @override
   Widget build(BuildContext context) {
-    // final getDataSearch = ref.watch(getLastViews);
+
     return SafeArea(
         child: Container(
-          margin:const EdgeInsets.fromLTRB(0, 0,0,10),
-          child: ListView.builder(
-                itemCount: listModelDetails.length,
-                scrollDirection: Axis.horizontal,
-                // itemBuilder: (context, index) =>
-                //     Text(getDataSearch.results[index].name.toString()),
-                itemBuilder: (context, index) => index < listModelDetails.length
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+      child: ListView.builder(
+        itemCount: listModelDetails.length,
+        scrollDirection: Axis.horizontal,
+        // itemBuilder: (context, index) =>
+        //     Text(getDataSearch.results[index].name.toString()),
+        itemBuilder: (context, index) => index < listModelDetails.length
             ? GestureDetector(
                 onTap: () {
                   MyWidgets.getDefaultStateDetailPage(ref: ref);
@@ -128,8 +126,7 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                                           Image.network(
                                         listModelDetails[index]
                                                 .variables[index2]
-                                                .media
-                                                .isNotEmpty
+                                                .media.isNotEmpty
                                             ? listModelDetails[index]
                                                     .variables[0]
                                                     .media[index2]
@@ -137,17 +134,19 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                                                 "https://salon.fgl.su/image/icons/delivery-6.png"
                                             : "https://salon.fgl.su/image/icons/delivery-6.png",
                                         height: 200,
-                                        width: MediaQuery.of(context).size.width *
-                                            0.4,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.4,
                                         fit: BoxFit.cover,
                                         alignment: Alignment.topCenter,
                                         errorBuilder:
                                             (context, error, stackTrace) =>
                                                 SizedBox(
                                           height: 150,
-                                          width:
-                                              MediaQuery.of(context).size.width *
-                                                  0.4,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.4,
                                           child: Image.asset(
                                               "assets/images/shopping1.png"),
                                         ),
@@ -160,19 +159,20 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                                 padding:
                                     const EdgeInsets.fromLTRB(10, 10, 10, 15.0),
                                 child: Align(
-                                    alignment: Alignment.topRight,
-                                    child:  GestureDetector(
-                                      onTap: () {
-                                        ///delete
-                                        deleteLastView(index);
-                                        setState(() {});
-                                      },
-                                      child:const Icon(
-                                        Icons.delete_outline_sharp,
-                                        color: Colors.red,
-                                        size: 24,
-                                      ),
-                                    ),),
+                                  alignment: Alignment.topRight,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ///delete
+                                      deleteLastView(index);
+                                      setState(() {});
+                                    },
+                                    child: const Icon(
+                                      Icons.delete_outline_sharp,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ),
                               )
                             ],
                           ),
@@ -212,7 +212,6 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("${listModelDetails[index].price} \$"),
-
                               ],
                             ),
                           ),
@@ -227,7 +226,7 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                 //         color: Colors.blue, child: Text(data[index].fanName)))
               )
             : const LoadingShimmer(),
-              ),
-        ));
+      ),
+    ));
   }
 }
