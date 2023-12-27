@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
@@ -45,9 +46,10 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                 log(index.toString());
               },
               child: Container(
-                padding: const EdgeInsets.fromLTRB(1, 1, 1, 0),
-                margin: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                padding: const EdgeInsets.fromLTRB(1, 1, 4, 0),
+                margin: const EdgeInsets.fromLTRB(3, 5, 3, 0),
                 decoration: BoxDecoration(
+                  // border: Border.all(color: Colors.grey.shade100),
                   boxShadow: const [
                     BoxShadow(
                         color: Color.fromARGB(232, 252, 243, 215),
@@ -71,28 +73,32 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                           children: [
                             SingleChildScrollView(
                               physics: const NeverScrollableScrollPhysics(),
-                              child: Image.network(
-                                getDataSearch.results[index].photo ??
-                                    "https://salon.fgl.su/image/icons/delivery-6.png",
-                                height: 200,
-                                alignment: Alignment.topCenter,
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    SizedBox(
-                                  height: 150,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.4,
-                                  child: Image.asset(
-                                      "assets/images/shopping1.png"),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: CachedNetworkImage(
+                                  imageUrl: 
+                                  getDataSearch.results[index].photo ??
+                                      "https://salon.fgl.su/image/icons/delivery-6.png",
+                                  height: 200,
+                                  alignment: Alignment.topCenter,
+                                  width: MediaQuery.of(context).size.width * 0.4,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, error, stackTrace) =>
+                                      SizedBox(
+                                    height: 150,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Image.asset(
+                                        "assets/images/shopping1.png"),
+                                  ),
+                                  // height: 100,
+                                  // width: 150,
                                 ),
-                                // height: 100,
-                                // width: 150,
                               ),
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.fromLTRB(10, 10, 10, 15.0),
+                                  const EdgeInsets.fromLTRB(10, 5, 5, 5.0),
                               child: Align(
                                   alignment: Alignment.topRight,
                                   child: GestureDetector(
@@ -113,11 +119,19 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                                                     .notifier)
                                             .updateFavourite(index);
                                       },
-                                      child: Icon(
-                                        getDataSearch.results[index].isFavorite
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        color: Colors.red,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(3),
+                                        decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white),
+                                        child: Icon(
+                                          getDataSearch.results[index].isFavorite
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color:
+                                          getDataSearch.results[index].isFavorite?Colors.red:
+                                          Colors.grey,
+                                        ),
                                       ))),
                             )
                           ],
@@ -145,9 +159,9 @@ class _SimilarItemsState extends ConsumerState<SimilarItems> {
                                 color: Colors.amber,
                               ),
                               const SizedBox(width: 10),
-                              Text(getDataSearch.results[index].rating ?? "-",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
+                              Text(getDataSearch.results[index].rating.toString(),
+                                  style: const TextStyle(
+
                                       fontSize: 14)),
                             ],
                           )),

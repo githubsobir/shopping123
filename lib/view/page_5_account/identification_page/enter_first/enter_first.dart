@@ -60,10 +60,10 @@ class _EnterFirstState extends ConsumerState<EnterFirst> {
                   enterFirstBodyInput(
                     context: context,
                   ),
-                  const SizedBox(height: 20),
-                  forgotPassword(
-                    context: context,
-                  ),
+                  // const SizedBox(height: 20),
+                  // forgotPassword(
+                  //   context: context,
+                  // ),
                   const SizedBox(height: 20),
                   const SizedBox(height: 20),
                   // enterButton(

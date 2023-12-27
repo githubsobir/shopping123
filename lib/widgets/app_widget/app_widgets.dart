@@ -35,48 +35,15 @@ class MyWidgets {
     AwesomeDialog(context: context,
 
     title: "UZBEK BAZAR",
+      titleTextStyle:const TextStyle(fontWeight: FontWeight.w600, fontSize: 17) ,
       desc: text,
+      descTextStyle:const  TextStyle(fontWeight: FontWeight.w600),
       dialogType: DialogType.noHeader,
       btnOkOnPress: (){},
       btnOkColor: Colors.red,
       btnOkText: "ok".tr(),
       buttonsBorderRadius: BorderRadius.circular(10)
     ).show();
-
-    // showModalBottomSheet(
-    //   context: context,
-    //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-    //   backgroundColor: Colors.white,
-    //   builder: (context) {
-    //     return Container(
-    //         height: MediaQuery.of(context).size.height * 0.2,
-    //         margin: const EdgeInsets.all(10),
-    //         decoration: BoxDecoration(
-    //             color: Colors.white, borderRadius: BorderRadius.circular(10)),
-    //         child: Padding(
-    //             padding: const EdgeInsets.all(8.0),
-    //             child: Column(
-    //               mainAxisAlignment: MainAxisAlignment.start,
-    //               crossAxisAlignment: CrossAxisAlignment.center,
-    //
-    //               children: [
-    //                 Row(
-    //                   crossAxisAlignment: CrossAxisAlignment.center,
-    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //                   children: [
-    //                     const Text("", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-    //                     const Text("UZEKBAZAR", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-    //                      IconButton(icon: const Icon( Icons.cancel), onPressed: (){
-    //                      Navigator.of(context).pop();
-    //                     },)
-    //                   ],
-    //                 ),
-    //                 const SizedBox(height: 20),
-    //                 Text(text, style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 18 ), textAlign: TextAlign.center),
-    //               ],
-    //             )));
-    //   },
-    // ).then((value) {});
   }
 
   /// productni karzinkaga saqlash
@@ -155,9 +122,9 @@ class MyWidgets {
             textAlign: TextAlign.center,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         actions: [
-          const Text(
-            "Xizmatdan foydalanish uchun ro'yxatdan o'ting yoki login / parol orqali kiring",
-            style: TextStyle(fontWeight: FontWeight.w600),
+           Text(
+            "loginOrRegistration".tr(),
+            style: const TextStyle(fontWeight: FontWeight.w600),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 30),
@@ -173,12 +140,12 @@ class MyWidgets {
                     builder: (context) => EnterFirst(windowIdEnterFirst: "1"),
                   ));
             },
-            child: const Text("Login / parol orqali kirish"),
+            child:  Text("loginAndPass".tr()),
           ),
           const SizedBox(height: 15),
-          const Align(
+           Align(
               alignment: Alignment.center,
-              child: Text("- YOKI -", textAlign: TextAlign.center)),
+              child: Text("or".tr(), textAlign: TextAlign.center)),
           const SizedBox(height: 15),
           MaterialButton(
             minWidth: double.infinity,
@@ -192,8 +159,8 @@ class MyWidgets {
                     builder: (context) => SignUp(),
                   ));
             },
-            child: const Text(
-              "Ro'yxatdan o'tish",
+            child:  Text(
+              "registration".tr(),
             ),
           ),
         ],

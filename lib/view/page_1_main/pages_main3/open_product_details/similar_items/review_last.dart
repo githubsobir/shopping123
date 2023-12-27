@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
@@ -35,22 +36,17 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
 
   getData() async {
     try {
-      // await Future.delayed(Duration.zero);
       listModelDetails = box.get("listLastView").toString().length > 4
           ? (jsonDecode(box.get("listLastView")) as List)
               .map((e) => ModelDetails.fromJson(e))
               .toList()
           : [];
-      log("listModelDetails.length.toString()");
-      log(listModelDetails.length.toString());
     } catch (e) {
       log(e.toString());
     }
   }
 
   deleteLastView(int index) {
-    log(index.toString());
-
     listModelDetails = box.get("listLastView").toString().length > 4
         ? (jsonDecode(box.get("listLastView")) as List)
             .map((e) => ModelDetails.fromJson(e))
@@ -62,15 +58,12 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
 
   @override
   Widget build(BuildContext context) {
-
     return SafeArea(
         child: Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: ListView.builder(
         itemCount: listModelDetails.length,
         scrollDirection: Axis.horizontal,
-        // itemBuilder: (context, index) =>
-        //     Text(getDataSearch.results[index].name.toString()),
         itemBuilder: (context, index) => index < listModelDetails.length
             ? GestureDetector(
                 onTap: () {
@@ -123,41 +116,36 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                                           .variables
                                           .length,
                                       itemBuilder: (context, index2) =>
-                                          Image.network(
-                                        listModelDetails[index]
-                                                .variables[index2]
-                                                .media.isNotEmpty
-                                            ? listModelDetails[index]
-                                                    .variables[0]
-                                                    .media[index2]
-                                                    .file ??
-                                                "https://salon.fgl.su/image/icons/delivery-6.png"
-                                            : "https://salon.fgl.su/image/icons/delivery-6.png",
-                                        height: 200,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.4,
-                                        fit: BoxFit.cover,
-                                        alignment: Alignment.topCenter,
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                SizedBox(
-                                          height: 150,
+                                          ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: CachedNetworkImage(
+                                          imageUrl: getImageLink(index, index2),
+                                          height: 200,
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
                                               0.4,
-                                          child: Image.asset(
-                                              "assets/images/shopping1.png"),
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.topCenter,
+                                          errorWidget: (context, error,
+                                                  stackTrace) =>
+                                              SizedBox(
+                                                  height: 150,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.4,
+                                                  child: Image.asset(
+                                                      "assets/images/shopping1.png")),
+                                          // height: 100,
+                                          // width: 150,
                                         ),
-                                        // height: 100,
-                                        // width: 150,
                                       ),
                                     ),
                                   )),
                               Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(10, 10, 10, 15.0),
+                                    const EdgeInsets.fromLTRB(10, 5, 5, 15.0),
                                 child: Align(
                                   alignment: Alignment.topRight,
                                   child: GestureDetector(
@@ -166,10 +154,16 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                                       deleteLastView(index);
                                       setState(() {});
                                     },
-                                    child: const Icon(
-                                      Icons.delete_outline_sharp,
-                                      color: Colors.red,
-                                      size: 24,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle),
+                                      child: const Icon(
+                                        Icons.delete_outline_sharp,
+                                        color: Colors.grey,
+                                        size: 24,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -198,10 +192,8 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
                                   color: Colors.amber,
                                 ),
                                 const SizedBox(width: 10),
-                                Text(listModelDetails[index].rating ?? "-",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14)),
+                                Text(listModelDetails[index].rating.toString(),
+                                    style: const TextStyle(fontSize: 14)),
                               ],
                             )),
                         Padding(
@@ -228,5 +220,13 @@ class _ReviewItemsState extends ConsumerState<ReviewItems> {
             : const LoadingShimmer(),
       ),
     ));
+  }
+
+  String getImageLink(int index, int index2) {
+    try {
+      return listModelDetails[index].variables[0].media[index2].file;
+    } catch (e) {
+      return "";
+    }
   }
 }

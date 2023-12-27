@@ -5,8 +5,8 @@ import 'package:shopping/data/model/model_main_1_page/model_search.dart';
 
 class BaseClass {
   static String url = "https://uzbazar.husanibragimov.uz/";
-  // static String url = "https://api.uzbekbazar.exadot.io";
-  // static String url = "https://diyorbek23.pythonanywhere.com";
+  static String shareUrl = "https://uzbek-bazar.vercel.app/product/details/";
+
 
   var box = Hive.box("online");
   String getIpOrToken() {
@@ -115,9 +115,9 @@ class BaseClass {
           data = "gender=${m.gender}";
         }
       }
-      if (m.search.toString() != "null" && m.search.toString().isNotEmpty) {
+      if (m.search.toString() != "null") {
         if (data.isNotEmpty) {
-          data = "$data&search=${m.search}";
+          data = "$data&search=${m.search.toString().isEmpty?" ":m.search}";
         } else {
           data = "search=${m.search}";
         }

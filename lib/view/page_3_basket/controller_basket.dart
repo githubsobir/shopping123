@@ -27,9 +27,16 @@ class BasketNotifierState extends StateNotifier<ModelBasketList> {
       state = state.copyWith("0", "0", "0", "0", "0", []);
 
       var modelBasketList = await internetGetBasketList.getDataBasketList();
-
-      state = state.copyWith(modelBasketList.count, modelBasketList.next,
-          modelBasketList.previous, "", "1", modelBasketList.results);
+      modelBasketList.internetStatePosition != "2"
+          ? state = state.copyWith(modelBasketList.count, modelBasketList.next,
+              modelBasketList.previous, "", "1", modelBasketList.results)
+          : state = state.copyWith(
+              modelBasketList.count,
+              modelBasketList.next,
+              modelBasketList.previous,
+              modelBasketList.errorText,
+              "2",
+              modelBasketList.results);
     } on DioException catch (e) {
       try {
         state = state.copyWith(
@@ -45,8 +52,8 @@ class BasketNotifierState extends StateNotifier<ModelBasketList> {
     try {
       List<ResultBasketList> results = [...state.results];
       results.removeWhere((element) => element.product.id.toString() == id);
-      state =
-          state.copyWith(state.count, state.next, state.previous, "","1", results);
+      state = state.copyWith(
+          state.count, state.next, state.previous, "", "1", results);
     } catch (e) {
       // state =
       //     state.copyWith(state.count, state.next, state.previous, "","3", results);

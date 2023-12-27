@@ -349,7 +349,7 @@ class _SignUpState extends State<SignUp> {
                                         isActive: "1",
                                         fileImage: "1"));
                               }else{
-                                MyWidgets.bottomSheetUniversal(text: "Ma'lumot kiritishda xatolik qayta uruning.",context: context,);
+                                MyWidgets.bottomSheetUniversal(text: "errorInfoEnter".tr(),context: context,);
                               }
 
 

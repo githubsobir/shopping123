@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/main_product_details.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class DetailsPage extends StatefulWidget {
   String idProduct;
@@ -49,13 +50,13 @@ class _DatailsPageState extends State<DetailsPage> {
                   elevation: 0,
                 ),
                 Image.asset("assets/images/shopping1.png", fit: BoxFit.cover),
-                Text("Ma'lumot olishda xatolik"),
-                Text(""),
+                Text("errorGetInfo".tr()),
+
               ],
             ));
           }, loading: () {
-            return const Center(
-              child: Text("Loading..."),
+            return  Center(
+              child: Text("loading".tr()),
             );
           });
         },

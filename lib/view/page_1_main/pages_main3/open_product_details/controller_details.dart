@@ -22,7 +22,6 @@ final noSelectSizeMiniDetailsPage = StateProvider<int>((ref) => -1);
 final sizeSelectProductPage = StateProvider<String>((ref) => "");
 final colorSelectProductPage = StateProvider<String>((ref) => "");
 
-///
 
 final apiProviderDetails =
     Provider<InternetDetailsInformation>((ref) => InternetDetailsInformation());
@@ -37,20 +36,15 @@ final getDetails =
       await ref.read(apiProviderDetails).getDetailsInformation(id: id);
 
   try {
-    log("## 1");
     ref.read(getListDetails.notifier).state = modelDetails.variables;
-    log("## 2");
     List<ModelDetails> listModelDetails =
         box.get("listLastView").toString().length > 4
             ? (jsonDecode(box.get("listLastView")) as List)
                 .map((e) => ModelDetails.fromJson(e))
                 .toList()
             : [];
-    log("## 3");
     listModelDetails.add(modelDetails);
-    log("## 4");
     box.put("listLastView", jsonEncode(listModelDetails).toString());
-    log("## 5");
   } catch (e) {
     log(e.toString());
   }

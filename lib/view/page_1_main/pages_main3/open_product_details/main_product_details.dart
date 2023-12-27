@@ -15,12 +15,14 @@ import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shopping/data/model/model_details/model_details.dart';
+import 'package:shopping/data/network/base_url.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/app_bar_details/store_visibility.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/full_screen_view.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/mini_details/controller_mini_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/open_store_products/open_store_all_product.dart';
-import 'package:shopping/view/page_1_main/pages_main3/open_product_details/rating_page.dart';
+import 'package:shopping/view/page_1_main/pages_main3/open_product_details/rating/rating_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/review_last.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/similar_items/similar_items.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
@@ -103,7 +105,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Text(
                         widget.modelDetails.name.toString(),
-                        maxLines: 2,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
@@ -112,7 +114,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
+                   /// rating, like
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -142,7 +145,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 onRatingUpdate: (rating) {},
                               ),
                             ),
-                            Text(widget.index.toString()),
+                            Text(widget.modelDetails.rating.toString()),
                           ],
                         ),
 
@@ -175,32 +178,14 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       ],
                     ),
                     const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              "${widget.modelDetails.price} \$",
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                            // const SizedBox(width: 10),
-                            // Text(
-                            //   widget.modelDetails.price.toString(),
-                            //   style: const TextStyle(
-                            //     fontSize: 16,
-                            //     fontWeight: FontWeight.w300,
-                            //     color: Colors.black,
-                            //     decoration: TextDecoration.lineThrough,
-                            //   ),
-                            // ),
-                          ],
-                        ),
-                      ],
+                    /// narxi
+                    Text(
+                      "${widget.modelDetails.price} \$",
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
                     const Divider(color: Color(0xffbbbaba), thickness: 1),
                     const SizedBox(height: 10),
@@ -219,14 +204,15 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Material",
+                            Text("material".tr(),
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15)),
                             Text(widget.modelDetails.material.toString()),
-                            const SizedBox(height: 4),
+
                             const SizedBox(height: 10),
+                            /// rang tanlash
                             Text("chooseColor".tr(),
                                 style: const TextStyle(
                                     color: Colors.black,
@@ -373,9 +359,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-
-                    /// size list
-                    ///
+                    /// o'lcham tanlash
                     widget.modelDetails.size.isNotEmpty
                         ? Consumer(
                             builder: (context, ref, child) => Container(
@@ -473,7 +457,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                           )
                         : const SizedBox.shrink(),
                     const SizedBox(height: 10),
-                    Container(
+                    SizedBox(
                       height: 40,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
@@ -487,7 +471,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("brand: "),
+                                  Text("brand".tr()),
                                   Text(widget.modelDetails.brand.toString()),
                                 ],
                               ),
@@ -502,7 +486,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("gender: "),
+                                  Text("gender".tr()),
                                   Text(widget.modelDetails.gender.toString()),
                                 ],
                               ),
@@ -517,7 +501,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("season: "),
+                                  Text("season".tr()),
                                   Text(widget.modelDetails.season.toString()),
                                 ],
                               ),
@@ -532,154 +516,33 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text("type: "),
+                                  Text("type".tr()),
                                   Text(widget.modelDetails.type.toString()),
                                 ],
                               ),
                             ),
                           ),
-
                         ],
                       ),
                     ),
 
                     /// store
-
-                    Visibility(
-                      visible: widget.boolShowStore,
-                      child: SizedBox(
-                        height: 120,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Container(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("seller".tr()),
-                                Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration:
-                                      BoxDecoration(color: Colors.grey.shade50),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const Icon(
-                                            Icons.person_outline,
-                                            size: 24,
-                                            color: Colors.black,
-                                          ),
-                                          // Text(
-                                          //   "seller".tr(),
-                                          //   style:const TextStyle(
-                                          //       color: Colors.black,
-                                          //       fontSize: 18,
-                                          //       fontWeight: FontWeight.w500),
-                                          // ),
-                                          const SizedBox(width: 5),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.3,
-                                            child: Text(
-                                              widget.modelDetails.organization
-                                                  .toString(),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 2,
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: 45,
-                                        child: MaterialButton(
-                                          padding:
-                                              const EdgeInsets.only(left: 0),
-                                          onPressed: () {
-                                            pushNewScreen(context,
-                                                screen: OpenStoreAllProduct(
-                                                  categoryId: widget
-                                                      .modelDetails.category
-                                                      .toString(),
-                                                  parentId: widget
-                                                      .modelDetails.id
-                                                      .toString(),
-                                                  categoryName:
-                                                      widget.modelDetails.name,
-                                                  organization: widget
-                                                      .modelDetails.organization
-                                                      .toString(),
-                                                ));
-                                          },
-                                          child: Column(
-                                            children: [
-                                              const Icon(
-                                                  LineIcons.alternateStore),
-                                              Text(
-                                                "store".tr(),
-                                                maxLines: 2,
-                                                style: const TextStyle(
-                                                    fontSize: 12),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 1),
-                                      const SizedBox(width: 1),
-                                      Container(
-                                        height: 40,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.green,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: InkWell(
-                                          onTap: () {
-                                            launchUrl(Uri(
-                                                scheme: "tel",
-                                                path: "+998901234567"));
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              const Icon(
-                                                LineIcons.alternatePhone,
-                                                color: Colors.white,
-                                              ),
-                                              Text(
-                                                "callNow".tr(),
-                                                style: const TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                    visibilityStore(
+                        context:  context,
+                        categoryId: widget
+                        .modelDetails.category
+                        .toString(),
+                    parentId: widget
+                        .modelDetails.id
+                        .toString(),
+                    categoryName:
+                    widget.modelDetails.name,
+                    organization: widget
+                        .modelDetails.organization
+                        .toString(),
+                    boolVisibility: widget.boolShowStore
                     ),
+
 
                     /// description
                     const SizedBox(height: 10),
@@ -687,22 +550,24 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         label: "description".tr(),
                         text: widget.modelDetails.desc.toString()),
                     const SizedBox(height: 10),
-                    const Text(
-                      "Similar Items",
-                      style: TextStyle(
+                    /// o'xshash maxsulotlar
+                    Text(
+                      "similarItem".tr(),
+                      style: const TextStyle(
                           fontSize: 24,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
-
                     SizedBox(
                       height: 360,
                       child: SimilarItems(
                           idDetail: widget.modelDetails.type.toString()),
                     ),
-                    const SizedBox(height: 20),
-                    const Text("Oxorgi ko'rilganlar",
-                        style: TextStyle(
+                    const SizedBox(height: 10),
+
+                    /// oxirgi ko'rilganlar
+                    Text("lastViews".tr(),
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     SizedBox(
                       height: 360,
@@ -757,7 +622,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                   // margin:const EdgeInsets.only(top: 10),
                   height: MediaQuery.of(context).size.height * 0.7,
                   color: Colors.white,
-                  child: RatingPage(productName: productName));
+                  child: RatingPage(productName: productName, productId: productId.toString(),));
             },
           )
         : MyWidgets.dialogNoToken(context: context);
@@ -827,7 +692,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                     errorWidget: (context, url, text) {
                                       return Center(
                                         child: Image.asset(
-                                          "assets/images/image_for_error.png",
+                                          "assets/images/shopping1.png",
                                           fit: BoxFit.cover,
                                         ),
                                       );
@@ -837,17 +702,13 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                                             const LoadingShimmer()),
                               ),
                             )
-                          : Align(
-                              alignment: Alignment.topCenter,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/shopping1.png",
-                                    fit: BoxFit.cover,
-                                  ),
-                                ],
+                          : Container(
+                              width: MediaQuery.of(context).size.width * 0.94,
+                              alignment: Alignment.center,
+                              child: Image.asset(
+                                "assets/images/shopping1.png",
+                                alignment: Alignment.center,
+                                fit: BoxFit.cover,
                               ),
                             ),
                       index.toString() != "-1"
@@ -871,11 +732,9 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                       Container(
                           width: MediaQuery.of(context).size.width,
                           color: Colors.white.withOpacity(
-                              images[index].quantity.toString() == "0"
-                                  ? 0.3
-                                  : 0),
+                              imageBackColorQuantity(images, index)),
                           child: Center(
-                              child: images[index].quantity.toString() == "0"
+                              child: imageBackColorQuantity(images, index) != 0
                                   ? Icon(
                                       Icons.not_interested,
                                       size: 100,
@@ -905,7 +764,8 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
               padding: const EdgeInsets.all(0),
               onPressed: () {
                 Share.share(
-                    'https://uzbek-bazar.vercel.app/product/details/${widget.modelDetails.id}');
+                  subject: "UzbekBazar",
+                    BaseClass.shareUrl+ widget.modelDetails.id.toString());
               },
               icon: const Icon(
                 Icons.share,
@@ -934,6 +794,14 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
         ),
       ),
     );
+  }
+
+  double imageBackColorQuantity(List<ModelSelectItem> images, int index) {
+    try {
+      return images[index].quantity.toString() == "0" ? 0.3 : 0;
+    } catch (e) {
+      return 0;
+    }
   }
 }
 
@@ -971,49 +839,6 @@ class ExpandableText extends StatelessWidget {
   }
 }
 
-class ProDetailHeader extends StatelessWidget {
-  final String label;
-
-  const ProDetailHeader({
-    super.key,
-    required this.label,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 40,
-            width: 50,
-            child: Divider(
-              color: Colors.yellow.shade900,
-              thickness: 1,
-            ),
-          ),
-          Text(
-            label,
-            style: TextStyle(
-                color: Colors.yellow.shade900,
-                fontSize: 24,
-                fontWeight: FontWeight.w600),
-          ),
-          SizedBox(
-            height: 40,
-            width: 50,
-            child: Divider(
-              color: Colors.yellow.shade900,
-              thickness: 1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 ///
 class ModelSelectItem {

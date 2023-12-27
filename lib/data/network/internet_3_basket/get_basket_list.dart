@@ -27,10 +27,15 @@ class InternetGetBasketList {
   }
 
   Future<ModelBasketList> getDataBasketList() async {
+    ModelBasketList modelBasketList;
     Response response = await dio.get(
         "${BaseClass.url}api/v1/web/carts/?session_id=${getIpOrTokenWithOutBearer()}");
     log(jsonEncode(response.data).toString());
-    ModelBasketList modelBasketList = ModelBasketList.fromJson(response.data);
+    try{
+       modelBasketList = ModelBasketList.fromJson(response.data);
+    }catch(e){
+       modelBasketList = ModelBasketList(results: [], errorText: "Ma'lumot olishda xatolik", internetStatePosition: "2");
+    }
     return modelBasketList;
   }
 }

@@ -334,17 +334,17 @@ class _BasketPageState extends ConsumerState<BasketPage> {
           title: Text("basket".tr(),
               style: const TextStyle(
                   color: Colors.black, fontWeight: FontWeight.bold)),
-          bottom: const TabBar(
+          bottom:  TabBar(
             indicatorColor: Colors.red,
             labelColor: Colors.red,
             dividerColor: Colors.white,
-            labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             tabs: [
               Tab(
-                text: "Savat",
+                text: "basket".tr(),
               ),
               Tab(
-                text: "Buyrutmalarim",
+                text: "orders".tr(),
               ),
             ],
           ),

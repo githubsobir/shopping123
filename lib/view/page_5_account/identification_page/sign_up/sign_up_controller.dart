@@ -61,7 +61,7 @@ class SignUpNotifier extends StateNotifier<ModelForSignUp> {
         } else if (data.contains("404")) {
           if (!context.mounted) return;
           MyWidgets.bottomSheetUniversal(
-              text: "404 Serverda xatolik keyinroq qayta urinib ko'ring",
+              text: "404 xatolik keyinroq qayta urinib ko'ring",
               context: context);
         }
       }

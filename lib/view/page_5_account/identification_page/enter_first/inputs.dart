@@ -194,6 +194,7 @@ Widget enterFirstBodyInput({
                 return null;
               })
       ),
+      const SizedBox(height: 20,),
       Consumer(
         builder: (context2, ref, child) => MaterialButton(
             height: 50,
@@ -233,6 +234,7 @@ Widget enterFirstBodyInput({
           ],
         ),
       ),
+
       GestureDetector(
         onTap: () {
           // textCaptchaEditingController.clear();

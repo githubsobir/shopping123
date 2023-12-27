@@ -77,7 +77,6 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
         );
         modelProductList = ModelProductList.fromJson(response.data);
 
-
         listProduct2.addAll(modelProductList.results);
         state = state.copyWith(
             results: listProduct2,
@@ -102,14 +101,23 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
             errorText: e.response!.statusCode.toString(),
             boolGetData: "1");
       }  else{
-
-        state = state.copyWith(
-            previous: "999",
-            next: "999",
-            count: "9999",
-            results: listProduct2,
-            errorText: e.response!.statusCode.toString(),
-            boolGetData: "2");
+        try{
+          state = state.copyWith(
+              previous: "999",
+              next: "999",
+              count: "9999",
+              results: listProduct2,
+              errorText: e.response!.statusCode.toString(),
+              boolGetData: "2");
+        }catch(e){
+          state = state.copyWith(
+              previous: "999",
+              next: "999",
+              count: "9999",
+              results: listProduct2,
+              errorText: e.toString(),
+              boolGetData: "2");
+        }
       }
 
       return ModelProductList(
