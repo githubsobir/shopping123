@@ -40,10 +40,13 @@ class CategoryStateNotifier extends StateNotifier<ModelCategoryGet> {
       state = state.copyWith(modelCategoryGet.count, modelCategoryGet.next,
           modelCategoryGet.previous, "1", "", modelCategoryGet.results);
     } on DioException catch (e) {
-      log(e.message.toString());
-      log(e.toString());
-      state =
-          state.copyWith("0", "0", "0", "2", e.response!.statusCode.toString(), []);
+      try{
+        state = state.copyWith(
+            "0", "0", "0", "2", e.error.toString(), []);
+      }catch(e){
+        state = state.copyWith(
+            "0", "0", "0", "2", e.toString(), []);
+      }
     }
   }
 }

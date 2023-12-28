@@ -376,7 +376,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(data.errorText.toString(), maxLines: 5),
+              Text(data.errorText.toString(), maxLines: 3, textAlign: TextAlign.center),
               const SizedBox(
                 height: 10,
               ),

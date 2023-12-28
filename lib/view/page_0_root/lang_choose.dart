@@ -46,6 +46,9 @@ class _EnterFirst0State extends State<EnterFirst0> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.appColorWhite(),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(10.0),

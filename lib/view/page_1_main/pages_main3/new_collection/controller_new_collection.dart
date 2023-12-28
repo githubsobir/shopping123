@@ -89,35 +89,33 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
 
       return state;
     } on DioException catch (e) {
-      log(e.toString());
-
-
-      if (e.response!.statusCode.toString() == "404" && int.parse(modelSearch.page.toString()) > 1 ) {
-        state = state.copyWith(
-            previous: "999",
-            next: "999",
-            count: "9999",
-            results: listProduct2,
-            errorText: e.response!.statusCode.toString(),
-            boolGetData: "1");
-      }  else{
-        try{
+      try{
+        if (e.response!.statusCode.toString() == "404" &&
+            int.parse(modelSearch.page.toString()) > 1) {
           state = state.copyWith(
               previous: "999",
               next: "999",
               count: "9999",
               results: listProduct2,
               errorText: e.response!.statusCode.toString(),
-              boolGetData: "2");
-        }catch(e){
+              boolGetData: "1");
+        } else {
           state = state.copyWith(
               previous: "999",
               next: "999",
               count: "9999",
               results: listProduct2,
-              errorText: e.toString(),
+              errorText: e.error.toString(),
               boolGetData: "2");
         }
+      }catch(e){
+        state = state.copyWith(
+            previous: "999",
+            next: "999",
+            count: "9999",
+            results: listProduct2,
+            errorText: e.toString(),
+            boolGetData: "2");
       }
 
       return ModelProductList(
@@ -125,7 +123,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
           next: "",
           previous: "",
           boolGetData: "2",
-          errorText: e.response!.statusCode.toString(),
+          errorText: e.error.toString(),
           results: []);
     }
   }
@@ -169,7 +167,7 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
           "${BaseClass.url}api/v1/web/favorites/",
           options: Options(headers: {"Authorization": getIpOrToken()}),
           data: {
-            "session_id": getIpOrTokenWithOutBearer(),
+            "session_id": box.get("ipAddressPhone").toString(),
             "product": idProduct,
           });
       log("serverga yuborildi !!!");

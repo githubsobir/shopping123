@@ -298,7 +298,8 @@ class _BasketPageState extends ConsumerState<BasketPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(listOrder.errorText.toString()),
+            Text(listOrder.errorText.toString(),  textAlign: TextAlign.center,
+                maxLines: 3),
             Text("error".tr(),),
             MaterialButton(
               onPressed: () {

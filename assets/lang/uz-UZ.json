@@ -18,6 +18,7 @@
   "passwordAgain": "Parolni qayta kiriting",
   "connectWithUs": "Biz bilan aloqa",
   "languageApp": "Interfey tili",
+  "chooseLang": "Til tanlang",
   "enter": "Kirish",
   "registration": "Ro'yxatdan o'tish",
   "enterSystem": "Tizimga kirish",
@@ -48,12 +49,14 @@
   "chooseSize": "O'lcham tanlang",
   "addCart": "Savatga qo'shish",
   "similarItem": "O'xshash maxsulotlar",
-  "lastViews": "Oxorgi ko'rilganlar",
+  "lastViews": "Oxirgi ko'rilganlar",
   "type": "Turi: ",
   "season": "Fasl: ",
   "gender": "Jins: ",
   "brand": "Brandi: ",
   "material": "Material",
   "rating": "Baho bering",
-  "send": "Yuborish"
+  "send": "Yuborish",
+  "filter": "Saralash",
+  "moneyFilter": "To'lov narxi"
 }

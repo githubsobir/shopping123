@@ -10,7 +10,7 @@ import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/details_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
-import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_controller.dart';
+import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_page.dart';
 import 'package:shopping/view/page_4_favourite/controller_favourite.dart';
 import 'package:shopping/widgets/app_widget/app_widgets.dart';
 import 'package:shopping/widgets/loading_pagea/loading_cupertino.dart';
@@ -35,9 +35,10 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
   int indexGetData = 1;
 
   getData({required String item, required WidgetRef ref}) async {
-
-       ref.watch(getDataSearch(ModelSearch(search: controllerText.text.toString(), page: indexGetData.toString())));
-       indexGetData = indexGetData + 1;
+    ref.watch(getDataSearch(ModelSearch(
+        search: controllerText.text.toString(),
+        page: indexGetData.toString())));
+    indexGetData = indexGetData + 1;
   }
 
   int pageCount = 1;
@@ -496,7 +497,7 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                     //       height: 120,
                                     //     )),
                                     const SizedBox(height: 20),
-                                     Text("infoNotFind".tr()),
+                                    Text("infoNotFind".tr()),
                                   ],
                                 ),
                               ))

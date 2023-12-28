@@ -132,7 +132,8 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
                                                     .toString(),
                                                 isFavourite: listFavouriteList
                                                     .results[index].isActive,
-                                                idProduct2: "",
+                                                idProduct2: listFavouriteList
+                                                    .results[index].product.id.toString(),
                                               ),
                                               withNavBar: false);
                                           log(index.toString());
@@ -154,7 +155,9 @@ class _FavouritePageState extends ConsumerState<FavouritePage>
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(listFavouriteList.errorText.toString()),
+            Text(listFavouriteList.errorText.toString(),  textAlign: TextAlign.center,
+            maxLines: 3,
+            ),
               Text("error".tr(),),
             MaterialButton(
               onPressed: () {

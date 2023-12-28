@@ -27,8 +27,8 @@ class FavoriteStateNotifier extends StateNotifier<ModelFavouriteStateNotifier> {
     try {
       state = state.copyWith("", "", "", "0", "", []);
       String dataFavourite = await getFavouriteList.getDataFavouriteList();
-      log("istaklar server murojaat");
-      log(dataFavourite);
+      // log("istaklar server murojaat");
+      // log(dataFavourite);
       ModelFavouriteStateNotifier modelFavouriteStateNotifier =
           ModelFavouriteStateNotifier.fromJson(jsonDecode(dataFavourite));
       state = state.copyWith(
@@ -41,12 +41,12 @@ class FavoriteStateNotifier extends StateNotifier<ModelFavouriteStateNotifier> {
     } on DioException catch (e) {
      try {
         state = state
-            .copyWith("", "", "", "3", e.response!.statusCode.toString(), []);
+            .copyWith("", "", "", "3", e.error.toString(), []);
       }catch(e){
        state = state
            .copyWith("", "", "", "3", e.toString(), []);
      }
-      log(e.response!.statusCode.toString());
+      // log(e.response!.statusCode.toString());
     }
   }
 
@@ -54,14 +54,15 @@ class FavoriteStateNotifier extends StateNotifier<ModelFavouriteStateNotifier> {
     List<ResultModelNotifier> listResult = [];
     listResult = state.results;
 
-    if (!resultModelNotifier.isActive) {
+    // if (!resultModelNotifier.isActive) {
       listResult.removeWhere((element) => element.id == resultModelNotifier.id);
-    } else {
+    // } else {
 
-      listResult.add(resultModelNotifier);
-    }
+      // listResult.add(resultModelNotifier);
+    // }
     state = state.copyWith(
-        state.count, state.next, state.previous, true, "",listResult);
+
+        state.count, state.next, state.previous,  "1", "",listResult);
   }
 
   /// layklarni serverga yuborish qo'shish
@@ -70,13 +71,14 @@ class FavoriteStateNotifier extends StateNotifier<ModelFavouriteStateNotifier> {
   Future setFavoritesServer({required String idProduct}) async {
     try {
       log("setFavoritesServer");
-      Response response = await dio.post(
-          "${BaseClass.url}api/v1/web/favorites/",
+      Response response = await dio.delete(
+          "${BaseClass.url}api/v1/web/favorites/$idProduct/",
           options: Options(headers: {"Authorization": getIpOrToken()}),
-          data: {
-            "session_id": getIpOrTokenWithOutBearer(),
-            "product": idProduct,
-          });
+          // data: {
+          //   "session_id": getIpOrTokenWithOutBearer(),
+          //   "product": idProduct,
+          // }
+          );
 
       log(response.data.toString());
     } catch (e) {

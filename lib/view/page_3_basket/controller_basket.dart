@@ -40,7 +40,7 @@ class BasketNotifierState extends StateNotifier<ModelBasketList> {
     } on DioException catch (e) {
       try {
         state = state.copyWith(
-            "0", "0", "0", e.response!.statusCode.toString(), "2", []);
+            "0", "0", "0", e.error.toString(), "2", []);
       } catch (e) {
         state = state.copyWith("0", "0", "0", "error", "2", []);
       }

@@ -536,7 +536,7 @@ class _ItemDetailsScreenState extends State<ItemDetailsScreen> {
                         .modelDetails.id
                         .toString(),
                     categoryName:
-                    widget.modelDetails.name,
+                    widget.modelDetails.name??"",
                     organization: widget
                         .modelDetails.organization
                         .toString(),
