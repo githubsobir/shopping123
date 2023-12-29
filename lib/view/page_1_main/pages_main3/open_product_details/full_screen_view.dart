@@ -126,7 +126,7 @@ class _FullScreenViewState extends State<FullScreenView> {
               margin: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/images/gerb.jpg"))),
+                      image: AssetImage("assets/images/shopping1.png"))),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: InteractiveViewer(
