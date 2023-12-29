@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping/data/model/model_main_1_page/model_search.dart';
+import 'package:shopping/view/page_1_main/pages_main3/search_page/controller_search_page.dart';
 import 'package:shopping/view/page_1_main/pages_main3/search_page/filter/filter_controller.dart';
 
 class Filter extends ConsumerStatefulWidget {
@@ -13,15 +17,6 @@ class Filter extends ConsumerStatefulWidget {
 }
 
 class _FilterState extends ConsumerState<Filter> {
-  List<String> subCateg = [
-    "Pyjama",
-    "Dresses",
-    "Outdoor",
-    "Pyjama",
-    "Dresses",
-    "Outdoor",
-  ];
-
   List<String> regions = [
     "Toshkent viloyati",
     "Toshkent shahri",
@@ -39,80 +34,93 @@ class _FilterState extends ConsumerState<Filter> {
     "Andijon viloyati",
   ];
 
+  late ModelSearch modelSearch;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Drawer(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "filter".tr(),
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.clear),
-                  ),
-                ],
-              ),
-              const Divider(),
-              MaterialButton(
-                color: Colors.red.shade500,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8)),
-                onPressed: () {},
-                child: Text("search".tr(),
-                    style:const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                "category".tr(),
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              const SizedBox(height: 5),
-              buildCategories(),
-              const Divider(),
-              const SizedBox(height: 5),
-              Text(
-                "chooseColor".tr(),
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 5),
-              setColor(),
-              const Divider(),
-              const SizedBox(height: 5),
-              Text(
-                "chooseSize".tr(),
-                style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
-              ),
-              setSize(),
-              const Divider(),
-              const SizedBox(height: 5),
-              buildQuantityField(),
-            ],
-          ),
+    return Drawer(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "filter".tr(),
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
+              ],
+            ),
+            const Divider(),
+            MaterialButton(
+              color: Colors.red.shade500,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                modelSearch = ModelSearch(
+                  search:     ref.watch(textSearch),
+                    color: ref.watch(selectColorQueryProvider),
+                    brand: ref.watch(selectedBrandIdProvider),
+                    minPrice: ref.watch(startValueProvider),
+                    maxPrice: ref.read(endValueProvider),
+                    size: ref.watch(selectSizeIndexProvider));
+
+                ref.read(cont.notifier).getListFromInternet(modelSearch: modelSearch);
+
+              },
+              child: Text("search".tr(),
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              "category".tr(),
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
+            ),
+            const SizedBox(height: 5),
+            buildCategories(),
+            const Divider(),
+            const SizedBox(height: 5),
+            Text(
+              "chooseColor".tr(),
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 5),
+            setColor(),
+            const Divider(),
+            const SizedBox(height: 5),
+            Text(
+              "chooseSize".tr(),
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
+            setSize(),
+            const Divider(),
+            const SizedBox(height: 5),
+            buildQuantityField(),
+          ],
         ),
       ),
     );
@@ -186,48 +194,65 @@ class _FilterState extends ConsumerState<Filter> {
 
   Widget buildCategories() {
     return SizedBox(
-      height: 35,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: subCateg.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                ref.read(selectedSubCategProvider.notifier).state = index;
-              },
-              child: Container(
-                margin: const EdgeInsets.only(left: 2, right: 2),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: Colors.grey.shade300,
-                  border: ref.watch(selectedSubCategProvider) == index
-                      ? Border.all(
-                          color: Colors.black,
-                          width: 2,
-                        )
-                      : const Border(),
-                ),
-                // : BoxDecoration(
-                //     color: Colors.grey.shade200,
-                //     borderRadius: BorderRadius.circular(8)),
-                child: Text(
-                  subCateg[index],
-                  style: TextStyle(
-                      decorationThickness: 1.5,
-                      color: ref.watch(selectedSubCategProvider) == index
-                          ? Colors.black
-                          : Colors.black87,
-                      // decoration: ref.watch(selectedSubCategProvider) == index
-                      //     ? TextDecoration.underline
-                      //     : TextDecoration.none,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400),
-                ),
-              ),
-            );
-          }),
-    );
+        height: 35,
+        // getBrands
+        child: Consumer(
+            builder: (context, ref, child) =>
+                ref.watch(getBrands).when(data: (data) {
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.results.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            ref.read(selectedBrandProvider.notifier).state =
+                                index;
+
+                            ref.read(selectedBrandIdProvider.notifier).state =
+                                data.results[index].id.toString();
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 2, right: 2),
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.grey.shade300,
+                              border:
+                                  ref.watch(selectedBrandProvider).toString() ==
+                                          index.toString()
+                                      ? Border.all(
+                                          color: Colors.black,
+                                          width: 2,
+                                        )
+                                      : const Border(),
+                            ),
+                            // : BoxDecoration(
+                            //     color: Colors.grey.shade200,
+                            //     borderRadius: BorderRadius.circular(8)),
+                            child: Text(
+                              data.results[index].name,
+                              style: TextStyle(
+                                  decorationThickness: 1.5,
+                                  color: ref
+                                              .watch(selectedBrandProvider)
+                                              .toString() ==
+                                          index.toString()
+                                      ? Colors.black
+                                      : Colors.black87,
+                                  // decoration: ref.watch(selectedSubCategProvider) == index
+                                  //     ? TextDecoration.underline
+                                  //     : TextDecoration.none,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        );
+                      });
+                }, error: (error, errorText) {
+                  return Text(errorText.toString());
+                }, loading: () {
+                  return Text("loading");
+                })));
   }
 
   SizedBox setColor() {
@@ -252,6 +277,9 @@ class _FilterState extends ConsumerState<Filter> {
                         onTap: () {
                           ref.read(selectColorIndexProvider.notifier).state =
                               index;
+
+                          ref.read(selectColorQueryProvider.notifier).state =
+                              data.results[index].code.toString();
                         },
                         child: Container(
                           height: 40,
@@ -391,12 +419,12 @@ class _RangeSliderExampleState extends State<RangeSliderExample> {
         divisions: 500,
         activeColor: const Color(0xff121212),
         inactiveColor: const Color(0xffCBCBCB),
-        labels: RangeLabels(
-          _currentRangeValues.start.round().toString(),
-          _currentRangeValues.end.round().toString(),
-        ),
+        // labels: RangeLabels(
+        //   _currentRangeValues.start.round().toString(),
+        //   _currentRangeValues.end.round().toString(),
+        // ),
         onChanged: (RangeValues values) {
-          _currentRangeValues = values;
+          // _currentRangeValues = values;
           ref.read(startValueProvider.notifier).state = values.start;
           ref.read(endValueProvider.notifier).state = values.end;
         },

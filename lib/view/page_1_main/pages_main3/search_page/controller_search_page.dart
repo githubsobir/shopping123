@@ -18,6 +18,8 @@ final getMainSearchBrandData = FutureProvider<ModelMainSearchBrend>((ref) {
   return ref.read(apiMainSearchBrands).getMainSearchBrand();
 });
 
+final textSearch = StateProvider<String>((ref) => "");
+
 final apiProviderSearch =
     Provider<InternetInfiniteList>((ref) => InternetInfiniteList());
 
@@ -48,74 +50,78 @@ final getDataSearch = FutureProvider.family
     }
   } else {}
 
-
   return listData;
 });
 
-final cont =
-    StateNotifierProvider.autoDispose<ModelSearchListNotifier, ModelProductList>((
+final cont = StateNotifierProvider.autoDispose<ModelSearchListNotifier,
+    ModelProductList>((
   ref,
 ) {
-      return ModelSearchListNotifier();
-       });
-
-
+  return ModelSearchListNotifier();
+});
 
 /// search
 class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
-  ModelSearchListNotifier() : super(ModelProductList(count: "", next: "", previous: "", results: []));
+  ModelSearchListNotifier()
+      : super(ModelProductList(boolGetData: "1", errorText: "" , count: "", next: "", previous: "", results: []));
 
   var dio = Dio();
   late ModelProductList modelSavedQuestion;
   List<ResultProductList> listData = [];
   var box = Hive.box("online");
-  String getIpOrToken() {
-    if (box.get("token").toString().length > 20) {
-      return "Bearer ${box.get("token")}";
-    } else {
-      return box.get("ipAddressPhone").toString();
-    }
-  }
 
-  String getIpOrTokenWithOutBearer() {
-    if (box.get("token").toString().length > 20) {
-      return box.get("token");
-    } else {
-      return box.get("ipAddressPhone").toString();
-    }
-  }
-  Future<List<ResultProductList>> getListFromInternet({required ModelSearch modelSearch}) async {
-
-
-
-    log("${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}");
-    log(BaseClass.getLinkSearch(m: modelSearch));
-    Response response = await dio.get(
-
-        "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
-        // options: Options(
-        //     headers: {"Authorization": getIpOrToken()})
-    );
-    log("@34");
-    log(jsonEncode(response.data).toString());
+  Future<List<ResultProductList>> getListFromInternet(
+      {required ModelSearch modelSearch}) async {
+    state = state.copyWith(
+        previous: "",
+        next: "",
+        count: "0",
+        boolGetData: "0",
+        errorText: "",
+        results: []);
     try {
+    Response response = await dio.get(
+      "${BaseClass.url}api/v1/web/products/?${BaseClass.getLinkSearch(m: modelSearch)}",
+    );
+
       modelSavedQuestion = ModelProductList.fromJson(response.data);
       listData.clear();
-      // listData = modelSavedQuestion.results;
       if (listData.isEmpty) {
         listData = modelSavedQuestion.results;
       } else {
         listData.addAll(modelSavedQuestion.results);
       }
-      state = state.copyWith(results: listData);
+      state = state.copyWith(
+          previous: modelSavedQuestion.previous,
+          next: modelSavedQuestion.next,
+          count: modelSavedQuestion.count,
+          boolGetData: "1",
+          errorText: "",
+          results: listData);
+
       return state.results;
-    } catch (e) {
-      log("@#§123");
-      log(e.toString());
+    }  on DioException catch (e) {
+     try {
+        state = state.copyWith(
+            previous: "",
+            next: "",
+            count: "",
+            boolGetData: "2",
+            errorText: e.message,
+            results: []);
+      }catch(e){
+       state = state.copyWith(
+           previous: "",
+           next: "",
+           count: "",
+           boolGetData: "2",
+           errorText: e.toString(),
+           results: []);
+     }
+
       return [];
     }
   }
-
 
   /// qidiruv uchun
   ///
@@ -134,9 +140,8 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
   }
 
   setOrders({required String idOrder}) {
-
     List<ResultProductList> updateOrder = [];
-    updateOrder.addAll(  state.results);
+    updateOrder.addAll(state.results);
     log(updateOrder.toString());
     for (int i = 0; i < updateOrder.length; i++) {
       if (updateOrder[i].id.toString() == idOrder) {
@@ -151,8 +156,9 @@ class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
     state = state.copyWith(results: updateOrder);
     return state;
   }
-  clearData(){
+
+  clearData() {
     state.results.clear();
-    state = state.copyWith(results: [],previous: "", count: "", next: "");
+    state = state.copyWith(results: [], previous: "", count: "", next: "");
   }
 }

@@ -64,14 +64,10 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
 
   var controllerText = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    /// birinchi kirishda maxsus kalit so'z bilan tekshiraman
-    // final listGet = ref.watch(getDataSearch(ModelSearch(search: "@@@1")));
+  Widget bodyBuild() {
     final getDataSearch = ref.watch(cont);
-    return Scaffold(
-      key: _scaffoldKey,
-      body: SafeArea(
+    if (getDataSearch.boolGetData.toString() == "1") {
+      return SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: SingleChildScrollView(
@@ -102,6 +98,9 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                 ref.read(cont.notifier).getListFromInternet(
                                     modelSearch:
                                         ModelSearch(search: val.toString()));
+                              },
+                              onChanged: (val) {
+                                ref.read(textSearch.notifier).state = val;
                               },
                               decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.search),
@@ -500,10 +499,48 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                                     Text("infoNotFind".tr()),
                                   ],
                                 ),
-                              ))
+                              )),
                   ],
                 ),
-              )))),
+              ))));
+    } else if (getDataSearch.boolGetData.toString() == "2") {
+    /// error
+      return Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(getDataSearch.errorText.toString(),
+                textAlign: TextAlign.center, maxLines: 3),
+            Text(
+              "error".tr(),
+            ),
+            MaterialButton(
+              onPressed: () {
+                ref.read(cont);
+              },
+              color: Colors.blue.shade800,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
+              child: Text("tryAgain".tr(),
+                  style: const TextStyle(color: Colors.white)),
+            )
+          ],
+        ),
+      );
+    } else if (getDataSearch.boolGetData.toString() == "0") {
+      /// loading
+      return const LoadingGridView();
+    }else{
+      return Center(child: Text("Qidiruv"),);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      body: bodyBuild(),
       endDrawer: Filter(),
     );
   }

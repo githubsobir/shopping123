@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shopping/data/model/model_1_main/model_color/model_brand.dart';
 import 'package:shopping/data/model/model_1_main/model_color/model_color.dart';
 import 'package:shopping/data/model/model_1_main/model_color/model_sizes.dart';
 import 'package:shopping/data/network/base_url.dart';
 
-final selectedSubCategProvider = StateProvider<int>((ref) {
+final selectedBrandProvider = StateProvider<int>((ref) {
   return 0;
+});
+final selectedBrandIdProvider = StateProvider<String>((ref) {
+  return "";
 });
 final selectRegionProvider = StateProvider<String>((ref) {
   return '';
@@ -13,6 +17,10 @@ final selectRegionProvider = StateProvider<String>((ref) {
 final selectColorIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
+final selectColorQueryProvider = StateProvider<String>((ref) {
+  return "";
+});
+
 final selectSizeIndexProvider = StateProvider<int>((ref) {
   return 0;
 });
@@ -37,3 +45,12 @@ final getSize = FutureProvider<ModelGetSizes>((ref) async {
   return modelGetSize;
 });
 
+// api/v1/web/brands/
+
+
+final getBrands = FutureProvider<ModelGetBrands>((ref) async {
+  var dio = Dio();
+  Response response = await dio.get("${BaseClass.url}api/v1/web/brands/");
+  ModelGetBrands modelGetBrands = ModelGetBrands.fromJson(response.data);
+  return modelGetBrands;
+});
