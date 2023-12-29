@@ -108,13 +108,14 @@ class ModelProductListNotifier extends StateNotifier<ModelProductList> {
               errorText: e.error.toString(),
               boolGetData: "2");
         }
-      }catch(e){
+      }catch(e2){
+
         state = state.copyWith(
             previous: "999",
             next: "999",
             count: "9999",
             results: listProduct2,
-            errorText: e.toString(),
+            errorText: e.error.toString(),
             boolGetData: "2");
       }
 
