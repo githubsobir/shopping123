@@ -132,7 +132,7 @@ class _FullScreenViewState extends State<FullScreenView> {
                 child: InteractiveViewer(
                   panEnabled: false,
                   // Set it to false
-                  boundaryMargin: EdgeInsets.all(20),
+                  boundaryMargin: const EdgeInsets.all(20),
                   minScale: 0.5,
                   maxScale: 4,
                   child: Image.network(

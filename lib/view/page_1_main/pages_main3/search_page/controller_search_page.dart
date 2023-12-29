@@ -63,7 +63,9 @@ final cont = StateNotifierProvider.autoDispose<ModelSearchListNotifier,
 /// search
 class ModelSearchListNotifier extends StateNotifier<ModelProductList> {
   ModelSearchListNotifier()
-      : super(ModelProductList(boolGetData: "1", errorText: "" , count: "", next: "", previous: "", results: []));
+      : super(ModelProductList(boolGetData: "1", errorText: "" , count: "", next: "", previous: "", results: [])){
+    getListFromInternet(modelSearch: ModelSearch());
+  }
 
   var dio = Dio();
   late ModelProductList modelSavedQuestion;
