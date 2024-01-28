@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_1_main/pages_main3/new_collection/controller_new_collection.dart';
@@ -43,6 +44,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
             countProduct: ref.read(countMiniDetails).toString(),
             sizeProduct: ref.read(sizeSelectProduct),
           );
+
       ref
           .read(getCategoryPage.notifier)
           .setOrdersBrand(idOrder: widget.idProduct);
@@ -365,7 +367,7 @@ class _MiniDetailsState extends ConsumerState<MiniDetails> {
           ));
         }, loading: () {
           return const Center(
-            child: Text("Loading..."),
+            child: CupertinoActivityIndicator(),
           );
         })),
       ),

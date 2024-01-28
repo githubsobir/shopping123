@@ -7,10 +7,15 @@ import 'package:hive/hive.dart';
 import 'package:shopping/data/model/model_3_basket/model_basket_get_all.dart';
 import 'package:shopping/data/network/internet_3_basket/get_basket_list.dart';
 
+
+
+final getIndexTabBarView = StateProvider<int>((ref) => 0);
+
 final getOrder =
     StateNotifierProvider<BasketNotifierState, ModelBasketList>((ref) {
   return BasketNotifierState();
 });
+
 
 class BasketNotifierState extends StateNotifier<ModelBasketList> {
   BasketNotifierState() : super(ModelBasketList(results: [])) {

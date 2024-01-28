@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent-tab-view.dart';
 import 'package:shopping/data/model/model_4_favourite/model_favourite.dart';
@@ -114,13 +116,14 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
                         ),
                         IconButton(
                           onPressed: () {
-                            if (_scaffoldKey.currentState!.isDrawerOpen) {
-                              _scaffoldKey.currentState!.closeDrawer();
-                              //close drawer, if drawer is open
-                            } else {
-                              _scaffoldKey.currentState!.openEndDrawer();
-                              //open drawer, if drawer is closed
-                            }
+                            Navigator.push(context, CupertinoPageRoute(builder: (context) => Filter(),));
+                            // if (_scaffoldKey.currentState!.isDrawerOpen) {
+                            //   _scaffoldKey.currentState!.closeDrawer();
+                            //   //close drawer, if drawer is open
+                            // } else {
+                            //   _scaffoldKey.currentState!.openEndDrawer();
+                            //   //open drawer, if drawer is closed
+                            // }
                           },
                           icon: const Icon(Icons.tune),
                         ),
@@ -526,16 +529,26 @@ class _MainSearchPageState extends ConsumerState<MainSearchPage> {
       /// loading
       return const LoadingGridView();
     }else{
-      return Center(child: Text("Keyinroq urinib ko'ring"),);
+      return const Center(child: Text("Keyinroq urinib ko'ring"),);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 1,
+        systemOverlayStyle:const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: Colors.white,
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+        ),
+      ),
       key: _scaffoldKey,
       body: bodyBuild(),
-      endDrawer: Filter(),
+
     );
   }
 }

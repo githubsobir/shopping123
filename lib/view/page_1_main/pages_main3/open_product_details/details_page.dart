@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/controller_details.dart';
 import 'package:shopping/view/page_1_main/pages_main3/open_product_details/main_product_details.dart';
@@ -28,6 +30,17 @@ class _DatailsPageState extends State<DetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        toolbarHeight: 1,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: Colors.white,
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+        ),
+      ),
       body: SafeArea(child: Consumer(
         builder: (context, ref, child) {
           final getDetail = ref.watch(getDetails(widget.idProduct));
@@ -55,8 +68,8 @@ class _DatailsPageState extends State<DetailsPage> {
               ],
             ));
           }, loading: () {
-            return  Center(
-              child: Text("loading".tr()),
+            return const Center(
+              child: CupertinoActivityIndicator(),
             );
           });
         },

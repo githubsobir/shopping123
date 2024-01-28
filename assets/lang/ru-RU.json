@@ -58,5 +58,6 @@
   "rating": "Baho bering",
   "send": "Yuborish",
   "filter": "Saralash",
-  "moneyFilter": "To'lov narxi"
+  "moneyFilter": "To'lov narxi",
+  "setAllOrder": "Savatdagi barchasiga buyrutma berish"
 }

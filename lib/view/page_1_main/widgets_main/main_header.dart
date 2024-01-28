@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -93,7 +94,7 @@ class _HeaderMainState extends ConsumerState<HeaderMain> {
                 }, error: (error, errorText) {
                   return [const Text("error")];
                 }, loading: () {
-                  return [const Text("loading")];
+                  return [const CupertinoActivityIndicator()];
                 })),
           ),
           const SizedBox(height: 10),

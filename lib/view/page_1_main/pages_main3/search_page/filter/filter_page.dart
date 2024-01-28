@@ -1,6 +1,6 @@
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shopping/data/model/model_main_1_page/model_search.dart';
@@ -38,40 +38,30 @@ class _FilterState extends ConsumerState<Filter> {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("search".tr(), style:const TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
+      ),
+      body: Container(
+        margin: const EdgeInsets.all(20),
         child: ListView(
-          // crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "filter".tr(),
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(Icons.clear),
-                ),
-              ],
-            ),
-            const Divider(),
+
             MaterialButton(
-              color: Colors.red.shade500,
+              height: 50,
+
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+
+                  borderRadius: BorderRadius.circular(8),
+              side: const BorderSide(color: Colors.black)
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
 
                 modelSearch = ModelSearch(
-                  search:     ref.watch(textSearch),
+                    search:     ref.watch(textSearch),
                     color: ref.watch(selectColorQueryProvider),
                     brand: ref.watch(selectedBrandIdProvider),
                     minPrice: ref.watch(startValueProvider),
@@ -83,9 +73,9 @@ class _FilterState extends ConsumerState<Filter> {
               },
               child: Text("search".tr(),
                   style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
+                      color: Colors.black, fontWeight: FontWeight.bold)),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 30),
             Text(
               "category".tr(),
               style: const TextStyle(
@@ -96,6 +86,7 @@ class _FilterState extends ConsumerState<Filter> {
             ),
             const SizedBox(height: 5),
             buildCategories(),
+            const SizedBox(height: 5),
             const Divider(),
             const SizedBox(height: 5),
             Text(
@@ -107,6 +98,8 @@ class _FilterState extends ConsumerState<Filter> {
             ),
             const SizedBox(height: 5),
             setColor(),
+            const SizedBox(height: 5),
+
             const Divider(),
             const SizedBox(height: 5),
             Text(
@@ -216,15 +209,17 @@ class _FilterState extends ConsumerState<Filter> {
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
-                              color: Colors.grey.shade300,
                               border:
-                                  ref.watch(selectedBrandProvider).toString() ==
-                                          index.toString()
-                                      ? Border.all(
-                                          color: Colors.black,
-                                          width: 2,
+                                      Border.all(
+                                          color:
+                                          ref.watch(selectedBrandProvider).toString() ==
+                                              index.toString()?
+                                          Colors.black:Colors.grey,
+                                          width:  ref.watch(selectedBrandProvider).toString() ==
+                                              index.toString()?
+                                          2.5:1,
                                         )
-                                      : const Border(),
+                                      ,
                             ),
                             // : BoxDecoration(
                             //     color: Colors.grey.shade200,
@@ -251,7 +246,7 @@ class _FilterState extends ConsumerState<Filter> {
                 }, error: (error, errorText) {
                   return Text(errorText.toString());
                 }, loading: () {
-                  return Text("loading");
+                  return const CupertinoActivityIndicator();
                 })));
   }
 
@@ -288,7 +283,7 @@ class _FilterState extends ConsumerState<Filter> {
                             border: ref.watch(selectColorIndexProvider) == index
                                 ? Border.all(
                                     width: 2,
-                                    color: Colors.black,
+                                    color: Colors.red,
                                   )
                                 : const Border(),
                             borderRadius: BorderRadius.circular(100),
@@ -302,8 +297,8 @@ class _FilterState extends ConsumerState<Filter> {
                                   width: 40,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      width: 1,
-                                      color: Colors.red,
+                                      width: 0.5,
+                                      color: Colors.grey,
                                     ),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
@@ -335,7 +330,7 @@ class _FilterState extends ConsumerState<Filter> {
               }, error: (error, errorText) {
                 return Text(errorText.toString());
               }, loading: () {
-                return Text("Loading...");
+                return const CupertinoActivityIndicator();
               })),
     );
   }
@@ -370,7 +365,7 @@ class _FilterState extends ConsumerState<Filter> {
                                   color: Colors.black,
                                 )
                               : Border.all(
-                                  width: 2,
+                                  width: 1,
                                   color: const Color(0xffCBCBCB),
                                 ),
                           // borderRadius: BorderRadius.circular(100),
@@ -392,7 +387,7 @@ class _FilterState extends ConsumerState<Filter> {
               return Text(eText.toString());
             },
             loading: () {
-              return Text("loading");
+              return const CupertinoActivityIndicator();
             }));
   }
 }
@@ -405,7 +400,7 @@ class RangeSliderExample extends StatefulWidget {
 }
 
 class _RangeSliderExampleState extends State<RangeSliderExample> {
-  RangeValues _currentRangeValues = const RangeValues(1, 10000);
+  // RangeValues _currentRangeValues = const RangeValues(1, 10000);
 
   @override
   Widget build(BuildContext context) {

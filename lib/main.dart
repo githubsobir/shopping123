@@ -33,6 +33,10 @@ Future main() async {
   await Hive.initFlutter();
   await Hive.openBox("online");
   await initialization(null);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.black, // navigation bar color
+    statusBarColor: Colors.yellowAccent, // status bar color
+  ));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then(
